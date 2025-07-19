@@ -69,11 +69,11 @@ const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-1">
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="p-2.5 rounded-xl  transition-colors duration-200"
               aria-label="Toggle theme"
             >
               {theme === 'light' ? (
@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* Search Button - Mobile */}
-            <button className="md:hidden p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
+            <button className="md:hidden p-2.5 rounded-xl  transition-colors duration-200">
               <Search size={20} className="text-gray-600 dark:text-gray-400" />
             </button>
 
@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="lg:hidden p-2.5 rounded-xl  transition-colors duration-200"
             >
               {isMobileMenuOpen ? (
                 <X size={20} className="text-gray-600 dark:text-gray-400" />
@@ -116,18 +116,18 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Mobile Search Bar */}
-        <div className="md:hidden pb-4">
+        {/* <div className="md:hidden pb-2">
           <div className="relative">
             <input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full px-4 py-3 pl-11 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full px-4 py-2 pl-11 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             />
             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
           </div>
-        </div>
+        </div> */}
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (

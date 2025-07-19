@@ -200,14 +200,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <img
           src={product.image}
           alt={product.name}
-          className="sm:rounded-none rounded-lg w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-700"
+          className="sm:rounded-none rounded-lg w-full sm:aspect-none sm:h-52 aspect-square object-cover group-hover:scale-110 transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
         <div className="absolute  inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col space-y-2">
+        {/* <div className="absolute top-3 left-3 flex flex-col space-y-2">
           {product.isNew && (
             <Badge variant="new" className="animate-pulse shadow-lg">
               NEW
@@ -221,9 +221,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {discountPercentage > 0 && (
             <Badge variant="error" className="bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg">
               -{discountPercentage}% OFF
-            </Badge>
+            </Badge>  
           )}
-        </div>
+        </div> */}
 
         {/* Quick Actions */}
         <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0">
@@ -256,15 +256,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {product.category === 'solar-panels' && (
           <div className="absolute bottom-3 left-3 flex items-center space-x-1 bg-green-500/95 backdrop-blur-xl text-white px-3 py-1.5 rounded-2xl shadow-lg border border-green-400/30">
             <Zap size={14} />
-            <span className="text-xs font-semibold">Eco-Friendly</span>
+            <span className="text-xs">Eco-Friendly</span>
           </div>
         )}
       </div>
 
-      <div className="py-4">
+      <div className="py-4 sm:p-6 ">
         <div className="mb-3 cursor-pointer" onClick={handleProductClick}>
           <div className="sm:rrrflex items-start justify-between mb-2">
-            <h3 className="sm:font-bold text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 text-sm sm:text-base leading-tight">
+            <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 text-sm sm:text-base leading-tight">
               {product.name}
             </h3>
             {/* {product.warranty && (
@@ -331,16 +331,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Add to Cart Button */}
-        {/* <Button
+        <Button
           onClick={() => onAddToCart(product)}
           disabled={!product.inStock}
           variant={product.inStock ? 'primary' : 'secondary'}
-          className="w-full"
+          className="hidden sm:mt-3 sm:flex w-full"
           size="lg"
         >
           <ShoppingCart size={16} />
           <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-        </Button> */}
+        </Button>
       </div>
     </Card>
   );

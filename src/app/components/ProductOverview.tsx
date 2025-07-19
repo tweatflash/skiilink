@@ -58,20 +58,20 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
       {/* Header */}
       <div className="bg-white shadow-sm border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center space-x-4">
+          <div className="flex w-full no-scrollbar overflow-x-auto items-center space-x-4">
             <button
               onClick={onBack}
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft size={20} />
-              <span>Back to Products</span>
+              <span className='whitespace-nowrap'>Back to Products</span>
             </button>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>Products</span>
+              <span className='whitespace-nowrap'>Products</span>
               <span>/</span>
-              <span>{product.category}</span>
+              <span className='whitespace-nowrap'>{product.category}</span>
               <span>/</span>
-              <span className="text-gray-900 font-medium truncate">{product.name}</span>
+              <span className="text-gray-900 whitespace-nowrapfont-medium truncate">{product.name}</span>
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
                   {product.brand}
                 </p>
               )}
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+              <h1 className="text-3xl lg:text-4xl font-bold break-all break-words whitespace-pre-wrap text-gray-900 mb-4 leading-tight">
                 {product.name}
               </h1>
               
@@ -182,7 +182,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
             </div>
 
             {/* Price */}
-            <div className="bg-gray-50 rounded-xl p-6">
+            <div className="bg-gray-50 rounded-xl sm:p-6">
               <div className="flex items-center space-x-4 mb-4">
                 <span className="text-4xl font-bold text-gray-900">
                   {formatPrice(product.price)}
@@ -252,8 +252,8 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex items-center space-x-2 text-center">
+            <div className="flex justify-between flex-wrap gap-4 shrink-0">
+              <div className="flex  items-center space-x-2 text-center">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Shield size={20} className="text-green-600" />
                 </div>
