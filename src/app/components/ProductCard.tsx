@@ -200,7 +200,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <img
           src={product.image}
           alt={product.name}
-          className=" w-full h-56 sm:h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+          className="sm:rounded-none rounded-lg w-full aspect-square object-cover group-hover:scale-110 transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
@@ -261,10 +261,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <div className="p-6">
+      <div className="py-4">
         <div className="mb-3 cursor-pointer" onClick={handleProductClick}>
-          <div className="flex items-start justify-between mb-2">
-            <h3 className="font-bold text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 text-base leading-tight">
+          <div className="sm:rrrflex items-start justify-between mb-2">
+            <h3 className="sm:font-bold text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 text-sm sm:text-base leading-tight">
               {product.name}
             </h3>
             {/* {product.warranty && (
@@ -274,9 +274,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             )} */}
           </div>
-          {product.brand && (
+          {/* {product.brand && (
             <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-2">{product.brand}</p>
-          )}
+          )} */}
         </div>
         
        
@@ -302,7 +302,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div> */}
 
         {/* Key Features */}
-        {product.specifications && (
+        {/* {product.specifications && (
           <div className="flex flex-wrap gap-2 mb-4">
             {product.specifications.slice(0, 2).map((spec, index) => (
               <Badge
@@ -314,10 +314,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </Badge>
             ))}
           </div>
-        )}
+        )} */}
 
         {/* Price */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-0">
           <div className="flex flex-col">
             <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
               {formatPrice(product.price)}
@@ -331,7 +331,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Add to Cart Button */}
-        <Button
+        {/* <Button
           onClick={() => onAddToCart(product)}
           disabled={!product.inStock}
           variant={product.inStock ? 'primary' : 'secondary'}
@@ -340,7 +340,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <ShoppingCart size={16} />
           <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-        </Button>
+        </Button> */}
       </div>
     </Card>
   );
