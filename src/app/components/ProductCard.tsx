@@ -195,16 +195,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Grid view with enhanced modern design
   return (
-    <Card hover className="group overflow-hidden p-0">
-      <div className="relative overflow-hidden bg-black/5 cursor-pointer" onClick={handleProductClick}>
+    <Card hover className="group px-3">
+      <div className="relative cursor-pointer" onClick={handleProductClick}>
         <img
           src={product.image}
           alt={product.name}
-          className="sm:rounded-none rounded-lg w-full sm:aspect-none sm:h-52 aspect-square object-cover group-hover:scale-110 transition-transform duration-700"
+          className="rounded-lg w-full aspect-square object-cover bg-white transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute  inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="absolute rounded-lg inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
         {/* Badges */}
         {/* <div className="absolute top-3 left-3 flex flex-col space-y-2">
@@ -261,7 +261,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <div className="py-4 sm:p-6 ">
+      <div className="py-4 ">
         <div className="mb-3 cursor-pointer" onClick={handleProductClick}>
           <div className="sm:rrrflex items-start justify-between mb-2">
             <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 text-sm sm:text-base leading-tight">
@@ -282,7 +282,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
        
 
         {/* Rating */}
-        {/* <div className="flex items-center space-x-2 mb-4">
+        <div className="flex items-center space-x-2 mb-4">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -297,9 +297,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             ))}
           </div>
           <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-            {product.rating} ({product.reviews})
+            {product.rating.toFixed(2)} | {product.reviews}+ sold
           </span>
-        </div> */}
+        </div>
 
         {/* Key Features */}
         {/* {product.specifications && (
@@ -331,7 +331,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Add to Cart Button */}
-        <Button
+        {/* <Button
           onClick={() => onAddToCart(product)}
           disabled={!product.inStock}
           variant={product.inStock ? 'primary' : 'secondary'}
@@ -340,7 +340,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <ShoppingCart size={16} />
           <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-        </Button>
+        </Button> */}
       </div>
     </Card>
   );

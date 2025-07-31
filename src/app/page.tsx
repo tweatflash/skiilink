@@ -12,6 +12,7 @@ import ProductOverview from './components/ProductOverview';
 import AdminPanel from './components/AdminPanel';
 import { categories, featuredProducts, bestSellingProducts } from './data/products';
 import { Product, CartItem } from './types/product';
+import { useRouter } from 'next/navigation';
 
 function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -83,10 +84,9 @@ function App() {
   const handleShopNow = () => {
     document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
   };
-
+const router =useRouter()
   const handleViewCatalog = () => {
-    setCurrentView('catalog');
-    setSelectedCategory(null);
+    router.push("/products")
   };
 
   const handleBackToHome = () => {
@@ -110,15 +110,15 @@ function App() {
 
   if (isAdminView) {
     return (
-      <ThemeProvider>
+      // <ThemeProvider>
         <AdminPanel />
-      </ThemeProvider>
+      // </ThemeProvider>
     );
   }
 
   if (currentView === 'product' && selectedProduct) {
     return (
-      <ThemeProvider>
+      // <ThemeProvider>
         <div className="min-h-screen bg-gray-50">
           <Header
             cartItemCount={cartItemCount}
@@ -141,13 +141,13 @@ function App() {
             onRemoveItem={handleRemoveItem}
           />
         </div>
-      </ThemeProvider>
+      // </ThemeProvider>
     );
   }
 
   if (currentView === 'catalog') {
     return (
-      <ThemeProvider>
+      // <ThemeProvider>
         <div className="min-h-screen bg-gray-50">
           <Header
             cartItemCount={cartItemCount}
@@ -172,12 +172,12 @@ function App() {
             onRemoveItem={handleRemoveItem}
           />
         </div>
-      </ThemeProvider>
+      // </ThemeProvider>
     );
   }
 
   return (
-    <ThemeProvider>
+    // <ThemeProvider>
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
       <Header
         cartItemCount={cartItemCount}
@@ -370,7 +370,7 @@ function App() {
         onRemoveItem={handleRemoveItem}
       />
     </div>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
 

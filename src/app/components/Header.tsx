@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShoppingCart, Search, Sun, Moon, Menu, X } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import Link from 'next/link';
 
 interface HeaderProps {
   cartItemCount: number;
@@ -15,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   searchQuery
 }) => {
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   return (
@@ -23,6 +24,7 @@ const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
+          <Link href={"/"}>
           <div className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-xl">⚡</span>
@@ -30,28 +32,29 @@ const Header: React.FC<HeaderProps> = ({
             <div className="hidden sm:block">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
                 SKIILINK
+                
               </h1>
               <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">VENTURES LIMITED</p>
             </div>
           </div>
-
+          </Link>
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+            <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Home
-            </a>
-            <a href="#products" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+            </Link>
+            <Link href="products" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Products
-            </a>
-            <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+            </Link>
+            <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Solutions
-            </a>
-            <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
-              Support
-            </a>
-            <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
-              About
-            </a>
+            </Link>
+            <Link href="sign-up" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+              Sign up
+            </Link>
+            <Link href="/sign-in" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+              Sign in
+            </Link>
           </nav>
 
           {/* Search Bar - Desktop */}
@@ -71,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({
           {/* Right Side Actions */}
           <div className="flex items-center space-x-1">
             {/* Theme Toggle */}
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="p-2.5 rounded-xl  transition-colors duration-200"
               aria-label="Toggle theme"
@@ -81,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({
               ) : (
                 <Sun size={20} className="text-gray-600 dark:text-gray-400" />
               )}
-            </button>
+            </button> */}
 
             {/* Search Button - Mobile */}
             <button className="md:hidden p-2.5 rounded-xl  transition-colors duration-200">
@@ -133,41 +136,41 @@ const Header: React.FC<HeaderProps> = ({
         {isMobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 dark:border-gray-800 py-4 animate-fade-in">
             <nav className="flex flex-col space-y-3">
-              <a
-                href="#"
+              <Link
+                href="/"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Home
-              </a>
-              <a
-                href="#products"
+              </Link>
+              <Link
+                href="products"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Products
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Solutions
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Support
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 About
-              </a>
+              </Link>
             </nav>
           </div>
         )}

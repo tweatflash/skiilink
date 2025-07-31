@@ -32,3 +32,31 @@ body {
     scrollbar-width: none; /* Firefox */
   }
 }
+html.dark {
+    --typography-color: var(--color-zinc-400);
+    --typography-heading: var(--color-white);
+    --typography-strong: var(--color-white);
+    --typography-link: var(--color-white);
+    --typography-link-underline: var(--color-zinc-600);
+    --typography-link-underline-hover: var(--color-zinc-400);
+    --typography-code: var(--color-white);
+    --typography-thead-border: var(--color-zinc-800);
+    --typography-list-marker: var(--color-white);
+    --typography-hr: var(--color-zinc-800);
+    --background:0 0% 7%;
+    --primary-bg-color: hsl(var(--background)/ .8);
+    --border-color:240 3.7% 15.9%;
+    --accent:240 2.9% 12.0%;
+    --color:white;
+
+}
+
+:root {
+    
+     --background:0 0% 100%;
+    --primary-bg-color: hsl(var(--background)/.8);
+    --border-color:240 5.9% 90%;
+    --accent:240 4.8% 95.9%;
+    --error-bg:0, 91%, 71%, ;
+    --color:black;
+}

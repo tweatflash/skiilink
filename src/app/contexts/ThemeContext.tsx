@@ -5,9 +5,14 @@ type Theme = 'light' | 'dark';
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
+  authError:{
+    show:boolean,
+    error:string
+  }
+  setAuthError:any
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
@@ -25,7 +30,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     return 'light';
   });
-
+  const [authError,setAuthError]=useState({
+    "show":false,
+    "error":""
+  })
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
@@ -38,7 +46,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme,authError,setAuthError }}>
       {children}
     </ThemeContext.Provider>
   );

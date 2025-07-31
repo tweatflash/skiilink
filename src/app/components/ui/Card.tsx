@@ -16,16 +16,16 @@ const Card: React.FC<CardProps> = ({
 }) => {
   const paddingStyles = {
     none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8'
+    sm: 'px-4',
+    md: 'px-6',
+    lg: 'px-8'
   };
 
   return (
     <div
       className={cn(
-        ' sm:bg-white dark:bg-gray-900 sm:border sm:border-gray-200 sm:dark:border-gray-800 sm:rounded-2xl sm:shadow-sm',
-        hover && 'sm:hover:shadow-xl sm:hover:shadow-gray-200/50 sm:dark:hover:shadow-gray-900/50 transition-all duration-300 hover:-translate-y-1',
+        ' ',
+        hover && 'pt-3 pb-0 sm:hover:shadow-xl hover:bg-white transition-all duration-300 hover:-translate-y-1',
         paddingStyles[padding],
         className
       )}
