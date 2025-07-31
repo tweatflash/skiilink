@@ -158,18 +158,18 @@ const Header: React.FC<HeaderProps> = ({
                 Solutions
               </Link>
               <Link
-                href="#"
+                href="/sign-up"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Support
+                Sign in
               </Link>
               <Link
-                href="#"
+                href="/sign-in"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                About
+                Sign in
               </Link>
             </nav>
           </div>
