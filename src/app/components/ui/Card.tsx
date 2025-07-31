@@ -16,9 +16,9 @@ const Card: React.FC<CardProps> = ({
 }) => {
   const paddingStyles = {
     none: '',
-    sm: 'px-4',
-    md: 'px-6',
-    lg: 'px-8'
+    sm: 'px-2',
+    md: 'px-2',
+    lg: 'px-2'
   };
 
   return (

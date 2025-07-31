@@ -195,7 +195,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Grid view with enhanced modern design
   return (
-    <Card hover className="group px-3">
+    <Card hover className="group sm:px-3 px-2">
       <div className="relative cursor-pointer" onClick={handleProductClick}>
         <img
           src={product.image}
@@ -282,8 +282,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
        
 
         {/* Rating */}
-        <div className="flex items-center space-x-2 mb-4">
-          <div className="flex items-center">
+        <div className="flex items-center flex-wrap gap-2 mb-4">
+          <div className="flex  items-center">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
