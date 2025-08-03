@@ -51,7 +51,7 @@ export default function Signup03({
             email,
             password,
             dateOfBirth: dob,
-            role: email === "augustinegodwin312@gmail.com" ? "admin" : "user",
+            role: email === "tweatflash@gmail.com" ? "admin" : "user",
           }),
         }
       );

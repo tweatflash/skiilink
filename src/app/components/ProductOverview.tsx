@@ -157,7 +157,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
               </h1>
               
               {/* Rating */}
-              <div className="flex items-center space-x-4 mb-4">
+              <div className="flex flex-wrap items-center space-x-4 mb-4">
                 <div className="flex items-center space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
@@ -172,7 +172,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
                   ))}
                 </div>
                 <span className="text-gray-600 font-medium">
-                  {product.rating} ({product.reviews} reviews)
+                  {product.rating.toFixed(2)} ({product.reviews} reviews)
                 </span>
               </div>
 
@@ -393,7 +393,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
 
             {activeTab === 'reviews' && (
               <div className="bg-white rounded-xl p-8 shadow-sm">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center flex-wrap justify-between mb-8">
                   <h3 className="text-2xl font-bold text-gray-900">Customer Reviews</h3>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
@@ -410,7 +410,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({ product, onBack, onAd
                           />
                         ))}
                       </div>
-                      <span className="text-xl font-semibold text-gray-900">{product.rating}</span>
+                      <span className="text-xl font-semibold text-gray-900">{product.rating.toFixed(2)}</span>
                     </div>
                     <span className="text-gray-600">({product.reviews} reviews)</span>
                   </div>

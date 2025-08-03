@@ -200,7 +200,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <img
           src={product.image}
           alt={product.name}
-          className="rounded-lg w-full aspect-square object-cover bg-white transition-transform duration-700"
+          className="rounded-lg w-full aspect-square object-cover bg-white border border-gray-200 transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
@@ -262,9 +262,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="py-4 ">
-        <div className="mb-3 cursor-pointer" onClick={handleProductClick}>
+        <div className="mb-2 cursor-pointer" onClick={handleProductClick}>
           <div className="sm:rrrflex items-start justify-between mb-2">
-            <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 text-sm sm:text-base leading-tight">
+            <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate line-clamp-2 text-sm sm:text-base leading-tight">
               {product.name}
             </h3>
             {/* {product.warranty && (
@@ -282,7 +282,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
        
 
         {/* Rating */}
-        <div className="flex items-center flex-wrap gap-2 mb-4">
+        <div className="flex items-center flex-wrap gap-2 mb-2">
           <div className="flex  items-center">
             {[...Array(5)].map((_, i) => (
               <Star

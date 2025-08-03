@@ -137,12 +137,12 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      {/* <div className="bg-white shadow-sm border-b sticky top-0 z-40"> */}
+        {/* <div className="max-w-7xl mx-auto px-4 py-4"> */}
           {/* Mobile Header */}
-          <div className="flex items-center justify-between lg:hidden">
+          {/* <div className="flex items-center justify-between lg:hidden">
             <div className="flex items-center space-x-3">
               <button
                 onClick={onBack}
@@ -168,10 +168,10 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
               <Filter size={16} />
               <span className="text-sm">Filters</span>
             </button>
-          </div>
+          </div> */}
 
           {/* Desktop Header */}
-          <div className="hidden lg:flex items-center justify-between">
+          {/* <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
@@ -189,7 +189,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Search */}
+              Search
               <div className="relative">
                 <input
                   type="text"
@@ -209,7 +209,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 )}
               </div>
 
-              {/* Sort */}
+              </>Sort<>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
@@ -221,7 +221,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 <option value="rating">Highest Rated</option>
               </select>
 
-              {/* View Mode */}
+              <>View Mode</>
               <div className="flex border border-gray-300 rounded-lg overflow-hidden">
                 <button
                   onClick={() => setViewMode('grid')}
@@ -237,12 +237,12 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          {/* Mobile Filters Panel */}
-          {showFilters && (
+          {/*  Mobile Filters Panel  */}
+          {/* {showFilters && (
             <div className="lg:hidden mt-4 p-4 bg-gray-50 rounded-lg space-y-4">
-              {/* Mobile Search */}
+              
               <div className="relative">
                 <input
                   type="text"
@@ -262,7 +262,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 )}
               </div>
 
-              {/* Mobile Sort and View */}
+              <> Mobile Sort and View </>
               <div className="flex space-x-3">
                 <select
                   value={sortBy}
@@ -291,17 +291,17 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 </div>
               </div>
             </div>
-          )}
-        </div>
-      </div>
+          )} */}
+        {/* </div> */}
+      {/* </div> */}
 
       {/* Category Tabs */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex space-x-1 overflow-x-auto py-4 scrollbar-hide">
+          <div className="flex space-x-1 overflow-x-auto py-4 no-scrollbar scrollbar-hide">
             <button
               onClick={() => setCurrentCategory(null)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors text-sm font-medium ${
+              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
                 !currentCategory
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -315,7 +315,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 <button
                   key={category.id}
                   onClick={() => setCurrentCategory(category.id)}
-                  className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors text-sm font-medium ${
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
                     currentCategory === category.id
                       ? 'bg-orange-500 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -348,7 +348,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
           <>
             <div className={`grid  ${
               viewMode === 'grid' 
-                ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5' 
+                ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' 
                 : 'grid-cols-1'
             }`}>
               {displayedProducts.map((product) => (

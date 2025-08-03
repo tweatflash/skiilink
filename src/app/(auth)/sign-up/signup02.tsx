@@ -34,7 +34,7 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
     if (value.length > 1) return;
     
     const newOtp = [...otp];
-    newOtp[index] = value.toUpperCase();
+    newOtp[index] = value;
     setOtp(newOtp);
     setError('');
 
@@ -57,7 +57,7 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').toUpperCase().slice(0, 5);
+    const pastedData = e.clipboardData.getData('text').slice(0, 5);
     const newOtp = pastedData.split('').concat(Array(5 - pastedData.length).fill(''));
     setOtp(newOtp);
     

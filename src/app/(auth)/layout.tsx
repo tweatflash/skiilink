@@ -1,12 +1,8 @@
 "use client"
 import Link from "next/link";
-import { Inter } from "next/font/google";
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "app/contexts/ThemeContext";
-const interFont=Inter({
-  subsets:["latin"],
-  fallback:["placeholder", "sans-serif","system-ui"]
-})
+
 export default function AuthLayout({children,}: {children: React.ReactNode}) {
     const navigation = [
       { name: "Product", href: "#" },

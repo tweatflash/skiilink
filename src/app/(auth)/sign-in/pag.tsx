@@ -57,7 +57,7 @@ export default function Login({clientId}:Prop) {
             })
         }
         try { 
-            const request = await fetch("https://tweatflash-web-app.onrender.com/api/v1/auth/login/",{
+            const request = await fetch("https://solar-store.onrender.com/api/v1/auth/login/",{
                 method:"POST",
                 headers:{
                     'Content-Type': 'application/json',

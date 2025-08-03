@@ -79,14 +79,14 @@ export interface Customer {
 }
 
 export interface ProductFormData {
-  name: string;
+  title: string;
   description: string;
   fullDescription: string;
   price: number;
-  originalPrice?: number;
+  discountPercentage?: number;
   category: string;
   brand: string;
-  model: string;
+  sku: string;
   weight: string;
   dimensions: string;
   warranty: string;

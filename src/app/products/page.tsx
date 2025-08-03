@@ -181,13 +181,14 @@ function App() {
   return (
     // <ThemeProvider>
         <div className="min-h-screen bg-gray-50">
-          <div className='w-full relative'>
           <Header
             cartItemCount={cartItemCount}
             onCartClick={() => setIsCartOpen(true)}
             onSearchChange={setSearchQuery}
             searchQuery={searchQuery}
           />
+          <div className='w-full relative'>
+          
           </div>
           <CatalogPage
             onBack={handleBackToHome}

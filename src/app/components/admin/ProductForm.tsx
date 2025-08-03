@@ -12,7 +12,7 @@ import {
 import { Product } from '../../types/product';
 import { ProductFormData } from '../../types/admin';
 import { categories } from '../../data/products';
-
+import uploadWithFormData from '../../../../lib/upload(formData)'
 interface ProductFormProps {
   product?: Product | null;
   onClose: () => void;
@@ -21,15 +21,16 @@ interface ProductFormProps {
 
 const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const serverFormdata=new FormData()
   const [formData, setFormData] = useState<ProductFormData>({
-    name: product?.name || '',
+    title: product?.name || '',
     description: product?.description || '',
     fullDescription: product?.fullDescription || product?.description || '',
     price: product?.price || 0,
-    originalPrice: product?.originalPrice || undefined,
+    discountPercentage: product?.originalPrice || undefined,
     category: product?.category || '',
     brand: product?.brand || '',
-    model: product?.model || '',
+    sku: product?.model || '',
     weight: product?.weight || '',
     dimensions: product?.dimensions || '',
     warranty: product?.warranty || '',
@@ -41,8 +42,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
     isBestSeller: product?.isBestSeller || false,
   });
 
-  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>(
-    product?.images || [product?.image].filter(Boolean) || []
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[] | any>(
+     product?.images || [product?.image].filter(Boolean) || []
   );
 
   const handleInputChange = (field: keyof ProductFormData, value: any) => {
@@ -72,10 +73,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
     setFormData(prev => ({ ...prev, images: newImages }));
 
     // Create preview URLs
-    files.forEach(file => {
+    files.forEach((file:any) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreviewUrls(prev => [...prev, e.target?.result as string]);
+        setImagePreviewUrls((prev:any) => [...prev, e.target?.result as string]);
       };
       reader.readAsDataURL(file);
     });
@@ -83,12 +84,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
 
   const removeImage = (index: number) => {
     const newImages = formData.images.filter((_, i) => i !== index);
-    const newPreviews = imagePreviewUrls.filter((_, i) => i !== index);
+    const newPreviews = imagePreviewUrls.filter((_ :any, i:any) => i !== index);
     setFormData(prev => ({ ...prev, images: newImages }));
     setImagePreviewUrls(newPreviews);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Filter out empty specifications and features
@@ -97,8 +98,27 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
       specifications: formData.specifications.filter(spec => spec.trim() !== ''),
       features: formData.features.filter(feature => feature.trim() !== ''),
     };
-    
-    onSave(cleanedData);
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === 'images' && Array.isArray(value)) {
+        // Append each image file individually
+        value.forEach((file, index) => {
+          serverFormdata.append(`images[${index}]`, file); // assumes each item is a File object
+        });
+      } else if (Array.isArray(value)) {
+        // Stringify arrays before appending
+        serverFormdata.append(key, JSON.stringify(value));
+      } else {
+        // Append primitive values directly
+        serverFormdata.append(key, value ?? '');
+      }
+    });
+
+    // for (const [key, value] of serverFormdata.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
+    const data = await uploadWithFormData("/products/create",serverFormdata);
+    console.log(data)
+    // onSave(cleanedData);
   };
 
   return (
@@ -142,8 +162,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
               <input
                 type="text"
                 required
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
+                value={formData.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Enter product name"
               />
@@ -187,8 +207,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
               </label>
               <input
                 type="text"
-                value={formData.model}
-                onChange={(e) => handleInputChange('model', e.target.value)}
+                value={formData.sku}
+                onChange={(e) => handleInputChange('sku', e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Enter model number"
               />
@@ -252,8 +272,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
                 type="number"
                 min="0"
                 step="0.01"
-                value={formData.originalPrice || ''}
-                onChange={(e) => handleInputChange('originalPrice', parseFloat(e.target.value) || undefined)}
+                value={formData.discountPercentage || ''}
+                onChange={(e) => handleInputChange('discountPercentage', parseFloat(e.target.value) || undefined)}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="0.00"
               />
@@ -409,7 +429,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose, onSave }) =
 
             {imagePreviewUrls.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {imagePreviewUrls.map((url, index) => (
+                {imagePreviewUrls.map((url:any, index:number) => (
                   <div key={index} className="relative group">
                     <img
                       src={url}
