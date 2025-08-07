@@ -1,19 +1,37 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { ArrowLeft, Filter, Grid, List, SortAsc, Search, X } from 'lucide-react';
-import ProductCard from './ProductCard';
-import { Product, Category } from '../types/product';
-import { categories, featuredProducts, bestSellingProducts } from '../data/products';
-
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import {
+  ArrowLeft,
+  Filter,
+  Grid,
+  List,
+  SortAsc,
+  Search,
+  X,
+} from "lucide-react";
+import ProductCard from "./ProductCard";
+import { Product, Category } from "../types/product";
+import {
+  categories,
+  featuredProducts,
+  bestSellingProducts,
+} from "../data/products";
+import { useRouter } from "next/navigation";
+import getWikiResults from '../../../lib/getProducts'
+import ProductCard2 from "./ProductCard2";
 interface CatalogPageProps {
   onBack: () => void;
   onAddToCart: (product: Product) => void;
   onProductClick?: (product: Product) => void;
   searchQuery?: string;
-  selectedCategory?: string | null;
+  selectedCategory: string | null;
+  setSelectedCategory: any;
 }
 
 // Simulate more products for infinite scroll
-const generateMoreProducts = (baseProducts: Product[], count: number): Product[] => {
+const generateMoreProducts = (
+  baseProducts: Product[],
+  count: number
+): Product[] => {
   const moreProducts: Product[] = [];
   for (let i = 0; i < count; i++) {
     const baseProduct = baseProducts[i % baseProducts.length];
@@ -30,24 +48,33 @@ const generateMoreProducts = (baseProducts: Product[], count: number): Product[]
 };
 
 const allProducts = [...featuredProducts, ...bestSellingProducts];
-const extendedProducts = [...allProducts, ...generateMoreProducts(allProducts, 200)];
+const extendedProducts = [
+  ...allProducts,
+  ...generateMoreProducts(allProducts, 200),
+];
 
-const CatalogPage: React.FC<CatalogPageProps> = ({ 
-  onBack, 
-  onAddToCart, 
+const CatalogPage: React.FC<CatalogPageProps> = ({
+  onBack,
+  onAddToCart,
   onProductClick,
-  searchQuery = '', 
-  selectedCategory = null 
+  searchQuery = "",
+  selectedCategory,
+  setSelectedCategory
 }) => {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [currentCategory, setCurrentCategory] = useState<string | null>(selectedCategory);
-  const [sortBy, setSortBy] = useState<'name' | 'price-low' | 'price-high' | 'rating'>('name');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [currentCategory, setCurrentCategory] = useState<string | null>(
+    selectedCategory
+  );
+  const [sortBy, setSortBy] = useState<
+    "name" | "price-low" | "price-high" | "rating"
+  >("name");
+  const [productItems,setProductItems]=useState<dummyStore[]>([])
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
   const [showFilters, setShowFilters] = useState(false);
-
+  const router = useRouter();
   const PRODUCTS_PER_LOAD = 12;
 
   const filteredProducts = useMemo(() => {
@@ -55,30 +82,37 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
 
     // Filter by search query
     if (localSearchQuery) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(localSearchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(localSearchQuery.toLowerCase()) ||
+          product.category
+            .toLowerCase()
+            .includes(localSearchQuery.toLowerCase())
       );
     }
 
     // Filter by category
     if (currentCategory) {
-      filtered = filtered.filter(product => product.category === currentCategory);
+      filtered = filtered.filter(
+        (product) => product.category === currentCategory
+      );
     }
 
     // Sort products
     switch (sortBy) {
-      case 'price-low':
+      case "price-low":
         filtered.sort((a, b) => a.price - b.price);
         break;
-      case 'price-high':
+      case "price-high":
         filtered.sort((a, b) => b.price - a.price);
         break;
-      case 'rating':
+      case "rating":
         filtered.sort((a, b) => b.rating - a.rating);
         break;
-      case 'name':
+      case "name":
       default:
         filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
@@ -91,22 +125,34 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     if (loading || !hasMore) return;
 
     setLoading(true);
-    
+
     // Simulate API delay
     setTimeout(() => {
       const currentLength = displayedProducts.length;
-      const nextProducts = filteredProducts.slice(currentLength, currentLength + PRODUCTS_PER_LOAD);
-      
+      const nextProducts = filteredProducts.slice(
+        currentLength,
+        currentLength + PRODUCTS_PER_LOAD
+      );
+
       if (nextProducts.length === 0) {
         setHasMore(false);
       } else {
-        setDisplayedProducts(prev => [...prev, ...nextProducts]);
+        setDisplayedProducts((prev) => [...prev, ...nextProducts]);
       }
-      
+
       setLoading(false);
     }, 500);
   }, [displayedProducts.length, filteredProducts, loading, hasMore]);
-
+  const fetchProducts =async ()=>{
+    const request: Promise<ProductRes> = await getWikiResults("all");
+    const response:dummyStore[] | undefined =(await request)?.products
+    if (response && response.length){
+      setProductItems([...productItems, ...response])
+    }
+  }
+  useEffect(()=>{
+    fetchProducts()
+  },[])
   // Reset displayed products when filters change
   useEffect(() => {
     setDisplayedProducts(filteredProducts.slice(0, PRODUCTS_PER_LOAD));
@@ -117,32 +163,33 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   useEffect(() => {
     const handleScroll = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop
-        >= document.documentElement.offsetHeight - 1000
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 1000
       ) {
         loadMoreProducts();
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [loadMoreProducts]);
 
   const getCategoryName = (categoryId: string) => {
-    return categories.find(cat => cat.id === categoryId)?.name || categoryId;
+    return categories.find((cat) => cat.id === categoryId)?.name || categoryId;
   };
 
   const getProductCount = (categoryId: string) => {
-    return filteredProducts.filter(product => product.category === categoryId).length;
+    return filteredProducts.filter((product) => product.category === categoryId)
+      .length;
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       {/* <div className="bg-white shadow-sm border-b sticky top-0 z-40"> */}
-        {/* <div className="max-w-7xl mx-auto px-4 py-4"> */}
-          {/* Mobile Header */}
-          {/* <div className="flex items-center justify-between lg:hidden">
+      {/* <div className="max-w-7xl mx-auto px-4 py-4"> */}
+      {/* Mobile Header */}
+      {/* <div className="flex items-center justify-between lg:hidden">
             <div className="flex items-center space-x-3">
               <button
                 onClick={onBack}
@@ -170,8 +217,8 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
             </button>
           </div> */}
 
-          {/* Desktop Header */}
-          {/* <div className="hidden lg:flex items-center justify-between">
+      {/* Desktop Header */}
+      {/* <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
@@ -239,8 +286,8 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
             </div>
           </div> */}
 
-          {/*  Mobile Filters Panel  */}
-          {/* {showFilters && (
+      {/*  Mobile Filters Panel  */}
+      {/* {showFilters && (
             <div className="lg:hidden mt-4 p-4 bg-gray-50 rounded-lg space-y-4">
               
               <div className="relative">
@@ -292,7 +339,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
               </div>
             </div>
           )} */}
-        {/* </div> */}
+      {/* </div> */}
       {/* </div> */}
 
       {/* Category Tabs */}
@@ -300,11 +347,14 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex space-x-1 overflow-x-auto py-4 no-scrollbar scrollbar-hide">
             <button
-              onClick={() => setCurrentCategory(null)}
+              onClick={() => {
+                router.push(`/products?category=${null}`);
+                setSelectedCategory(null) 
+              }}
               className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
-                !currentCategory
-                  ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                selectedCategory === null
+                  ? "bg-orange-500 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               All Products ({filteredProducts.length})
@@ -314,11 +364,16 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
               return (
                 <button
                   key={category.id}
-                  onClick={() => setCurrentCategory(category.id)}
+                  onClick={() => {
+                    setCurrentCategory(category.id);
+                    setSelectedCategory(category.id)
+                    console.log(currentCategory, selectedCategory);
+                    router.push(`/products?category=${category.id}`);
+                  }}
                   className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
                     currentCategory === category.id
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? "bg-orange-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {category.name} ({count})
@@ -333,10 +388,12 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
       <div className="max-w-7xl mx-auto px-4 py-8">
         {displayedProducts.length === 0 && !loading ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+            <p className="text-gray-500 text-lg">
+              No products found matching your criteria.
+            </p>
             <button
               onClick={() => {
-                setLocalSearchQuery('');
+                setLocalSearchQuery("");
                 setCurrentCategory(null);
               }}
               className="mt-4 text-orange-500 hover:text-orange-600 underline"
@@ -346,17 +403,19 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
           </div>
         ) : (
           <>
-            <div className={`grid  ${
-              viewMode === 'grid' 
-                ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' 
-                : 'grid-cols-1'
-            }`}>
-              {displayedProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
+            <div
+              className={`grid  ${
+                viewMode === "grid"
+                  ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                  : "grid-cols-1"
+              }`}
+            >
+              {productItems.map((product) => (
+                <ProductCard2
+                  key={product._id}
                   product={product}
-                  onAddToCart={onAddToCart}
-                  onProductClick={onProductClick}
+                  // onAddToCart={onAddToCart}
+                  // onProductClick={onProductClick}
                   viewMode={viewMode}
                 />
               ))}
@@ -367,7 +426,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
               <div className="text-center py-8">
                 <div className="inline-flex items-center space-x-2">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
-                  <span className="text-gray-600">Loading more products...</span>
+                  <span className="text-gray-600">
+                    Loading more products...
+                  </span>
                 </div>
               </div>
             )}
@@ -375,7 +436,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
             {/* End of Results */}
             {!hasMore && displayedProducts.length > 0 && (
               <div className="text-center py-8">
-                <p className="text-gray-500">You've reached the end of our catalog!</p>
+                <p className="text-gray-500">
+                  You've reached the end of our catalog!
+                </p>
                 <p className="text-sm text-gray-400 mt-2">
                   Showing all {displayedProducts.length} products
                 </p>

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import { Star, ShoppingCart, Heart, Eye, Zap, Shield } from 'lucide-react';
-import { Product } from '../types/product';
+import { Star, ShoppingCart, Heart, Eye, Zap, Shield, LucideShoppingBag } from 'lucide-react';
 import Card from './ui/Card';
 import Button from './ui/Button';
 import Badge from './ui/Badge';
@@ -9,10 +8,10 @@ import { useRouter } from 'next/navigation';
 
 
 interface ProductCardProps {
-  product: Product;
-  onAddToCart: (product: Product) => void;
-  onQuickView?: (product: Product) => void;
-  onProductClick?: (product: Product) => void;
+  product: dummyStore;
+//   onAddToCart: (product: Product) => void;
+//   onQuickView?: (product: Product) => void;
+//   onProductClick?: (product: Product) => void;
   viewMode?: 'grid' | 'list';
 }
 
@@ -25,15 +24,15 @@ const formatPrice = (price: number) => {
   }).format(price);
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ 
+const ProductCard2: React.FC<ProductCardProps> = ({ 
   product, 
-  onAddToCart, 
-  onQuickView, 
-  onProductClick,
+//   onAddToCart, 
+//   onQuickView, 
+//   onProductClick,
   viewMode = 'grid' 
 }) => {
-  const discountPercentage = product.originalPrice 
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+  const discountPercentage = product.discountPercentage 
+    ? Math.round(((product.discountPercentage - product.price) / product.discountPercentage) * 100)
     : 0;
   const router=useRouter()
   const handleProductClick = () => {
@@ -47,8 +46,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="flex flex-col sm:flex-row">
           <div className="relative w-full sm:w-64 h-48 sm:h-56 flex-shrink-0 cursor-pointer" onClick={handleProductClick}>
             <img
-              src={product.image}
-              alt={product.name}
+              src={product.image[0].url}
+              alt={product.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             
@@ -57,12 +56,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
             
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col space-y-2">
-              {product.isNew && (
+              {product.sku && (
                 <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
                   NEW
                 </span>
               )}
-              {product.isBestSeller && (
+              {product.discountPercentage && (
                 <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
                   BESTSELLER
                 </span>
@@ -79,7 +78,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <button className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
                 <Heart size={16} className="text-gray-600 hover:text-red-500" />
               </button>
-              {onQuickView && (
+              {/* {onQuickView && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -89,11 +88,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 >
                   <Eye size={16} className="text-gray-600 hover:text-blue-500" />
                 </button>
-              )}
+              )} */}
             </div>
 
             {/* Stock Status */}
-            {!product.inStock && (
+            {!product.stock && (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
                 <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-lg">
                   Out of Stock
@@ -107,13 +106,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 cursor-pointer" onClick={handleProductClick}>
                   <h3 className="font-bold text-lg text-gray-900 mb-1 group-hover:text-orange-600 transition-colors line-clamp-2">
-                    {product.name}
+                    {product.title}
                   </h3>
                   {product.brand && (
                     <p className="text-sm text-gray-500 font-medium">{product.brand}</p>
                   )}
                 </div>
-                {product.warranty && (
+                {product.warrantyInformation && (
                   <div className="flex items-center space-x-1 text-green-600 bg-green-50 px-2 py-1 rounded-full">
                     <Shield size={12} />
                     <span className="text-xs font-medium">Warranty</span>
@@ -146,14 +145,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </div> */}
 
               {/* Key Features */}
-              {product.specifications && (
+              {product.reviews && (
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {product.specifications.slice(0, 3).map((spec, index) => (
+                  {product.reviews.slice(0, 3).map((spec, index) => (
                     <span
                       key={index}
                       className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full font-medium"
                     >
-                      {spec}
+                      {spec.comment}
                     </span>
                   ))}
                 </div>
@@ -166,9 +165,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <span className="text-2xl font-bold text-gray-900">
                   {formatPrice(product.price)}
                 </span>
-                {product.originalPrice && (
+                {product.price && (
                   <span className="text-lg text-gray-500 line-through">
-                    {formatPrice(product.originalPrice)}
+                    {formatPrice(product.price)}
                   </span>
                 )}
               </div>
@@ -176,16 +175,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {/* Actions */}
               <div className="flex items-center space-x-3">
                 <button
-                  onClick={() => onAddToCart(product)}
-                  disabled={!product.inStock}
+                //   onClick={() => onAddToCart(product)}
+                  disabled={!product.availabilityStatus}
                   className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
-                    product.inStock
+                    product.availabilityStatus
                       ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transform hover:scale-105'
                       : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   }`}
                 >
                   <ShoppingCart size={18} />
-                  <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
+                  <span>{product.availabilityStatus ? 'Add to Cart' : 'Out of Stock'}</span>
                 </button>
               </div>
             </div>
@@ -200,8 +199,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <Card hover className="group sm:px-3 px-2">
       <div className="relative cursor-pointer" onClick={handleProductClick}>
         <img
-          src={product.image}
-          alt={product.name}
+          src={product.image[0].url}
+          alt={product.title}
           className="rounded-lg w-full aspect-square object-cover bg-white border border-gray-200 transition-transform duration-700"
         />
         
@@ -232,7 +231,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <button className="p-2.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-xl hover:scale-110 transition-all duration-200 border border-white/20">
             <Heart size={16} className="text-gray-600 dark:text-gray-400 hover:text-red-500" />
           </button>
-          {onQuickView && (
+          {/* {onQuickView && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -242,11 +241,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
             >
               <Eye size={16} className="text-gray-600 dark:text-gray-400 hover:text-blue-500" />
             </button>
-          )}
+          )} */}
         </div>
 
         {/* Stock Status */}
-        {!product.inStock && (
+        {!product.stock && (
           <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
             <Badge variant="error" size="lg" className="shadow-xl">
               Out of Stock
@@ -267,7 +266,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="mb-2 cursor-pointer" onClick={handleProductClick}>
           <div className="sm:rrrflex items-start justify-between mb-2">
             <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate line-clamp-2 text-sm sm:text-base leading-tight">
-              {product.name}
+              {product.title}
             </h3>
             {/* {product.warranty && (
               <div className="flex items-center space-x-1 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-xl ml-2 border border-green-200 dark:border-green-800">
@@ -299,7 +298,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             ))}
           </div>
           <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-            {product.rating.toFixed(2)} | {product.reviews}+ sold
+            200 + sold
           </span>
         </div>
 
@@ -317,35 +316,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
             ))}
           </div>
         )} */}
-
+    
         {/* Price */}
-        <div className="flex items-center justify-between mb-0">
+        <div className="flex items-center justify-between mb-0 relative">
           <div className="flex flex-col">
             <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
               {formatPrice(product.price)}
             </span>
-            {product.originalPrice && (
+            {product.discountPercentage && (
               <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                {formatPrice(product.originalPrice)}
+                {formatPrice(product.discountPercentage)}
               </span>
             )}
           </div>
+           <Button
+                // onClick={() => onAddToCart(product)}
+                disabled={!product.stock}
+                variant={!product.stock ? 'primary' : 'secondary'}
+                className=" flex w-fit right-0 px-3"
+                size="lg"
+                >
+                <LucideShoppingBag size={16} />
+                {/* <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span> */}
+                </Button>
         </div>
 
         {/* Add to Cart Button */}
-        {/* <Button
-          onClick={() => onAddToCart(product)}
-          disabled={!product.inStock}
-          variant={product.inStock ? 'primary' : 'secondary'}
-          className="hidden sm:mt-3 sm:flex w-full"
-          size="lg"
-        >
-          <ShoppingCart size={16} />
-          <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span>
-        </Button> */}
+       
       </div>
     </Card>
   );
 };
 
-export default ProductCard;
+export default ProductCard2;

@@ -103,10 +103,10 @@ export const featuredProducts: Product[] = [
     id: '2',
     name: 'Mate Tubular Solar Lead Acid Batteries 12V 220Ah',
     price: 1993330,
-    image: 'https://ae-pic-a1.aliexpress-media.com/kf/S6fc63257108e498b96b21156569d44a4t.jpg_960x960q75.jpg_.avif',
+    image: 'https://res.cloudinary.com/dlsngc9fb/image/upload/v1754154469/Post-images/tmp-2-1754154469459_rk7vvp.jpg',
     images: [
-      'https://ae-pic-a1.aliexpress-media.com/kf/S6fc63257108e498b96b21156569d44a4t.jpg_960x960q75.jpg_.avif',
-      'https://ae-pic-a1.aliexpress-media.com/kf/Sf6d566d1c8c14b9d9c3176c07e32f021p.jpg_960x960q75.jpg_.avif',
+      'https://res.cloudinary.com/dlsngc9fb/image/upload/v1754154469/Post-images/tmp-2-1754154469459_rk7vvp.jpg',
+      'https://res.cloudinary.com/dlsngc9fb/image/upload/v1754154470/Post-images/tmp-3-1754154469460_fk8ar4.jpg',
       'https://ae-pic-a1.aliexpress-media.com/kf/S7ec0ec26c29447019cd876fa4388913eD.jpg_960x960q75.jpg_.avif',
     ],
     category: 'solar-batteries',

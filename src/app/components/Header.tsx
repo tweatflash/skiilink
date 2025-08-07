@@ -1,8 +1,8 @@
-import React from 'react';
-import { ShoppingCart, Search, Sun, Moon, Menu, X } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
+import React, { useContext } from 'react';
+import { ShoppingCart, Search, Sun, Moon, Menu, X, User } from 'lucide-react';
+import { ThemeContext, useTheme } from '../contexts/ThemeContext';
 import Link from 'next/link';
-
+import Cookies from 'js-cookie';
 interface HeaderProps {
   cartItemCount: number;
   onCartClick: () => void;
@@ -18,7 +18,11 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   // const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
+   const themeContext = useContext(ThemeContext)
+    if (!themeContext) {
+        throw new Error("ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider.");
+    }
+  const {loggedIn,setLoggedIn}=themeContext;
   return (
     <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
@@ -49,12 +53,18 @@ const Header: React.FC<HeaderProps> = ({
             <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Solutions
             </Link>
-            <Link href="sign-up" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+            {
+              loggedIn.boolean==="pending" ?<></>:loggedIn.boolean==="false" ? <>
+                <Link href="sign-up" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Sign up
             </Link>
             <Link href="/sign-in" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Sign in
             </Link>
+              </> :loggedIn.role==="user" || loggedIn.role===null? <></> :<Link href="administration_dashboard" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+              Admin
+            </Link>
+            }
           </nav>
 
           {/* Search Bar - Desktop */}
@@ -73,18 +83,16 @@ const Header: React.FC<HeaderProps> = ({
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-1">
-            {/* Theme Toggle */}
-            {/* <button
-              onClick={toggleTheme}
+            {/* User */}
+            <button
+              // onClick={toggleTheme}
               className="p-2.5 rounded-xl  transition-colors duration-200"
-              aria-label="Toggle theme"
+              aria-label="User"
             >
-              {theme === 'light' ? (
-                <Moon size={20} className="text-gray-600 dark:text-gray-400" />
-              ) : (
-                <Sun size={20} className="text-gray-600 dark:text-gray-400" />
-              )}
-            </button> */}
+             
+                <User size={20} className="text-gray-600 dark:text-gray-400" />
+             
+            </button>
 
             {/* Search Button - Mobile */}
             <button className="md:hidden p-2.5 rounded-xl  transition-colors duration-200">
@@ -162,7 +170,7 @@ const Header: React.FC<HeaderProps> = ({
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Sign in
+                Create Account
               </Link>
               <Link
                 href="/sign-in"

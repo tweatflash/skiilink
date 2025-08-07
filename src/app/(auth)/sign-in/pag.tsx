@@ -57,15 +57,15 @@ export default function Login({clientId}:Prop) {
             })
         }
         try { 
-            const request = await fetch("https://solar-store.onrender.com/api/v1/auth/login/",{
+            const request = await fetch("https://solar-store.onrender.com/api/v1/auth/login",{
                 method:"POST",
                 headers:{
                     'Content-Type': 'application/json',
                     
                 },
                 body: JSON.stringify({
-                    "email":email,
-                    "password":password
+                    "email":"rosecharles819@gmail.com",
+                    "password":"mark2024"
                 }) 
             })
             const response=await request

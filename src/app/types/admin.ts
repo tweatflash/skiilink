@@ -89,7 +89,7 @@ export interface ProductFormData {
   sku: string;
   weight: string;
   dimensions: string;
-  warranty: string;
+  warrantyInformation: string;
   specifications: string[];
   features: string[];
   images: File[];

@@ -1,8 +1,10 @@
-"use client"
+import Index from "app";
 import "./globals.css";
 import type { Metadata } from 'next'
-import { ThemeProvider } from "./contexts/ThemeContext";
-
+export const metadata :Metadata= {
+    title: 'SKIILINK VENTURES LIMITED',
+    description:'SKIILINK VENTURES LIMITED',
+}
 export default function RootLayout({
   children,
 }: {
@@ -17,9 +19,7 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         ></meta>
         <body className={` h-full w-full bg-[hsl(var(--background))]`}>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
+          <Index children={children}/>
         </body>
       </html>
   );

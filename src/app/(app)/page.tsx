@@ -1,18 +1,17 @@
 "use client"
 import React, { useState, useMemo } from 'react';
-import { ThemeProvider } from './contexts/ThemeContext';
-import Header from './components/Header';
 
-import HeroSection from './components/HeroSection';
-import CategoryCard from './components/CategoryCard';
-import ProductCard from './components/ProductCard';
-import Cart from './components/Cart';
-import CatalogPage from './components/CatalogPage';
-import ProductOverview from './components/ProductOverview';
-import AdminPanel from './components/AdminPanel';
-import { categories, featuredProducts, bestSellingProducts } from './data/products';
-import { Product, CartItem } from './types/product';
+import HeroSection from '../components/HeroSection';
+import CategoryCard from '../components/CategoryCard';
+import ProductCard from '../components/ProductCard';
+import Cart from '../components/Cart';
+import CatalogPage from '../components/CatalogPage';
+import ProductOverview from '../components/ProductOverview';
+import AdminPanel from '../components/AdminPanel';
+import { categories, featuredProducts, bestSellingProducts } from '../data/products';
+import { Product, CartItem } from '../types/product';
 import { useRouter } from 'next/navigation';
+import Header from 'app/components/Header';
 
 function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -42,7 +41,7 @@ function App() {
     return filtered;
   }, [searchQuery, selectedCategory, allProducts]);
 
-  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
   const handleAddToCart = (product: Product, quantity: number = 1) => {
     setCartItems(prev => {
@@ -75,16 +74,16 @@ function App() {
   const handleRemoveItem = (productId: string) => {
     setCartItems(prev => prev.filter(item => item.product.id !== productId));
   };
-
+  const router =useRouter()
   const handleCategoryClick = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-    setCurrentView('catalog');
+    router.push(`/products?category=${categoryId}`)
+    
   };
 
   const handleShopNow = () => {
     document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
   };
-const router =useRouter()
+
   const handleViewCatalog = () => {
     router.push("/products")
   };
@@ -145,46 +144,41 @@ const router =useRouter()
     );
   }
 
-  if (currentView === 'catalog') {
-    return (
-      // <ThemeProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Header
-            cartItemCount={cartItemCount}
-            onCartClick={() => setIsCartOpen(true)}
-            onSearchChange={setSearchQuery}
-            searchQuery={searchQuery}
-          />
+  // if (currentView === 'catalog') {
+  //   return (
+  //     // <ThemeProvider>
+  //       <div className="min-h-screen bg-gray-50">
+  //         <Header
+  //           cartItemCount={cartItemCount}
+  //           onCartClick={() => setIsCartOpen(true)}
+  //           onSearchChange={setSearchQuery}
+  //           searchQuery={searchQuery}
+  //         />
           
-          <CatalogPage
-            onBack={handleBackToHome}
-            onAddToCart={handleAddToCart}
-            onProductClick={handleProductClick}
-            searchQuery={searchQuery}
-            selectedCategory={selectedCategory}
-          />
+  //         <CatalogPage
+  //           onBack={handleBackToHome}
+  //           onAddToCart={handleAddToCart}
+  //           onProductClick={handleProductClick}
+  //           searchQuery={searchQuery}
+  //           selectedCategory={selectedCategory}
+  //         />
 
-          <Cart
-            isOpen={isCartOpen}
-            onClose={() => setIsCartOpen(false)}
-            items={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveItem}
-          />
-        </div>
-      // </ThemeProvider>
-    );
-  }
+  //         <Cart
+  //           isOpen={isCartOpen}
+  //           onClose={() => setIsCartOpen(false)}
+  //           items={cartItems}
+  //           onUpdateQuantity={handleUpdateQuantity}
+  //           onRemoveItem={handleRemoveItem}
+  //         />
+  //       </div>
+  //     // </ThemeProvider>
+  //   );
+  // }
 
   return (
     // <ThemeProvider>
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
-      <Header
-        cartItemCount={cartItemCount}
-        onCartClick={() => setIsCartOpen(true)}
-        onSearchChange={setSearchQuery}
-        searchQuery={searchQuery}
-      />
+    <>
+      
       
       {/* Admin Access Button - Remove in production */}
       <div className="fixed bottom-6 right-6 z-50">
@@ -292,7 +286,7 @@ const router =useRouter()
               <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">Best Sellers</h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
                 Our customers' favorite products - tried, tested, and highly rated.
-              </p>
+              </p>  
             </div>
             
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
@@ -369,7 +363,7 @@ const router =useRouter()
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
       />
-    </div>
+    </>
     // </ThemeProvider>
   );
 }
