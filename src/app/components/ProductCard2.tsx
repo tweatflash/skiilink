@@ -16,12 +16,7 @@ interface ProductCardProps {
 }
 
 const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
+    return `NGN ${price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
 
 const ProductCard2: React.FC<ProductCardProps> = ({ 
@@ -36,7 +31,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     : 0;
   const router=useRouter()
   const handleProductClick = () => {
-    router.push("/products/688fe27c8552f5ced64ce93a")
+    router.push("/products/"+product._id)
    
   };
 
@@ -162,7 +157,9 @@ const ProductCard2: React.FC<ProductCardProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
               {/* Price */}
               <div className="flex items-center space-x-3">
+
                 <span className="text-2xl font-bold text-gray-900">
+                    <span className='text-sm'>NGN</span>
                   {formatPrice(product.price)}
                 </span>
                 {product.price && (
@@ -283,7 +280,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
        
 
         {/* Rating */}
-        <div className="flex items-center flex-wrap gap-2 mb-2">
+        <div className="flex items-center flex-wrap mb-1">
           <div className="flex  items-center">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -297,7 +294,8 @@ const ProductCard2: React.FC<ProductCardProps> = ({
               />
             ))}
           </div>
-          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+          
+          <span className="text-xs text-gray-600 dark:text-gray-400 font-medium ml-1 ps-1 ">
             200 + sold
           </span>
         </div>
@@ -319,9 +317,10 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     
         {/* Price */}
         <div className="flex items-center justify-between mb-0 relative">
-          <div className="flex flex-col">
+          <div className="flex flex-row flex-wrap items-center gap-2 justify-between">
             <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              {formatPrice(product.price)}
+                <span className='text-xs sm:text-sm'>NGN</span>
+                <span>{product.price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
             </span>
             {product.discountPercentage && (
               <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
@@ -333,12 +332,12 @@ const ProductCard2: React.FC<ProductCardProps> = ({
                 // onClick={() => onAddToCart(product)}
                 disabled={!product.stock}
                 variant={!product.stock ? 'primary' : 'secondary'}
-                className=" flex w-fit right-0 px-3"
+                className="hidden w-fit right-0 px-3"
                 size="lg"
                 >
                 <LucideShoppingBag size={16} />
                 {/* <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span> */}
-                </Button>
+                </Button> 
         </div>
 
         {/* Add to Cart Button */}

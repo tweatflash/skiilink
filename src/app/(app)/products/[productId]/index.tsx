@@ -16,12 +16,12 @@ import {
   Award,
   Clock,
 } from "lucide-react";
-import { Product } from "../../../types/product";
+// import { Product } from "../../../types/product";
 import { ThemeContext } from "app/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
 
 interface ProductOverviewProps {
-  product: Product;
+  product: dummyStore;
   // onBack: () => void;
   // onAddToCart: (product: Product, quantity: number) => void;
 }
@@ -51,10 +51,10 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
     "description" | "specifications" | "reviews"
   >("description");
     const router=useRouter()
-  const images = product.images || [product.image];
-  const discountPercentage = product.originalPrice
+  const images = product.image;
+  const discountPercentage = product.discountPercentage
     ? Math.round(
-        ((product.originalPrice - product.price) / product.originalPrice) * 100
+        ((product.discountPercentage - product.price) / product.discountPercentage) * 100
       )
     : 0;
 
@@ -66,18 +66,18 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
   };
 
   
-  const handleAddToCart = (product: Product, quantity: number = 1) => {
-      setCartItems((prev:any) => {
-        const existingItem = prev.find((item:any) => item.product.id === product.id);
-        if (existingItem) {
-          return prev.map((item:any) =>
-            item.product.id === product.id
-              ? { ...item, quantity: item.quantity + quantity }
-              : item
-          );
-        }
-        return [...prev, { product, quantity }];
-      });
+  const handleAddToCart = (product: dummyStore, quantity: number = 1) => {
+      // setCartItems((prev:any) => {
+      //   const existingItem = prev.find((item:any) => item.product.id === product.id);
+      //   if (existingItem) {
+      //     return prev.map((item:any) =>
+      //       item.product.id === product.id
+      //         ? { ...item, quantity: item.quantity + quantity }
+      //         : item
+      //     );
+      //   }
+      //   return [...prev, { product, quantity }];
+      // });
     };
     const onBack=()=>{
       router.push('/products')
@@ -101,7 +101,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
               <span className="whitespace-nowrap">{product.category}</span>
               <span>/</span>
               <span className="text-gray-900 whitespace-nowrapfont-medium truncate">
-                {product.name}
+                {product.title}
               </span>
             </div>
           </div>
@@ -115,19 +115,19 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             {/* Main Image */}
             <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden">
               <img
-                src={images[selectedImage]}
-                alt={product.name}
+                src={images[selectedImage].url}
+                alt={product.title}
                 className="w-full h-96 lg:h-[500px] object-cover"
               />
 
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col space-y-2">
-                {product.isNew && (
+                {product.meta && (
                   <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
                     NEW
                   </span>
                 )}
-                {product.isBestSeller && (
+                {product.brand && (
                   <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
                     BESTSELLER
                   </span>
@@ -159,7 +159,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             {/* Thumbnail Images */}
             {images.length > 1 && (
               <div className="flex space-x-3 overflow-x-auto pb-2">
-                {images.map((image: string, index: number) => (
+                {images.map((image:any , index: number) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
@@ -170,8 +170,8 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                     }`}
                   >
                     <img
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
+                      src={image.url}
+                      alt={`${product.title} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
                   </button>
@@ -190,7 +190,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                 </p>
               )}
               <h1 className="text-3xl lg:text-4xl font-bold break-all break-words whitespace-pre-wrap text-gray-900 mb-4 leading-tight">
-                {product.name}
+                {product.title}
               </h1>
 
               {/* Rating */}
@@ -209,11 +209,11 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                   ))}
                 </div>
                 <span className="text-gray-600 font-medium">
-                  {product.rating.toFixed(2)} ({product.reviews} reviews)
+                  {product.rating.toFixed(2)} ({product.rating} reviews)
                 </span>
               </div>
 
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
                 {product.description}
               </p>
             </div>
@@ -224,13 +224,13 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                 <span className="text-4xl font-bold text-gray-900">
                   {formatPrice(product.price)}
                 </span>
-                {product.originalPrice && (
+                {product.discountPercentage && (
                   <div className="flex flex-col">
                     <span className="text-xl text-gray-500 line-through">
-                      {formatPrice(product.originalPrice)}
+                      {formatPrice(product.discountPercentage)}
                     </span>
                     <span className="text-sm text-green-600 font-semibold">
-                      Save {formatPrice(product.originalPrice - product.price)}
+                      Save {formatPrice(product.discountPercentage - product.price)}
                     </span>
                   </div>
                 )}
@@ -238,7 +238,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
 
               {/* Stock Status */}
               <div className="flex items-center space-x-2 mb-4">
-                {product.inStock ? (
+                {product.stock ? (
                   <>
                     <Check size={16} className="text-green-500" />
                     <span className="text-green-600 font-medium">In Stock</span>
@@ -278,16 +278,16 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
               {/* Add to Cart Button */}
               <button
                 onClick={()=>handleAddToCart(product,quantity)}
-                disabled={!product.inStock}
+                disabled={!product.stock}
                 className={`w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
-                  product.inStock
+                  product.stock
                     ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transform hover:scale-105"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
                 <ShoppingCart size={20} />
                 <span>
-                  {product.inStock ? `Add ${quantity} to Cart` : "Out of Stock"}
+                  {product.stock ? `Add ${quantity} to Cart` : "Out of Stock"}
                 </span>
               </button>
             </div>
@@ -432,28 +432,28 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                         <div className="flex justify-between">
                           <dt className="text-gray-600">Dimensions:</dt>
                           <dd className="font-medium text-gray-900">
-                            {product.dimensions}
+                            {product.dimensions.width}
                           </dd>
                         </div>
                       )}
-                      {product.warranty && (
+                      {product.warrantyInformation && (
                         <div className="flex justify-between">
                           <dt className="text-gray-600">Warranty:</dt>
                           <dd className="font-medium text-gray-900">
-                            {product.warranty}
+                            {product.warrantyInformation}
                           </dd>
                         </div>
                       )}
                     </dl>
                   </div>
 
-                  {product.specifications && (
+                  {product.features && (
                     <div>
                       <h4 className="text-lg font-semibold text-gray-900 mb-4">
                         Features
                       </h4>
                       <ul className="space-y-2">
-                        {product.specifications.map(
+                        {product.features.map(
                           (spec: string, index: number) => (
                             <li
                               key={index}
@@ -497,7 +497,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                       </span>
                     </div>
                     <span className="text-gray-600">
-                      ({product.reviews} reviews)
+                      ({product.reviews.length} reviews)
                     </span>
                   </div>
                 </div>

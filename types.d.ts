@@ -14,7 +14,11 @@ type dummyStore={
     "tags":[    ][]
     "brand": string,
     "sku": string,
+    "fullDescription"?:string,
+    "features"?:string[],
+    "specifications"?:string[],
     "weight": number,
+    "model":string,
     "dimensions": {
         "width": number,
         "height": number,
