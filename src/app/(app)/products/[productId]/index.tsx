@@ -67,17 +67,24 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
 
   
   const handleAddToCart = (product: dummyStore, quantity: number = 1) => {
-      // setCartItems((prev:any) => {
-      //   const existingItem = prev.find((item:any) => item.product.id === product.id);
-      //   if (existingItem) {
-      //     return prev.map((item:any) =>
-      //       item.product.id === product.id
-      //         ? { ...item, quantity: item.quantity + quantity }
-      //         : item
-      //     );
-      //   }
-      //   return [...prev, { product, quantity }];
-      // });
+      
+      setCartItems((prev:CartItem[]) => {
+        const existingItem = prev.find((item:CartItem) => item.product._id === product._id);
+        
+        if (existingItem) {
+          console.log("why am i not adding")
+          return prev.map((item:CartItem) =>
+            item.product._id === product._id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          );
+          
+        }else{
+            
+            return [...prev, { product, quantity }];
+        }
+        
+      });
     };
     const onBack=()=>{
       router.push('/products')
@@ -158,8 +165,9 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
 
             {/* Thumbnail Images */}
             {images.length > 1 && (
-              <div className="flex space-x-3 overflow-x-auto pb-2">
-                {images.map((image:any , index: number) => (
+              <div className="flex space-x-3 w-full relative h-20 overflow-x-scroll no-scrollbar pb-2">
+                <div className="w-fit flex space-x-3 absolute overflow-x-auto no-scrollbar">
+                  {images.map((image:any , index: number) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
@@ -176,6 +184,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                     />
                   </button>
                 ))}
+                </div>
               </div>
             )}
           </div>

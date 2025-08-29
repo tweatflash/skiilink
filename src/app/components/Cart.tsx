@@ -1,6 +1,5 @@
 import React from 'react';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
-import { CartItem } from '../types/product';
 
 interface CartProps {
   isOpen: boolean;
@@ -47,31 +46,31 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
             ) : (
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.product.id} className="flex space-x-4 p-4 border border-gray-200 rounded-lg">
+                  <div key={item.product._id} className="flex space-x-4 p-4 border border-gray-200 rounded-lg">
                     <img
-                      src={item.product.image}
-                      alt={item.product.name}
+                      src={item.product.image[0].url}
+                      alt={item.product.title}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div className="flex-1">
-                      <h3 className="font-medium text-sm">{item.product.name}</h3>
+                      <h3 className="font-medium text-sm">{item.product.title}</h3>
                       <p className="text-orange-600 font-semibold">{formatPrice(item.product.price)}</p>
                       <div className="flex items-center space-x-2 mt-2">
                         <button
-                          onClick={() => onUpdateQuantity(item.product.id, Math.max(0, item.quantity - 1))}
+                          onClick={() => onUpdateQuantity(item.product._id.toString(), Math.max(0, item.quantity - 1))}
                           className="p-1 hover:bg-gray-100 rounded"
                         >
                           <Minus size={14} />
                         </button>
                         <span className="px-2 py-1 bg-gray-100 rounded text-sm">{item.quantity}</span>
                         <button
-                          onClick={() => onUpdateQuantity(item.product.id, item.quantity + 1)}
+                          onClick={() => onUpdateQuantity(item.product._id.toString(), item.quantity + 1)}
                           className="p-1 hover:bg-gray-100 rounded"
                         >
                           <Plus size={14} />
                         </button>
                         <button
-                          onClick={() => onRemoveItem(item.product.id)}
+                          onClick={() => onRemoveItem(item.product._id.toString())}
                           className="ml-auto text-red-500 hover:text-red-700 text-sm"
                         >
                           Remove

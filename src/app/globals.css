@@ -11,7 +11,7 @@ body {
 }
 @font-face {
   font-family: boldCal;
-  src: url(../../public/fonts/Coben.otf);
+  src: url(../../public/fonts/Chococooky.ttf);
 }
 @font-face {
   font-family: famil;
@@ -59,4 +59,7 @@ html.dark {
     --accent:240 4.8% 95.9%;
     --error-bg:0, 91%, 71%, ;
     --color:black;
+}
+.bg-loader{ 
+  @apply bg-gray-300 border border-gray-300
 }

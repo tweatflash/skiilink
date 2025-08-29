@@ -101,8 +101,8 @@ export const featuredProducts: Product[] = [
   },
   {
     id: '2',
-    name: 'Mate Tubular Solar Lead Acid Batteries 12V 220Ah',
-    price: 1993330,
+    name: 'Star Plus Tubular Solar Lead Acid Batteries 12V 220Ah',
+    price: 290000,
     image: 'https://res.cloudinary.com/dlsngc9fb/image/upload/v1754154469/Post-images/tmp-2-1754154469459_rk7vvp.jpg',
     images: [
       'https://res.cloudinary.com/dlsngc9fb/image/upload/v1754154469/Post-images/tmp-2-1754154469459_rk7vvp.jpg',
@@ -113,6 +113,7 @@ export const featuredProducts: Product[] = [
     rating: 4.9,
     reviews: 89,
     inStock: true,
+    originalPrice:300000,
     isNew: true,
     description: 'Deep cycle lithium battery with built-in BMS protection. Long-lasting and maintenance-free with superior energy density.',
     fullDescription: 'Advanced LiFePO4 lithium battery technology provides exceptional cycle life and safety. The integrated Battery Management System (BMS) protects against overcharge, over-discharge, and short circuits. With over 6000 charge cycles at 80% depth of discharge, this battery offers 10 times longer life than traditional lead-acid batteries. Compact design and lightweight construction make installation easy.',
@@ -134,8 +135,8 @@ export const featuredProducts: Product[] = [
   {
     id: '3',
     name: '5KW Felicity Solar Hybrid Inverter',
-    price: 1028989 ,
-    originalPrice: 1128989,
+    price: 550000 ,
+    originalPrice: 600000,
     image: 'https://www.felicitysolar.com/wp-content/uploads/2025/05/IVGM8KLP2G1.313-768x768.png',
     images: [
       'https://ae-pic-a1.aliexpress-media.com/kf/S7c131a342b30433ebb84b89d4bd25fe3G.jpg_960x960q75.jpg_.avif',
@@ -200,8 +201,9 @@ export const featuredProducts: Product[] = [
   },
   {
     id: '5',
-    name: 'Smart LED Flood Light 50W',
-    price: 134925,
+    name: 'Smart LED Flood Light 100W',
+    price: 40000,
+    originalPrice:45000,
     image: 'https://ae-pic-a1.aliexpress-media.com/kf/S0859d99c314a4787bd9a893fd326e0fbQ.jpg_960x960q75.jpg_.avif',
     images: [
       'https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&dpr=2',
@@ -265,8 +267,8 @@ export const bestSellingProducts: Product[] = [
   {
     id: '7',
     name: '1KWH portable power station ',
-    price: 581428,
-    originalPrice: 628000,
+    price: 400000,
+    originalPrice: 450000,
     image: 'https://ae-pic-a1.aliexpress-media.com/kf/S436a13160aaf4ceebd5b1c3a7edd23d33.jpg_960x960q75.jpg_.avif',
     images: [
       'https://ae-pic-a1.aliexpress-media.com/kf/S436a13160aaf4ceebd5b1c3a7edd23d33.jpg_960x960q75.jpg_.avif',

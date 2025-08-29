@@ -33,7 +33,7 @@ export interface Category {
 }
 
 export interface CartItem {
-  product: Product;
+  product: dummyStore;
   quantity: number;
 }
 type Result={

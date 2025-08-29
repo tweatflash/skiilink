@@ -193,16 +193,16 @@ const ProductCard2: React.FC<ProductCardProps> = ({
 
   // Grid view with enhanced modern design
   return (
-    <Card hover className="group sm:px-3 px-2">
-      <div className="relative cursor-pointer" onClick={handleProductClick}>
+    <Card hover className="group">
+      <div className="relative cursor-pointer border-b border-gray-300" onClick={handleProductClick}>
         <img
           src={product.image[0].url}
           alt={product.title}
-          className="rounded-lg w-full aspect-square object-cover bg-white border border-gray-200 transition-transform duration-700"
+          className=" w-full aspect-square object-cover bg-white border-gray-200 transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute rounded-lg inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
         {/* Badges */}
         {/* <div className="absolute top-3 left-3 flex flex-col space-y-2">
@@ -259,7 +259,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <div className="py-4 ">
+      <div className="py-4 sm:px-3 px-2">
         <div className="mb-2 cursor-pointer" onClick={handleProductClick}>
           <div className="sm:rrrflex items-start justify-between mb-2">
             <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate line-clamp-2 text-sm sm:text-base leading-tight">
@@ -318,7 +318,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
         {/* Price */}
         <div className="flex items-center justify-between mb-0 relative">
           <div className="flex flex-row flex-wrap items-center gap-2 justify-between">
-            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            <span className="sm:text-xl text-md font-bold text-gray-900 dark:text-gray-100">
                 <span className='text-xs sm:text-sm'>NGN</span>
                 <span>{product.price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
             </span>

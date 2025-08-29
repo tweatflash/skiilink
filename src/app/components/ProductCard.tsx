@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product) => void;
+  onAddToCart?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
   onProductClick?: (product: Product) => void;
   viewMode?: 'grid' | 'list';
@@ -176,7 +176,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {/* Actions */}
               <div className="flex items-center space-x-3">
                 <button
-                  onClick={() => onAddToCart(product)}
+                  onClick={() => onAddToCart && onAddToCart(product)}
                   disabled={!product.inStock}
                   className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
                     product.inStock
@@ -197,16 +197,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Grid view with enhanced modern design
   return (
-    <Card hover className="group sm:px-3 px-2">
+    <Card hover className="group">
       <div className="relative cursor-pointer" onClick={handleProductClick}>
         <img
           src={product.image}
           alt={product.name}
-          className="rounded-lg w-full aspect-square object-cover bg-white border border-gray-200 transition-transform duration-700"
+          className="w-full aspect-square object-cover bg-white border-b border-gray-200 transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
-        <div className="absolute rounded-lg inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
         {/* Badges */}
         {/* <div className="absolute top-3 left-3 flex flex-col space-y-2">
@@ -263,7 +263,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <div className="py-4 ">
+      <div className="py-4  sm:px-3 px-2">
         <div className="mb-2 cursor-pointer" onClick={handleProductClick}>
           <div className="sm:rrrflex items-start justify-between mb-2">
             <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate line-clamp-2 text-sm sm:text-base leading-tight">

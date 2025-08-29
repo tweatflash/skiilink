@@ -10,16 +10,24 @@ import CategoryCard from "app/components/CategoryCard";
 import ProductCard from "app/components/ProductCard";
 import Cart from "app/components/Cart";
 import CatalogPage from "app/components/CatalogPage";
-import ProductOverview from "app/components/ProductOverview";
 import AdminPanel from "app/components/AdminPanel";
 import Header from "app/components/Header";
 import { ThemeContext, ThemeProvider } from "app/contexts/ThemeContext";
 import HeroSection from "app/components/HeroSection";
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from "react";
 
 function App() {
-  const searchParams = useSearchParams();
-  const searchCategory = searchParams.get('category');
+  // Wrap useSearchParams in a Suspense boundary as required by Next.js
+
+  let searchCategory: string | null = null;
+  const SearchParamsWrapper = () => {
+    const searchParams = useSearchParams();
+    searchCategory = searchParams.get('category');
+    return null;
+  };
+
+  
   const jdjs=["all-products","solar-panels","solar-batteries","inverters","security-cameras","led-lights","electrical-tools","smart-home","cables-wires"]
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<

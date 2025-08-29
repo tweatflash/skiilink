@@ -12,7 +12,7 @@ const Card: React.FC<CardProps> = ({
   children, 
   className, 
   hover = false, 
-  padding = 'md' 
+  padding = 'none' 
 }) => {
   const paddingStyles = {
     none: '',
@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({
     <div
       className={cn(
         ' ',
-        hover && 'pt-2 sm:pt-3 pb-0 sm:hover:shadow-xl hover:bg-white rounded-lg transition-all duration-300 hover:-translate-y-1',
+        hover && '  pb-0 sm:hover:shadow-xl hover:bg-white border border-gray-300 overflow-hidden  rounded-xl transition-all duration-300 hover:-translate-y-1',
         paddingStyles[padding],
         className
       )}

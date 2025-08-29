@@ -5,9 +5,6 @@ import HeroSection from '../components/HeroSection';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 import Cart from '../components/Cart';
-import CatalogPage from '../components/CatalogPage';
-import ProductOverview from '../components/ProductOverview';
-import AdminPanel from '../components/AdminPanel';
 import { categories, featuredProducts, bestSellingProducts } from '../data/products';
 import { Product, CartItem } from '../types/product';
 import { useRouter } from 'next/navigation';
@@ -19,7 +16,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<'home' | 'catalog' | 'product' | 'admin'>('home');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<dummyStore | null>(null);
 
   const allProducts = [...featuredProducts, ...bestSellingProducts];
 
@@ -43,17 +40,17 @@ function App() {
 
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
-  const handleAddToCart = (product: Product, quantity: number = 1) => {
-    setCartItems(prev => {
-      const existingItem = prev.find(item => item.product.id === product.id);
+  const handleAddToCart = (product: CartItem['product'], quantity: number) => {
+    setCartItems((prev: CartItem[]) => {
+      const existingItem = prev.find(item => item.product._id === product._id);
       if (existingItem) {
         return prev.map(item =>
-          item.product.id === product.id
+          item.product._id === product._id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { product, quantity }];
+      return [...prev, { product: product, quantity }];
     });
   };
 
@@ -62,9 +59,9 @@ function App() {
       handleRemoveItem(productId);
       return;
     }
-    setCartItems(prev =>
+    setCartItems((prev:CartItem[]) =>
       prev.map(item =>
-        item.product.id === productId
+        item.product._id === productId
           ? { ...item, quantity }
           : item
       )
@@ -72,7 +69,7 @@ function App() {
   };
 
   const handleRemoveItem = (productId: string) => {
-    setCartItems(prev => prev.filter(item => item.product.id !== productId));
+    setCartItems(prev => prev.filter(item => item.product._id !== productId));
   };
   const router =useRouter()
   const handleCategoryClick = (categoryId: string) => {
@@ -94,7 +91,7 @@ function App() {
     setSearchQuery('');
   };
 
-  const handleProductClick = (product: Product) => {
+  const handleProductClick = (product: dummyStore) => {
     setSelectedProduct(product);
     setCurrentView('product');
   };
@@ -104,76 +101,8 @@ function App() {
     setSelectedProduct(null);
   };
 
-  // Check if admin view is requested (you can add authentication logic here)
-  const isAdminView = currentView === 'admin'
 
-  if (isAdminView) {
-    return (
-      // <ThemeProvider>
-        <AdminPanel />
-      // </ThemeProvider>
-    );
-  }
 
-  if (currentView === 'product' && selectedProduct) {
-    return (
-      // <ThemeProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Header
-            cartItemCount={cartItemCount}
-            onCartClick={() => setIsCartOpen(true)}
-            onSearchChange={setSearchQuery}
-            searchQuery={searchQuery}
-          />
-          
-          <ProductOverview
-            product={selectedProduct}
-            onBack={handleBackToCatalog}
-            onAddToCart={handleAddToCart}
-          />
-
-          <Cart
-            isOpen={isCartOpen}
-            onClose={() => setIsCartOpen(false)}
-            items={cartItems}
-            onUpdateQuantity={handleUpdateQuantity}
-            onRemoveItem={handleRemoveItem}
-          />
-        </div>
-      // </ThemeProvider>
-    );
-  }
-
-  // if (currentView === 'catalog') {
-  //   return (
-  //     // <ThemeProvider>
-  //       <div className="min-h-screen bg-gray-50">
-  //         <Header
-  //           cartItemCount={cartItemCount}
-  //           onCartClick={() => setIsCartOpen(true)}
-  //           onSearchChange={setSearchQuery}
-  //           searchQuery={searchQuery}
-  //         />
-          
-  //         <CatalogPage
-  //           onBack={handleBackToHome}
-  //           onAddToCart={handleAddToCart}
-  //           onProductClick={handleProductClick}
-  //           searchQuery={searchQuery}
-  //           selectedCategory={selectedCategory}
-  //         />
-
-  //         <Cart
-  //           isOpen={isCartOpen}
-  //           onClose={() => setIsCartOpen(false)}
-  //           items={cartItems}
-  //           onUpdateQuantity={handleUpdateQuantity}
-  //           onRemoveItem={handleRemoveItem}
-  //         />
-  //       </div>
-  //     // </ThemeProvider>
-  //   );
-  // }
 
   return (
     // <ThemeProvider>
@@ -181,14 +110,14 @@ function App() {
       
       
       {/* Admin Access Button - Remove in production */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setCurrentView('admin')}
           className="px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-700 text-white rounded-2xl shadow-2xl hover:shadow-gray-900/25 dark:hover:shadow-gray-800/25 transition-all duration-300 text-sm font-semibold backdrop-blur-xl border border-gray-700/50 hover:scale-105"
         >
           Admin Panel
         </button>
-      </div>
+      </div> */}
 
       <HeroSection onShopNow={handleShopNow} onViewCatalog={handleViewCatalog} />
 
@@ -264,13 +193,11 @@ function App() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onAddToCart={handleAddToCart}
-                  onProductClick={handleProductClick}
                 />
               ))}
             </div>
@@ -289,13 +216,11 @@ function App() {
               </p>  
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
               {bestSellingProducts.map((product:any) => (
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onAddToCart={handleAddToCart}
-                  onProductClick={handleProductClick}
                 />
               ))}
             </div>

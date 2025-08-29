@@ -62,7 +62,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   setSelectedCategory
 }) => {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [currentCategory, setCurrentCategory] = useState<string | null>(
     selectedCategory
@@ -159,21 +159,6 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     setHasMore(filteredProducts.length > PRODUCTS_PER_LOAD);
   }, [filteredProducts]);
 
-  // Infinite scroll handler
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 1000
-      ) {
-        loadMoreProducts();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadMoreProducts]);
-
   const getCategoryName = (categoryId: string) => {
     return categories.find((cat) => cat.id === categoryId)?.name || categoryId;
   };
@@ -182,7 +167,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     return filteredProducts.filter((product) => product.category === categoryId)
       .length;
   };
-
+  useEffect(()=>{
+    console.log(productItems.length)
+  },[productItems])
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -404,7 +391,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
         ) : (
           <>
             <div
-              className={`grid  ${
+              className={`grid gap-3 ${
                 viewMode === "grid"
                   ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
                   : "grid-cols-1"
@@ -419,19 +406,25 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                   viewMode={viewMode}
                 />
               ))}
+              {/* Loading Indicator */}
+              {loading && (
+               [1,2,5,5,5,,2,5,5,5].map(item=>(
+                 <div className="flex flex-col w-full h-full items-start">
+                  <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                  <div className="flex flex-col items-center justify-start py-4 w-full">
+                    <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                    <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                    <div className="grid grid-cols-3 w-full gap-2" >
+                      <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                      <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                    </div>
+                  </div>
+                </div>
+               ))
+              )}
             </div>
 
-            {/* Loading Indicator */}
-            {loading && (
-              <div className="text-center py-8">
-                <div className="inline-flex items-center space-x-2">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
-                  <span className="text-gray-600">
-                    Loading more products...
-                  </span>
-                </div>
-              </div>
-            )}
+            
 
             {/* End of Results */}
             {!hasMore && displayedProducts.length > 0 && (

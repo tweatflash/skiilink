@@ -3,7 +3,7 @@ type Ddstiew={
     loggedIn:boolean
 }
 type dummyStore={
-    "_id": number,
+    "_id": number | string,
     "title": string,
     "description": string,
     "category": string,
@@ -44,15 +44,15 @@ type dummyStore={
         "qrCode": string
     },
     "thumbnail": string,
-    "image":
-    {
-        "url": string,
-        "width": number,
-        "height": number,
-        "aspectRatio": number,
-        "_id": string,
-        "id": string
-    }[]
+    "image":ImageObj[]
+}
+type ImageObj={
+    "url": string,
+    "width": number,
+    "height": number,
+    "aspectRatio": number,
+    "_id": string,
+    "id": string
 }
 type ProductRes={
     products: dummyStore[]
@@ -82,7 +82,7 @@ type ProductF ={
   dimensions?: string;
 }
 type CartItem ={
-  product: ProductF;
+  product: dummyStore;
   quantity: number;
 }
 type UserRoot ={
