@@ -26,12 +26,6 @@ function App() {
     searchCategory = searchParams.get('category');
     return null;
   };
-  
-
-
-  
-
-  
   const jdjs=["all-products","solar-panels","solar-batteries","inverters","security-cameras","led-lights","electrical-tools","smart-home","cables-wires"]
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<
