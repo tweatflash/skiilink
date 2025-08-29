@@ -15,7 +15,6 @@ import Header from "app/components/Header";
 import { ThemeContext, ThemeProvider } from "app/contexts/ThemeContext";
 import HeroSection from "app/components/HeroSection";
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from "react";
 
 function App() {
   // Wrap useSearchParams in a Suspense boundary as required by Next.js
