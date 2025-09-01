@@ -16,7 +16,7 @@ import {
   bestSellingProducts,
 } from "../data/products";
 import { useRouter } from "next/navigation";
-import getWikiResults from '../../../lib/getProducts'
+import getWikiResults from "../../../lib/getProducts";
 import ProductCard2 from "./ProductCard2";
 interface CatalogPageProps {
   onBack: () => void;
@@ -59,7 +59,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   onProductClick,
   searchQuery = "",
   selectedCategory,
-  setSelectedCategory
+  setSelectedCategory,
 }) => {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   const [sortBy, setSortBy] = useState<
     "name" | "price-low" | "price-high" | "rating"
   >("name");
-  const [productItems,setProductItems]=useState<dummyStore[]>([])
+  const [productItems, setProductItems] = useState<dummyStore[]>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
   const [showFilters, setShowFilters] = useState(false);
@@ -143,16 +143,16 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
       setLoading(false);
     }, 500);
   }, [displayedProducts.length, filteredProducts, loading, hasMore]);
-  const fetchProducts =async ()=>{
+  const fetchProducts = async () => {
     const request: Promise<ProductRes> = await getWikiResults("all");
-    const response:dummyStore[] | undefined =(await request)?.products
-    if (response && response.length){
-      setProductItems([...productItems, ...response])
+    const response: dummyStore[] | undefined = (await request)?.products;
+    if (response && response.length) {
+      setProductItems([...productItems, ...response]);
     }
-  }
-  useEffect(()=>{
-    fetchProducts()
-  },[])
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   // Reset displayed products when filters change
   useEffect(() => {
     setDisplayedProducts(filteredProducts.slice(0, PRODUCTS_PER_LOAD));
@@ -167,11 +167,11 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     return filteredProducts.filter((product) => product.category === categoryId)
       .length;
   };
-  useEffect(()=>{
-    console.log(productItems.length)
-  },[productItems])
+  useEffect(() => {
+    console.log(productItems.length);
+  }, [productItems]);
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       {/* <div className="bg-white shadow-sm border-b sticky top-0 z-40"> */}
       {/* <div className="max-w-7xl mx-auto px-4 py-4"> */}
@@ -330,18 +330,18 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
       {/* </div> */}
 
       {/* Category Tabs */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex space-x-1 overflow-x-auto py-4 no-scrollbar scrollbar-hide">
+      <div className="bg-white sticky top-16 lg:top-20 z-10">
+        <div className="max-screen mx-auto px-4">
+          <div className="flex space-x-2 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
             <button
               onClick={() => {
                 router.push(`/products?category=${null}`);
-                setSelectedCategory(null) 
+                setSelectedCategory(null);
               }}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
+              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-xs sm:text-sm font-medium ${
                 selectedCategory === null
                   ? "bg-orange-500 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-200"
               }`}
             >
               All Products ({filteredProducts.length})
@@ -353,14 +353,14 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                   key={category.id}
                   onClick={() => {
                     setCurrentCategory(category.id);
-                    setSelectedCategory(category.id)
+                    setSelectedCategory(category.id);
                     console.log(currentCategory, selectedCategory);
                     router.push(`/products?category=${category.id}`);
                   }}
-                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-xs sm:text-sm font-medium ${
                     currentCategory === category.id
                       ? "bg-orange-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {category.name} ({count})
@@ -372,7 +372,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
       </div>
 
       {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-screen mx-auto px-4 py-4 bg-white">
         {displayedProducts.length === 0 && !loading ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
@@ -390,10 +390,11 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
           </div>
         ) : (
           <>
+            {/* Other Screens */}
             <div
-              className={`grid gap-3 ${
+              className={`hidden sm:grid gap-3 ${
                 viewMode === "grid"
-                  ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                  ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
                   : "grid-cols-1"
               }`}
             >
@@ -407,24 +408,78 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 />
               ))}
               {/* Loading Indicator */}
-              {loading && (
-               [1,2,5,5,5,,2,5,5,5].map(item=>(
-                 <div className="flex flex-col w-full h-full items-start">
-                  <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                  <div className="flex flex-col items-center justify-start py-4 w-full">
-                    <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                    <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                    <div className="grid grid-cols-3 w-full gap-2" >
-                      <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                      <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+              {loading &&
+                [1, 2, 5, 5, 5, 2, 5, 5, 5].map((item) => (
+                  <div className="flex flex-col w-full h-full items-start">
+                    <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                    <div className="flex flex-col items-center justify-start py-4 w-full">
+                      <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                      <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                      <div className="grid grid-cols-3 w-full gap-2">
+                        <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                        <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                      </div>
                     </div>
                   </div>
-                </div>
-               ))
-              )}
+                ))}
             </div>
+            {/* Mobile View */}
+            <div className={`flex sm:hidden flex-row gap-3 flex-nowrap`}>
+              {/* Mobile View */}
+              {/* First Row */}
+              <div className="flex-1 flex-col gap-3 overflow-x-auto">
+                {productItems
+                  .slice(0, Math.ceil(productItems.length / 2))
+                  .map((product) => (
+                    <ProductCard2
+                      key={product._id}
+                      product={product}
+                      viewMode={viewMode}
+                    />
+                  ))}
+                {loading &&
+                  [1, 2, 5, 5, 5].map((item) => (
+                    <div className="flex flex-col w-full items-start">
+                      <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                      <div className="flex flex-col items-center justify-start py-4 w-full">
+                        <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                        <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                        <div className="grid grid-cols-3 w-full gap-2">
+                          <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                          <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
 
-            
+              {/* Second Row */}
+              <div className="flex-1 flex-col gap-3 overflow-x-auto">
+                {productItems
+                  .slice(Math.ceil(productItems.length / 2))
+                  .map((product) => (
+                    <ProductCard2
+                      key={product._id}
+                      product={product}
+                      viewMode={viewMode}
+                    />
+                  ))}
+                {loading &&
+                  [1, 2, 5, 5, 5].map((item) => (
+                    <div className="flex flex-col w-full items-start">
+                      <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                      <div className="flex flex-col items-center justify-start py-4 w-full">
+                        <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                        <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                        <div className="grid grid-cols-3 w-full gap-2">
+                          <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                          <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
 
             {/* End of Results */}
             {!hasMore && displayedProducts.length > 0 && (

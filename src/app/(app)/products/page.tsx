@@ -139,7 +139,7 @@ function App() {
  
   return (
     // <ThemeProvider>
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       
       <div className="w-full relative"></div>
       {

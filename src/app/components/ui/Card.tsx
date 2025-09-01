@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({
     <div
       className={cn(
         ' ',
-        hover && '  pb-0 sm:hover:shadow-xl hover:bg-white border border-gray-300 overflow-hidden  rounded-xl transition-all duration-300 hover:-translate-y-1',
+        hover && 'pb-0  relative card-overlay transition-all duration-300 hover:-translate-y-1',
         paddingStyles[padding],
         className
       )}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
 
+import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
 interface CartProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,7 +21,33 @@ const formatPrice = (price: number) => {
 
 const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, onRemoveItem }) => {
   const total = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
-
+  const config = {
+      public_key: 'FLWPUBK_TEST-be991d4a6e11f924beafb5b15d5721f6-X',
+      tx_ref: Date.now().toString(),
+      amount: total,
+      currency: 'NGN',
+      payment_options: 'card,mobilemoney,ussd',
+      customer: {
+        email: 'user@gmail.com',
+        phone_number: '070********',
+        name: 'john doe',
+      },
+      customizations: {
+        title: 'My store',
+        description: 'Payment for items in cart',
+        logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+      },
+    };
+  
+    const fwConfig = {
+      ...config,
+      text: 'Checkout',
+      callback: (response:any) => {
+         console.log(response);
+        closePaymentModal() // this will close the modal programmatically
+      },
+      onClose: () => {},
+    };
   if (!isOpen) return null;
 
   return (
@@ -89,9 +116,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               <div className="flex justify-between text-lg font-semibold">
                 <span>Total: {formatPrice(total)}</span>
               </div>
-              <button className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors">
-                Checkout
-              </button>
+              <FlutterWaveButton className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors" {...fwConfig} />
             </div>
           )}
         </div>

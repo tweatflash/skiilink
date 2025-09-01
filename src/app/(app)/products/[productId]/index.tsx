@@ -72,7 +72,6 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
         const existingItem = prev.find((item:CartItem) => item.product._id === product._id);
         
         if (existingItem) {
-          console.log("why am i not adding")
           return prev.map((item:CartItem) =>
             item.product._id === product._id
               ? { ...item, quantity: item.quantity + quantity }
@@ -89,6 +88,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
     const onBack=()=>{
       router.push('/products')
     }
+     
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -300,7 +300,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                 </span>
               </button>
             </div>
-
+               
             {/* Trust Indicators */}
             <div className="flex justify-between flex-wrap gap-4 shrink-0">
               <div className="flex  items-center space-x-2 text-center">

@@ -24,8 +24,8 @@ const Header: React.FC<HeaderProps> = ({
     }
   const {loggedIn,setLoggedIn}=themeContext;
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4">
+    <header className="sticky top-0 z-50 bg-white">
+      <div className="max-screen mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href={"/"}>
@@ -53,22 +53,11 @@ const Header: React.FC<HeaderProps> = ({
             <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
               Solutions
             </Link>
-            {
-              loggedIn.boolean==="pending" ?<></>:loggedIn.boolean==="false" ? <>
-                <Link href="sign-up" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
-              Sign up
-            </Link>
-            <Link href="/sign-in" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
-              Sign in
-            </Link>
-              </> :loggedIn.role==="user" || loggedIn.role===null? <></> :<Link href="administration_dashboard" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
-              Admin
-            </Link>
-            }
+            
           </nav>
 
           {/* Search Bar - Desktop */}
-          <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
+          <div className="hidden md:flex items-center flex-1 max-w-lg mx-8">
             <div className="relative w-full">
               <input
                 type="text"
@@ -142,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-200 dark:border-gray-800 py-4 animate-fade-in">
+          <div className="lg:hidden  border-t border-gray-200 dark:border-gray-800 py-4 animate-fade-in">
             <nav className="flex flex-col space-y-3">
               <Link
                 href="/"

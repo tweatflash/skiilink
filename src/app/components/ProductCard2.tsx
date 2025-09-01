@@ -193,12 +193,12 @@ const ProductCard2: React.FC<ProductCardProps> = ({
 
   // Grid view with enhanced modern design
   return (
-    <Card hover className="group">
-      <div className="relative cursor-pointer border-b border-gray-300" onClick={handleProductClick}>
+    <Card hover className="group cursor-pointer relative">
+      <div className="relative bg-gray-200 rounded-md overflow-hidden" >
         <img
           src={product.image[0].url}
           alt={product.title}
-          className=" w-full aspect-square object-cover bg-white border-gray-200 transition-transform duration-700"
+          className=" w-full aspect-square object-cover  transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
@@ -259,9 +259,12 @@ const ProductCard2: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <div className="py-4 sm:px-3 px-2">
+      <div className="py-4 " >
         <div className="mb-2 cursor-pointer" onClick={handleProductClick}>
-          <div className="sm:rrrflex items-start justify-between mb-2">
+          <div className="flex items-center gap-1 mb-2">
+            <span className="inline-flex items-center rounded-md bg-green-400/10 px-2  text-xs font-medium text-green-400 border border-green-500/20">
+              Sale
+            </span>
             <h3 className=" text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate line-clamp-2 text-sm sm:text-base leading-tight">
               {product.title}
             </h3>
@@ -318,7 +321,8 @@ const ProductCard2: React.FC<ProductCardProps> = ({
         {/* Price */}
         <div className="flex items-center justify-between mb-0 relative">
           <div className="flex flex-row flex-wrap items-center gap-2 justify-between">
-            <span className="sm:text-xl text-md font-bold text-gray-900 dark:text-gray-100">
+            
+            <span className="sm:text-xl text-lg font-bold text-gray-900 dark:text-gray-100">
                 <span className='text-xs sm:text-sm'>NGN</span>
                 <span>{product.price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
             </span>
