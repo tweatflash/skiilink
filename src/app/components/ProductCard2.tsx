@@ -14,7 +14,9 @@ interface ProductCardProps {
 //   onProductClick?: (product: Product) => void;
   viewMode?: 'grid' | 'list';
 }
-
+function classNames(...classes:any) {
+  return classes.filter(Boolean).join(' ')
+}
 const formatPrice = (price: number) => {
     return `NGN ${price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 };
@@ -194,19 +196,19 @@ const ProductCard2: React.FC<ProductCardProps> = ({
   // Grid view with enhanced modern design
   return (
     <Card hover className="group cursor-pointer relative">
-      <div className="relative bg-gray-200 rounded-md overflow-hidden" >
+      <div className="relative hrpi w-full rounded-lg overflow-hidden" >
         <img
           src={product.image[0].url}
           alt={product.title}
-          className=" w-full aspect-square object-cover  transition-transform duration-700"
+          className="w-full aspect-square object-cover transition-transform duration-700"
         />
         
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
         {/* Badges */}
-        {/* <div className="absolute top-3 left-3 flex flex-col space-y-2">
-          {product.isNew && (
+         <div className="absolute top-3 left-3 flex flex-col space-y-2">
+          {/* {product.isNew && (
             <Badge variant="new" className="animate-pulse shadow-lg">
               NEW
             </Badge>
@@ -215,13 +217,13 @@ const ProductCard2: React.FC<ProductCardProps> = ({
             <Badge variant="bestseller" className="shadow-lg">
               BESTSELLER
             </Badge>
-          )}
+          )} */}
           {discountPercentage > 0 && (
             <Badge variant="error" className="bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg">
               -{discountPercentage}% OFF
             </Badge>  
           )}
-        </div> */}
+        </div>
 
         {/* Quick Actions */}
         <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0">
@@ -288,7 +290,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                size={12}
+                size={12} 
                 className={`${
                   i < Math.floor(product.rating)
                     ? 'text-yellow-400 fill-current drop-shadow-sm'
@@ -302,7 +304,26 @@ const ProductCard2: React.FC<ProductCardProps> = ({
             200 + sold
           </span>
         </div>
-
+        {
+          product.specifications && <fieldset aria-label="Choose a color" className="my-2">
+          <div className="flex items-center gap-x-3">
+            {["bg-black","bg-white","bg-gray-500"].slice(0, 3).map((color) => (
+              <div key={color} className="flex rounded-full outline -outline-offset-1 outline-black/10">
+                <input
+                  defaultValue={color}
+                  name="color"
+                  type="radio"
+                  // aria-label={color.name}
+                  className={classNames(
+                    color,
+                    'size-3  appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3',
+                  )}
+                />
+              </div>
+            ))}
+          </div>
+        </fieldset>
+        }
         {/* Key Features */}
         {/* {product.specifications && (
           <div className="flex flex-wrap gap-2 mb-4">

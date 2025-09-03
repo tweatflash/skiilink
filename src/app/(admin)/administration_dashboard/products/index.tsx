@@ -367,7 +367,7 @@ const ProductManagement: React.FC = () => {
             </button>
             <button className="px-3 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg">1</button>
             <button className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              Next
+               Next
             </button>
           </div>
         </div>

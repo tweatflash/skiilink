@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   X,
   Upload,
@@ -13,6 +13,7 @@ import { Product } from "../../types/product";
 import { ProductFormData } from "../../types/admin";
 import { categories } from "../../data/products";
 import uploadWithFormData from "../../../../lib/upload(formData)";
+import { useRouter } from 'next/navigation';
 interface ProductFormProps {
   product?: Product | null;
   onClose: () => void;
@@ -61,7 +62,15 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[] | any>(
     product?.images || [product?.image].filter(Boolean) || []
   );
+  useEffect(() => {
+  const handleBeforeUnload = (e:any) => {
+    e.preventDefault();
+    e.returnValue = ""; // Chrome requires this
+  };
 
+  window.addEventListener("beforeunload", handleBeforeUnload);
+  return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+}, []);
   const handleInputChange = (field: keyof ProductFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -176,6 +185,54 @@ const ProductForm: React.FC<ProductFormProps> = ({
     const data = await uploadWithFormData("/products/create", serverFormdata);
     if (data) onSave(cleanedData);
   };
+
+
+
+
+
+
+
+
+
+
+
+
+    const router = useRouter();
+    const [isDirty, setIsDirty] = useState(false);
+    useEffect(() => {
+    if (isDirty) {
+      localStorage.setItem('productsForm', JSON.stringify(formData));
+    }
+  }, [formData, isDirty]);
+
+  // Warn on browser refresh or tab close
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
+
+  // Intercept route change
+  useEffect(() => {
+    const originalPush = router.push;
+
+    router.push = (url: string) => {
+      if (isDirty && !confirm('You have unsaved changes. Do you really want to leave?')) {
+        return;
+      }
+      originalPush(url);
+    };
+
+    return () => {
+      router.push = originalPush;
+    };
+  }, [isDirty, router]);
 
   return (
     <div className="p-6 max-w-4xl mx-auto bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-300">
@@ -662,6 +719,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
             className="flex items-center space-x-2 px-6 py-3 bg-orange-500 dark:bg-orange-600 text-white rounded-lg hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors"
           >
             <Save size={16} />
+            <svg className=" animate-spin text-white size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx={12} cy={12} r={10} stroke="currentColor" strokeWidth={4}/>
+                <path className="opacity-75 fill-white dark:fill-black" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+              </svg>
             <span>{product ? "Update Product" : "Create Product"}</span>
           </button>
         </div>

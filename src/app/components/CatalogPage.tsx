@@ -338,7 +338,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 router.push(`/products?category=${null}`);
                 setSelectedCategory(null);
               }}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-xs sm:text-sm font-medium ${
+              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
                 selectedCategory === null
                   ? "bg-orange-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-200"
@@ -357,7 +357,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                     console.log(currentCategory, selectedCategory);
                     router.push(`/products?category=${category.id}`);
                   }}
-                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-xs sm:text-sm font-medium ${
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
                     currentCategory === category.id
                       ? "bg-orange-500 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-200"

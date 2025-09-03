@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;  
 body {
-  /* -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; */
+   -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   /* font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,  Arial, sans-serif !important; */
-  font-family: boldCal;
+  font-family: boldCal !important;
   
   /* font-family:"Segoe UI Historic", Roboto, Ubuntu, "Helvetica Neue", sans-serif */
 }
@@ -74,4 +74,12 @@ html.dark {
 }
 .max-screen{
   @apply max-w-[1400px];
+}
+
+.hrpi::before{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100% ;
+  background-color:#6c757d1a ;
 }
