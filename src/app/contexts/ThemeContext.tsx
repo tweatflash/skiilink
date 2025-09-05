@@ -12,6 +12,8 @@ interface ThemeContextType {
   setAuthError: any;
   cartItems:CartItem[];
   setCartItems:Dispatch<SetStateAction<any>>;
+  catalogueProducts:dummyStore[]
+  setCatalogueProducts:Dispatch<SetStateAction<any>>; 
   isCartOpen:boolean;
   setIsCartOpen: Dispatch<SetStateAction<any>>;
   searchQuery:string;
@@ -59,6 +61,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
   const [cartItems, setCartItems] = useState([]);
+  const [catalogueProducts, setCatalogueProducts] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [userAuth,setUserAuth]=useState<UserRoot | {}>({})
@@ -90,12 +93,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const ranOnce = useRef(false);
     const Authentication=async ()=>{
     const request=await checkLoggedInStatus()
-    const response:UserRoot =await request?.data
+    const response:UserRoot | undefined =await request?.data
     console.log(request)
     if (request === undefined ){
        setLoggedIn({"boolean":"false", "role":null})
     }else if (request.status && request.status===200){
-        if (response.user.role==="admin"){
+        if (response?.user.role==="admin"){
           setLoggedIn({"boolean":"true", "role":"admin"})
         }else{
           setLoggedIn({"boolean":"true", "role":"user"})
@@ -118,6 +121,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         loggedIn,
         setLoggedIn,
+        catalogueProducts,
+        setCatalogueProducts,
         theme,
         toggleTheme,
         authError,

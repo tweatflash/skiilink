@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Plus, 
   Search, 
@@ -16,7 +16,8 @@ import {
 import { Product } from '../../../types/product';
 import { featuredProducts, bestSellingProducts, categories } from '../../../data/products';
 import ProductForm from '../../../components/admin/ProductForm';
-
+import getWikiResults from '../../../../../lib/getProducts';
+import deleteProduct from '../../../../../lib/deleteProduct';
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
@@ -33,7 +34,7 @@ const ProductManagement: React.FC = () => {
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
-
+  const [productItems, setProductItems] = useState<dummyStore[]>([]);
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -51,21 +52,34 @@ const ProductManagement: React.FC = () => {
     setShowProductForm(true);
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string | number) => {
     if (confirm('Are you sure you want to delete this product?')) {
-      // Handle delete logic here
-      console.log('Delete product:', productId);
+      try {
+        const result = await deleteProduct(productId);
+        console.log('Product deleted:', result);
+      } catch (error) {
+        console.error('Error deleting product:', error);
+      }
     }
   };
 
-  const getStockStatus = (product: Product) => {
-    if (!product.inStock) return { label: 'Out of Stock', color: 'text-red-600 bg-red-50' };
+  const getStockStatus = (product: dummyStore) => {
+    if (!product.stock) return { label: 'Out of Stock', color: 'text-red-600 bg-red-50' };
     // Simulate low stock warning
     const isLowStock = Math.random() > 0.7;
     if (isLowStock) return { label: 'Low Stock', color: 'text-yellow-600 bg-yellow-50' };
     return { label: 'In Stock', color: 'text-green-600 bg-green-50' };
   };
-
+  const fetchProducts = async () => {
+      const request: Promise<ProductRes> = await getWikiResults("all");
+      const response: dummyStore[] | undefined = (await request)?.products;
+      if (response && response.length) {
+        setProductItems([...productItems, ...response]);
+      }
+    };
+    useEffect(()=>{
+      fetchProducts();
+    },[])
   if (showProductForm) {
     return (
       <ProductForm
@@ -154,26 +168,26 @@ const ProductManagement: React.FC = () => {
         {/* Mobile Card View */}
         <div className="block lg:hidden">
           <div className="p-4 space-y-4">
-            {filteredProducts.map((product) => {
+            {productItems.map((product) => {
               const stockStatus = getStockStatus(product);
               return (
-                <div key={product.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-3">
+                <div key={product._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-3">
                   <div className="flex items-start space-x-3">
                     <img
-                      src={product.image}
-                      alt={product.name}
+                      src={product.image[0].url}
+                      alt={product.title}
                       className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2">{product.name}</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2">{product.title}</h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">{product.description}</p>
                       <div className="flex items-center space-x-2 mt-2">
-                        {product.isNew && (
+                        {product.brand && (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             New
                           </span>
                         )}
-                        {product.isBestSeller && (
+                        {product.brand && (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                             Best Seller
                           </span>
@@ -185,9 +199,9 @@ const ProductManagement: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{formatPrice(product.price)}</span>
-                      {product.originalPrice && (
+                      {product.price && (
                         <div className="text-xs text-gray-500 dark:text-gray-400 line-through">
-                          {formatPrice(product.originalPrice)}
+                          {formatPrice(product.price)}
                         </div>
                       )}
                     </div>
@@ -200,11 +214,11 @@ const ProductManagement: React.FC = () => {
                     <div className="flex items-center space-x-1">
                       <Star size={12} className="text-yellow-400 fill-current" />
                       <span className="text-xs font-medium text-gray-900 dark:text-gray-100">{product.rating}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">({product.reviews})</span>
+                      {/* <span className="text-xs text-gray-500 dark:text-gray-400">({product.reviews})</span> */}
                     </div>
                     <div className="flex items-center space-x-1">
                       <button
-                        onClick={() => handleEditProduct(product)}
+                        // onClick={() => handleEditProduct(product)}
                         className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                         title="Edit Product"
                       >
@@ -217,7 +231,7 @@ const ProductManagement: React.FC = () => {
                         <Eye size={14} />
                       </button>
                       <button
-                        onClick={() => handleDeleteProduct(product.id)}
+                        onClick={() => handleDeleteProduct(product._id)}
                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                         title="Delete Product"
                       >
@@ -245,27 +259,27 @@ const ProductManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {filteredProducts.map((product) => {
+              {productItems.map((product) => {
                 const stockStatus = getStockStatus(product);
                 return (
-                  <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <tr key={product._id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                     <td className="py-4 px-6">
                       <div className="flex items-center space-x-3">
                         <img
-                          src={product.image}
-                          alt={product.name}
+                          src={product.image[0].url}
+                          alt={product.title}
                           className="w-12 h-12 rounded-lg object-cover"
                         />
                         <div>
-                          <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-1">{product.name}</h3>
+                          <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-1">{product.title}</h3>
                           <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{product.description}</p>
                           <div className="flex items-center space-x-2 mt-1">
-                            {product.isNew && (
+                            {product.brand && (
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 New
                               </span>
                             )}
-                            {product.isBestSeller && (
+                            {product.brand && (
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                                 Best Seller
                               </span>
@@ -282,9 +296,9 @@ const ProductManagement: React.FC = () => {
                     <td className="py-4 px-6">
                       <div>
                         <span className="font-semibold text-gray-900 dark:text-gray-100">{formatPrice(product.price)}</span>
-                        {product.originalPrice && (
+                        {product.price && (
                           <div className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                            {formatPrice(product.originalPrice)}
+                            {formatPrice(product.price)}
                           </div>
                         )}
                       </div>
@@ -301,13 +315,13 @@ const ProductManagement: React.FC = () => {
                       <div className="flex items-center space-x-1">
                         <Star size={14} className="text-yellow-400 fill-current" />
                         <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{product.rating}</span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">({product.reviews})</span>
+                        {/* <span className="text-sm text-gray-500 dark:text-gray-400">({product.reviews.length})</span> */}
                       </div>
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => handleEditProduct(product)}
+                          // onClick={() => handleEditProduct(product)}
                           className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                           title="Edit Product"
                         >
@@ -320,7 +334,7 @@ const ProductManagement: React.FC = () => {
                           <Eye size={16} />
                         </button>
                         <button
-                          onClick={() => handleDeleteProduct(product.id)}
+                          onClick={() => handleDeleteProduct(product._id)}
                           className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                           title="Delete Product"
                         >

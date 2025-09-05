@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import getWikiResults from "../../../lib/getProducts";
 import ProductCard2 from "./ProductCard2";
+import LoadingDb from "./loadingDb";
 interface CatalogPageProps {
   onBack: () => void;
   onAddToCart: (product: Product) => void;
@@ -147,7 +148,10 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     const request: Promise<ProductRes> = await getWikiResults("all");
     const response: dummyStore[] | undefined = (await request)?.products;
     if (response && response.length) {
+      setLoading(false)
       setProductItems([...productItems, ...response]);
+    }else{
+      setLoading(false)
     }
   };
   useEffect(() => {
@@ -171,6 +175,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     console.log(productItems.length);
   }, [productItems]);
   return (
+    
     <div className="min-h-screen bg-white">
       {/* Header */}
       {/* <div className="bg-white shadow-sm border-b sticky top-0 z-40"> */}
@@ -328,173 +333,176 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
           )} */}
       {/* </div> */}
       {/* </div> */}
-
-      {/* Category Tabs */}
-      <div className="bg-white sticky top-16 lg:top-20 z-10">
-        <div className="max-screen mx-auto px-4">
-          <div className="flex space-x-2 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
-            <button
-              onClick={() => {
-                router.push(`/products?category=${null}`);
-                setSelectedCategory(null);
-              }}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
-                selectedCategory === null
-                  ? "bg-orange-500 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              All Products ({filteredProducts.length})
-            </button>
-            {categories.map((category) => {
-              const count = getProductCount(category.id);
-              return (
+      {
+        loading ? <LoadingDb /> :<>
+          {/* Category Tabs */}
+          <div className="bg-white sticky top-16 lg:top-20 z-10">
+            <div className="max-screen mx-auto px-4">
+              <div className="flex space-x-2 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
                 <button
-                  key={category.id}
                   onClick={() => {
-                    setCurrentCategory(category.id);
-                    setSelectedCategory(category.id);
-                    console.log(currentCategory, selectedCategory);
-                    router.push(`/products?category=${category.id}`);
+                    router.push(`/products?category=${null}`);
+                    setSelectedCategory(null);
                   }}
                   className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
-                    currentCategory === category.id
+                    selectedCategory === null
                       ? "bg-orange-500 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
-                  {category.name} ({count})
+                  All Products ({filteredProducts.length})
                 </button>
-              );
-            })}
+                {categories.map((category) => {
+                  const count = getProductCount(category.id);
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => {
+                        setCurrentCategory(category.id);
+                        setSelectedCategory(category.id);
+                        console.log(currentCategory, selectedCategory);
+                        router.push(`/products?category=${category.id}`);
+                      }}
+                      className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
+                        currentCategory === category.id
+                          ? "bg-orange-500 text-white"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      {category.name} ({count})
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Products Grid */}
-      <div className="max-screen mx-auto px-4 py-4 bg-white">
-        {displayedProducts.length === 0 && !loading ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">
-              No products found matching your criteria.
-            </p>
-            <button
-              onClick={() => {
-                setLocalSearchQuery("");
-                setCurrentCategory(null);
-              }}
-              className="mt-4 text-orange-500 hover:text-orange-600 underline"
-            >
-              Clear all filters
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* Other Screens */}
-            <div
-              className={`hidden sm:grid gap-3 ${
-                viewMode === "grid"
-                  ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
-                  : "grid-cols-1"
-              }`}
-            >
-              {productItems.map((product) => (
-                <ProductCard2
-                  key={product._id}
-                  product={product}
-                  // onAddToCart={onAddToCart}
-                  // onProductClick={onProductClick}
-                  viewMode={viewMode}
-                />
-              ))}
-              {/* Loading Indicator */}
-              {loading &&
-                [1, 2, 5, 5, 5, 2, 5, 5, 5].map((item) => (
-                  <div className="flex flex-col w-full h-full items-start">
-                    <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                    <div className="flex flex-col items-center justify-start py-4 w-full">
-                      <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                      <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                      <div className="grid grid-cols-3 w-full gap-2">
-                        <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                        <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+          {/* Products Grid */}
+          <div className="max-screen mx-auto px-4 py-4 bg-white">
+            {displayedProducts.length === 0 && !loading ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">
+                  No products found matching your criteria.
+                </p>
+                <button
+                  onClick={() => {
+                    setLocalSearchQuery("");
+                    setCurrentCategory(null);
+                  }}
+                  className="mt-4 text-orange-500 hover:text-orange-600 underline"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Other Screens */}
+                <div
+                  className={`hidden sm:grid gap-3 ${
+                    viewMode === "grid"
+                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
+                      : "grid-cols-1"
+                  }`}
+                >
+                  {productItems.map((product) => (
+                    <ProductCard2
+                      key={product._id}
+                      product={product}
+                      // onAddToCart={onAddToCart}
+                      // onProductClick={onProductClick}
+                      viewMode={viewMode}
+                    />
+                  ))}
+                  {/* Loading Indicator */}
+                  {!loading &&
+                    [1, 2, 5, 5, 5, 2, 5, 5, 5].map((item) => (
+                      <div className="flex flex-col w-full h-full items-start">
+                        <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                        <div className="flex flex-col items-center justify-start py-4 w-full">
+                          <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                          <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                          <div className="grid grid-cols-3 w-full gap-2">
+                            <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                            <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
+                </div>
+                {/* Mobile View */}
+                <div className={`flex sm:hidden flex-row gap-3 flex-nowrap`}>
+                  {/* Mobile View */}
+                  {/* First Row */}
+                  <div className="flex-1 flex-col gap-3 overflow-x-auto">
+                    {productItems
+                      .slice(0, Math.ceil(productItems.length / 2))
+                      .map((product) => (
+                        <ProductCard2
+                          key={product._id}
+                          product={product}
+                          viewMode={viewMode}
+                        />
+                      ))}
+                    {loading &&
+                      [1, 2, 5, 5, 5].map((item) => (
+                        <div className="flex flex-col w-full items-start">
+                          <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                          <div className="flex flex-col items-center justify-start py-4 w-full">
+                            <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                            <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                            <div className="grid grid-cols-3 w-full gap-2">
+                              <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                              <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-                ))}
-            </div>
-            {/* Mobile View */}
-            <div className={`flex sm:hidden flex-row gap-3 flex-nowrap`}>
-              {/* Mobile View */}
-              {/* First Row */}
-              <div className="flex-1 flex-col gap-3 overflow-x-auto">
-                {productItems
-                  .slice(0, Math.ceil(productItems.length / 2))
-                  .map((product) => (
-                    <ProductCard2
-                      key={product._id}
-                      product={product}
-                      viewMode={viewMode}
-                    />
-                  ))}
-                {loading &&
-                  [1, 2, 5, 5, 5].map((item) => (
-                    <div className="flex flex-col w-full items-start">
-                      <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                      <div className="flex flex-col items-center justify-start py-4 w-full">
-                        <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                        <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                        <div className="grid grid-cols-3 w-full gap-2">
-                          <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                          <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
 
-              {/* Second Row */}
-              <div className="flex-1 flex-col gap-3 overflow-x-auto">
-                {productItems
-                  .slice(Math.ceil(productItems.length / 2))
-                  .map((product) => (
-                    <ProductCard2
-                      key={product._id}
-                      product={product}
-                      viewMode={viewMode}
-                    />
-                  ))}
-                {loading &&
-                  [1, 2, 5, 5, 5].map((item) => (
-                    <div className="flex flex-col w-full items-start">
-                      <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                      <div className="flex flex-col items-center justify-start py-4 w-full">
-                        <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                        <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                        <div className="grid grid-cols-3 w-full gap-2">
-                          <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                          <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                  {/* Second Row */}
+                  <div className="flex-1 flex-col gap-3 overflow-x-auto">
+                    {productItems
+                      .slice(Math.ceil(productItems.length / 2))
+                      .map((product) => (
+                        <ProductCard2
+                          key={product._id}
+                          product={product}
+                          viewMode={viewMode}
+                        />
+                      ))}
+                    {loading &&
+                      [1, 2, 5, 5, 5].map((item) => (
+                        <div className="flex flex-col w-full items-start">
+                          <div className="w-full aspect-square bg-loader rounded-lg"></div>
+                          <div className="flex flex-col items-center justify-start py-4 w-full">
+                            <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
+                            <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
+                            <div className="grid grid-cols-3 w-full gap-2">
+                              <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
+                              <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
+                      ))}
+                  </div>
+                </div>
 
-            {/* End of Results */}
-            {!hasMore && displayedProducts.length > 0 && (
-              <div className="text-center py-8">
-                <p className="text-gray-500">
-                  You've reached the end of our catalog!
-                </p>
-                <p className="text-sm text-gray-400 mt-2">
-                  Showing all {displayedProducts.length} products
-                </p>
-              </div>
+                {/* End of Results */}
+                {!hasMore && displayedProducts.length > 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">
+                      You've reached the end of our catalog!
+                    </p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      Showing all {displayedProducts.length} products
+                    </p>
+                  </div>
+                )}
+              </>
             )}
-          </>
-        )}
-      </div>
+          </div>
+        </>
+  }
     </div>
   );
 };
