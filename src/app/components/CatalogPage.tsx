@@ -22,7 +22,7 @@ import LoadingDb from "./loadingDb";
 import ErrorPage from "./errorPage";
 interface CatalogPageProps {
   onBack: () => void;
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (product: dummyStore) => void;
   onProductClick?: (product: Product) => void;
   searchQuery?: string;
   selectedCategory: string | null;
@@ -412,7 +412,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                     <ProductCard2
                       key={product._id}
                       product={product}
-                      // onAddToCart={onAddToCart}
+                      onAddToCart={onAddToCart}
                       // onProductClick={onProductClick}
                       viewMode={viewMode}
                     />
@@ -444,6 +444,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                         <ProductCard2
                           key={product._id}
                           product={product}
+                          onAddToCart={onAddToCart}
                           viewMode={viewMode}
                         />
                       ))}
@@ -472,6 +473,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                           key={product._id}
                           product={product}
                           viewMode={viewMode}
+                          onAddToCart={onAddToCart}
                         />
                       ))}
                     {loading &&

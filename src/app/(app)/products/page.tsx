@@ -72,12 +72,12 @@ function App() {
 
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleAddToCart = (product: Product, quantity: number = 1) => {
+  const handleAddToCart = (product: dummyStore, quantity: number = 1) => {
     setCartItems((prev:any) => {
-      const existingItem = prev.find((item:any) => item.product.id === product.id);
+      const existingItem = prev.find((item:any) => item.product.id === product._id);
       if (existingItem) {
         return prev.map((item:any) =>
-          item.product.id === product.id
+          item.product._id === product._id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );

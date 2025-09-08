@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   product: dummyStore;
-//   onAddToCart: (product: Product) => void;
+  onAddToCart: (product: dummyStore) => void;
 //   onQuickView?: (product: Product) => void;
 //   onProductClick?: (product: Product) => void;
   viewMode?: 'grid' | 'list';
@@ -23,7 +23,7 @@ const formatPrice = (price: number) => {
 
 const ProductCard2: React.FC<ProductCardProps> = ({ 
   product, 
-//   onAddToCart, 
+  onAddToCart, 
 //   onQuickView, 
 //   onProductClick,
   viewMode = 'grid' 
@@ -261,7 +261,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
         )}
       </div>
 
-      <div className="py-4 " >
+      <div className="py-4 px-2" >
         <div className="mb-2 cursor-pointer" onClick={handleProductClick}>
           <div className="flex items-center gap-1 mb-2">
             <span className="inline-flex items-center rounded-md bg-green-400/10 px-2  text-xs font-medium text-green-400 border border-green-500/20">
@@ -304,7 +304,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
             200 + sold
           </span>
         </div>
-        {
+        {/* {
           product.specifications && <fieldset aria-label="Choose a color" className="my-2">
           <div className="flex items-center gap-x-3">
             {["bg-black","bg-white","bg-gray-500"].slice(0, 3).map((color) => (
@@ -313,7 +313,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
                   defaultValue={color}
                   name="color"
                   type="radio"
-                  // aria-label={color.name}
+                  aria-label={color.name}
                   className={classNames(
                     color,
                     'size-3  appearance-none rounded-full forced-color-adjust-none checked:outline-2 checked:outline-offset-2 focus-visible:outline-3 focus-visible:outline-offset-3',
@@ -323,7 +323,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
             ))}
           </div>
         </fieldset>
-        }
+        } */}
         {/* Key Features */}
         {/* {product.specifications && (
           <div className="flex flex-wrap gap-2 mb-4">
@@ -341,26 +341,52 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     
         {/* Price */}
         <div className="flex items-center justify-between mb-0 relative">
-          <div className="flex flex-row flex-wrap items-center gap-2 justify-between">
+          <div className="flex flex-col justify-start">
             
-            <span className="sm:text-xl text-lg font-bold text-gray-900 dark:text-gray-100">
+            <span className="font-bold text-gray-900 dark:text-gray-100 flex-1">
                 <span className='text-xs sm:text-sm'>NGN</span>
-                <span>{product.price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
+                <span className='sm:text-xl text-lg '>{product.price.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
             </span>
-            {product.discountPercentage && (
-              <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+            {product.discountPercentage ? (
+              <span className="text-sm flex-1 text-gray-500 text-left  dark:text-gray-400 line-through">
                 {formatPrice(product.discountPercentage)}
               </span>
-            )}
+            ) : null}
           </div>
            <Button
-                // onClick={() => onAddToCart(product)}
+                onClick={() => onAddToCart(product)}
                 disabled={!product.stock}
                 variant={!product.stock ? 'primary' : 'secondary'}
-                className="hidden w-fit right-0 px-3"
-                size="lg"
+                className="w-fit right-0"
+                size="sm"
                 >
-                <LucideShoppingBag size={16} />
+                <svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  width={20}
+  height={20}
+  color="#000000"
+  fill="none"
+>
+  <path
+    d="M21.0524 11.5L21.3307 9.83981C21.5126 8.75428 21.6036 8.21152 21.3123 7.85576C21.0209 7.5 20.4854 7.5 19.4144 7.5H4.58564C3.51461 7.5 2.9791 7.5 2.68773 7.85576C2.39637 8.21152 2.48735 8.75428 2.66933 9.83981L3.87289 17.0194C4.27181 19.3991 4.47127 20.5889 5.28565 21.2945C6.10003 22 7.27396 22 9.62182 22H12"
+    stroke="#000000"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+  />
+  <path
+    d="M14 18H22M18 22L18 14"
+    stroke="#000000"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+  />
+  <path
+    d="M17.5 7.5C17.5 4.46243 15.0376 2 12 2C8.96243 2 6.5 4.46243 6.5 7.5"
+    stroke="#000000"
+    strokeWidth="1.5"
+  />
+</svg>
+
                 {/* <span>{product.inStock ? 'Add to Cart' : 'Out of Stock'}</span> */}
                 </Button> 
         </div>
