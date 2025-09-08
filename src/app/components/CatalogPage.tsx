@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import getWikiResults from "../../../lib/getProducts";
 import ProductCard2 from "./ProductCard2";
 import LoadingDb from "./loadingDb";
+import ErrorPage from "./errorPage";
 interface CatalogPageProps {
   onBack: () => void;
   onAddToCart: (product: Product) => void;
@@ -64,6 +65,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
 }) => {
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);  
   const [hasMore, setHasMore] = useState(true);
   const [currentCategory, setCurrentCategory] = useState<string | null>(
     selectedCategory
@@ -147,11 +149,12 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   const fetchProducts = async () => {
     const request: Promise<ProductRes> = await getWikiResults("all");
     const response: dummyStore[] | undefined = (await request)?.products;
-    if (response && response.length) {
+    if (response) {
       setLoading(false)
       setProductItems([...productItems, ...response]);
     }else{
       setLoading(false)
+      setError("Failed to load products");
     }
   };
   useEffect(() => {
@@ -334,7 +337,8 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
       {/* </div> */}
       {/* </div> */}
       {
-        loading ? <LoadingDb /> :<>
+        loading ? <LoadingDb /> : !loading && error ?<ErrorPage/> :
+        <>
           {/* Category Tabs */}
           <div className="bg-white sticky top-16 lg:top-20 z-10">
             <div className="max-screen mx-auto px-4">
@@ -400,7 +404,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                 <div
                   className={`hidden sm:grid gap-3 ${
                     viewMode === "grid"
-                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
+                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
                       : "grid-cols-1"
                   }`}
                 >

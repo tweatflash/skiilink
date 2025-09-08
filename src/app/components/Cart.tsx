@@ -33,7 +33,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
         name: 'john doe',
       },
       customizations: {
-        title: 'My store',
+        title: 'SKIILINK VENTURES LIMITED',
         description: 'Payment for items in cart',
         logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
       },
@@ -43,13 +43,17 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
       ...config,
       text: 'Checkout',
       callback: (response:any) => {
-         console.log(response);
+        console.log(response);
+        removeAllItems(items)
+        onClose()
         closePaymentModal() // this will close the modal programmatically
       },
       onClose: () => {},
     };
   if (!isOpen) return null;
-
+  const removeAllItems=(items:CartItem[])=>{
+    items.forEach((item:CartItem) => onRemoveItem(item.product._id.toString()));
+  }
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>

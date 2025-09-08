@@ -73,7 +73,7 @@ html.dark {
   z-index: 2;
 }
 .max-screen{
-  @apply max-w-[1400px];
+  @apply max-w-[1300px];
 }
 
 .hrpi::before{
