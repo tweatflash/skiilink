@@ -1,30 +1,15 @@
 "use client";
-import React, { useState, useMemo, useContext, useEffect } from "react";
+import React, { useState, useMemo, useContext, useEffect, Suspense } from "react";
 import {
   categories,
   featuredProducts,
   bestSellingProducts,
 } from "../../data/products";
 import { Product, CartItem } from "../../types/product";
-import CategoryCard from "app/components/CategoryCard";
-import ProductCard from "app/components/ProductCard";
-import Cart from "app/components/Cart";
 import CatalogPage from "app/components/CatalogPage";
-import AdminPanel from "app/components/AdminPanel";
-import Header from "app/components/Header";
 import { ThemeContext, ThemeProvider } from "app/contexts/ThemeContext";
-import HeroSection from "app/components/HeroSection";
-import { useSearchParams } from 'next/navigation';
-
 function App() {
-  // Wrap useSearchParams in a Suspense boundary as required by Next.js
-
   let searchCategory: string | null = null;
-  const SearchParamsWrapper = () => {
-    const searchParams = useSearchParams();
-    searchCategory = searchParams.get('category');
-    return null;
-  };
   const jdjs=["all-products","solar-panels","solar-batteries","inverters","security-cameras","led-lights","electrical-tools","smart-home","cables-wires"]
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<
@@ -123,23 +108,13 @@ function App() {
     setSelectedProduct(null);
   };
 
-  // Check if admin view is requested (you can add authentication logic here)
-  const isAdminView = currentView === "admin";
-
-  if (isAdminView) {
-    return (
-      // <ThemeProvider>
-      <AdminPanel />
-      // </ThemeProvider>
-    );
-  }
-
   
 
  
   return (
     // <ThemeProvider>
-    <div className="min-h-screen">
+    <Suspense>
+      <div className="min-h-screen w-full">
       
       <div className="w-full relative"></div>
       {
@@ -154,6 +129,7 @@ function App() {
       }
       
     </div>
+    </Suspense>
     // </ThemeProvider>
   );
 }

@@ -26,7 +26,7 @@ export default function AuthLayout({children,}: {children: React.ReactNode}) {
     },[authError])
     return (
       
-        <div className={`bg-[hsl(var(--background))] grid min-h-svh lg:grid-cols-2`}>
+        <div className={`bg-[hsl(var(--background))] grid min-h-svh lg:grid-cols-1`}>
 
             <div className="flex flex-col gap-4 p-6 md:p-10">
               <div className="flex justify-center gap-2 ">
@@ -57,13 +57,13 @@ export default function AuthLayout({children,}: {children: React.ReactNode}) {
                   </div>
               </div>
             </div>
-            <div className="bg-muted relative hidden lg:block">
+            {/* <div className="bg-muted relative hidden lg:block">
               <img
                 src="https://app.fireflies.ai/login-testimonial-background-dark.png"
                 alt="Image"
                 className="absolute inset-0 h-full w-full object-cover"
               />
-            </div>
+            </div> */}
             
       </div>
     )

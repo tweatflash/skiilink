@@ -14,7 +14,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow, onViewCatalog }) =
       <div 
         className="absolute inset-0 opacity-20 dark:opacity-10"
         style={{
-          backgroundImage: 'url(https://images.pexels.com/photos/9875414/pexels-photo-9875414.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2)',
+          backgroundImage: 'url("images/image_1.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -90,11 +90,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow, onViewCatalog }) =
           <div className="hidden lg:block">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 rounded-3xl blur-3xl"></div>
-              <img
-                src="https://images.pexels.com/photos/9875414/pexels-photo-9875414.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&dpr=2"
+                <img
+                src="images/image_3.jpg"
                 alt="Solar Panel Installation"
                 className="relative rounded-3xl shadow-2xl border border-white/10"
-              />
+                />
               <div className="absolute -bottom-6 -left-6 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl text-gray-900 dark:text-white p-6 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">

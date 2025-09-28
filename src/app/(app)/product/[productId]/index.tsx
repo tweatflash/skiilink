@@ -120,7 +120,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
           {/* Product Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div className="relative hrpi2 rounded-2xl shadow-lg overflow-hidden">
               <img
                 src={images[selectedImage].url}
                 alt={product.title}
@@ -139,11 +139,11 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                     BESTSELLER
                   </span>
                 )}
-                {discountPercentage > 0 && (
+                {discountPercentage > 0 ? (
                   <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
                     -{discountPercentage}% OFF
                   </span>
-                )}
+                ) : null}
               </div>
 
               {/* Action Buttons */}
@@ -233,7 +233,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                 <span className="text-4xl font-bold text-gray-900">
                   {formatPrice(product.price)}
                 </span>
-                {product.discountPercentage && (
+                {product.discountPercentage ? (
                   <div className="flex flex-col">
                     <span className="text-xl text-gray-500 line-through">
                       {formatPrice(product.discountPercentage)}
@@ -242,7 +242,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                       Save {formatPrice(product.discountPercentage - product.price)}
                     </span>
                   </div>
-                )}
+                ): null}
               </div>
 
               {/* Stock Status */}

@@ -147,6 +147,8 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
     }, 500);
   }, [displayedProducts.length, filteredProducts, loading, hasMore]);
   const fetchProducts = async () => {
+    setLoading(true)
+    setError("")
     const request: Promise<ProductRes> = await getWikiResults("all");
     const response: dummyStore[] | undefined = (await request)?.products;
     if (response) {
@@ -179,7 +181,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
   }, [productItems]);
   return (
     
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full">
       {/* Header */}
       {/* <div className="bg-white shadow-sm border-b sticky top-0 z-40"> */}
       {/* <div className="max-w-7xl mx-auto px-4 py-4"> */}
@@ -337,52 +339,13 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
       {/* </div> */}
       {/* </div> */}
       {
-        loading ? <LoadingDb /> : !loading && error ?<ErrorPage/> :
+        loading ? <LoadingDb /> : !loading && error ?<ErrorPage refresh={fetchProducts}/> :
         <>
           {/* Category Tabs */}
-          <div className="bg-white sticky top-16 lg:top-20 z-10">
-            <div className="max-screen mx-auto px-4">
-              <div className="flex space-x-2 overflow-x-auto pb-4 no-scrollbar scrollbar-hide">
-                <button
-                  onClick={() => {
-                    router.push(`/products?category=${null}`);
-                    setSelectedCategory(null);
-                  }}
-                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
-                    selectedCategory === null
-                      ? "bg-orange-500 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  All Products ({filteredProducts.length})
-                </button>
-                {categories.map((category) => {
-                  const count = getProductCount(category.id);
-                  return (
-                    <button
-                      key={category.id}
-                      onClick={() => {
-                        setCurrentCategory(category.id);
-                        setSelectedCategory(category.id);
-                        console.log(currentCategory, selectedCategory);
-                        router.push(`/products?category=${category.id}`);
-                      }}
-                      className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors text-sm font-medium ${
-                        currentCategory === category.id
-                          ? "bg-orange-500 text-white"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-200"
-                      }`}
-                    >
-                      {category.name} ({count})
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          
 
           {/* Products Grid */}
-          <div className="max-screen mx-auto px-4 py-4 bg-white">
+          <div className="w-full mx-auto py-4 bg-white">
             {displayedProducts.length === 0 && !loading ? (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">
@@ -402,9 +365,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
               <>
                 {/* Other Screens */}
                 <div
-                  className={`hidden sm:grid gap-3 ${
+                  className={`hidden sm:grid gap-4 ${
                     viewMode === "grid"
-                      ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+                      ? "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                       : "grid-cols-1"
                   }`}
                 >

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import getSingleProduct from "../../../../../lib/getSingleProduct";
 import ProductOverview from ".";
+import NoProductsFound from "app/components/noProductsFound";
 
 type SingleProp = {
   params: {
@@ -29,11 +30,12 @@ export async function generateMetadata({ params: { productId } }: SingleProp) {
     },
   };
 }
+
 export default async function ProductData({params: { productId }}:SingleProp) {
    const wikiData: Promise<Ddstiew> = await getSingleProduct(productId);
     const results: dummyStore | undefined = (await wikiData)?.product;
   if (!results){
-    return <p>Check out this slab of strange</p>
+    return <NoProductsFound />
   }
   return (
     <>

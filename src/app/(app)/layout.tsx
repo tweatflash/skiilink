@@ -1,32 +1,47 @@
-"use client"
-import Cart from 'app/components/Cart'
-import Header from 'app/components/Header'
-import { ThemeContext } from 'app/contexts/ThemeContext'
-import React, { useContext } from 'react'
+"use client";
+import Cart from "app/components/Cart";
+import CommandPalette from "app/components/commandPallete";
+import Header from "app/components/Header";
+import { ThemeContext } from "app/contexts/ThemeContext";
+import React, { useContext } from "react";
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-    const themeContext = useContext(ThemeContext)
-    if (!themeContext) {
-        throw new Error("ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider.");
-    }
-    const { cartItems, setIsCartOpen,isCartOpen, searchQuery, setSearchQuery ,handleUpdateQuantity,handleRemoveItem} = themeContext;
-    const cartItemCount: number = cartItems.reduce((sum, item) => sum + item.quantity, 0)
-    return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
-            <Header
-                cartItemCount={cartItemCount}
-                onCartClick={() => setIsCartOpen(true)}
-                onSearchChange={setSearchQuery}
-                searchQuery={searchQuery}
-            />
-                {children}
-            <Cart
-                isOpen={isCartOpen}
-                onClose={() => setIsCartOpen(false)}
-                items={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveItem}
-            />
-            {/* Footer */}
+  const themeContext = useContext(ThemeContext);
+  if (!themeContext) {
+    throw new Error(
+      "ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider."
+    );
+  }
+  const {
+    cartItems,
+    setIsCartOpen,
+    isCartOpen,
+    searchQuery,
+    setSearchQuery,
+    handleUpdateQuantity,
+    handleRemoveItem,
+  } = themeContext;
+  const cartItemCount: number = cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  return (
+    <div className="min-h-screen  dark:bg-gray-950 transition-colors duration-300">
+      <Header
+        cartItemCount={cartItemCount}
+        onCartClick={() => setIsCartOpen(true)}
+        onSearchChange={setSearchQuery}
+        searchQuery={searchQuery}
+      />
+      {children}
+      <Cart
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        items={cartItems}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+      />
+      {/* Footer */}
       <footer className="bg-gray-900 dark:bg-black text-white py-20 transition-colors duration-300">
         <div className="max-screen mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -38,10 +53,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <span className="text-2xl font-bold">Skiilink V.LTD</span>
               </div>
               <p className="text-gray-400 dark:text-gray-500 mb-4 leading-relaxed">
-                Leading provider of solar, security, and electrical solutions for homes and businesses.
+                Leading provider of solar, security, and electrical solutions
+                for homes and businesses.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-bold text-lg mb-6">Products</h3>
               <ul className="space-y-3 text-gray-400 dark:text-gray-500">
@@ -51,7 +67,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <li>Security Cameras</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-bold text-lg mb-6">Support</h3>
               <ul className="space-y-3 text-gray-400 dark:text-gray-500">
@@ -61,7 +77,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <li>Returns</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-bold text-lg mb-6">Company</h3>
               <ul className="space-y-3 text-gray-400 dark:text-gray-500">
@@ -72,12 +88,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 dark:border-gray-700 mt-16 pt-8 text-center text-gray-400 dark:text-gray-500">
             <p>&copy; 2024 Skiilink Ventures limited. All rights reserved.</p>
           </div>
         </div>
       </footer>
-        </div>
-    )
+      <CommandPalette/>
+    </div>
+  );
 }

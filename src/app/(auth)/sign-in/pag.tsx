@@ -103,7 +103,7 @@ export default function Login({clientId}:Prop) {
         <div className="w-full max-w-[480px]">
             <form className="flex flex-col gap-6" method="POST" onSubmit={handleSubmit}>
             <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-[22px] mobile:text-[26px] w-full text-black dark:text-white">Welcome back to Jumia</h1>
+                <h1 className="text-[22px] mobile:text-[26px] w-full text-black dark:text-white">Welcome back to Skiilink</h1>
                 <p className="text-muted-foreground text-sm mobile:text-[16px] text-balance text-[#727272]" >
                     Type your e-mail and  password to log in to your Jumia account.
                 </p>
