@@ -28,7 +28,7 @@ export default function SearchLayout({
 }) {
   return (
     <Suspense>
-    <div className="mx-auto w-full min-h-screen h-max flex max-screen flex-col gap-4 sm:gap-8 px-4 pb-4 bg-white md:flex-row">
+    <div className="mx-auto w-full min-h-screen h-max flex max-screen flex-col gap-4 pt-4 md:pt-0 md:gap-8 px-4 pb-4 bg-white md:flex-row">
       <div className="order-first w-full flex-none md:max-w-[125px] z-30 ">
         <Collections />
       </div>

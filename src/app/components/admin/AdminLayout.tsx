@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   LayoutDashboard, 
   Package, 
@@ -12,7 +12,6 @@ import {
   Bell,
   Search
 } from 'lucide-react';
-
 interface AdminLayoutProps {
   children: React.ReactNode;
   activeTab: string;

@@ -24,7 +24,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow, onViewCatalog }) =
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-[900] leading-tight">
                 Power Your Future with
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500">
                   {' '}Clean Energy
@@ -93,7 +93,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow, onViewCatalog }) =
                 <img
                 src="images/image_3.jpg"
                 alt="Solar Panel Installation"
-                className="relative rounded-3xl shadow-2xl border border-white/10"
+                className="relative rounded-3xl shadow-2xl border border-white/10 h-[380px] object-cover"
                 />
               <div className="absolute -bottom-6 -left-6 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl text-gray-900 dark:text-white p-6 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
                 <div className="flex items-center space-x-4">

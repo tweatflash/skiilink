@@ -22,23 +22,23 @@ const Header: React.FC<HeaderProps> = ({
     if (!themeContext) {
         throw new Error("ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider.");
     }
-  const {loggedIn,setLoggedIn}=themeContext;
+  const {setSearch}=themeContext;
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-screen mx-auto px-4">
         <div className="flex items-center justify-between h-14 lg:h-16">
           {/* Logo */}
           <Link href={"/"}>
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">⚡</span>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold font-[famil] bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
                 SKIILINK
                 
               </h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1">VENTURES LIMITED</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1 font-[famil]">VENTURES LIMITED</p>
             </div>
           </div>
           </Link>
@@ -57,16 +57,13 @@ const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Search Bar - Desktop */}
-          <div className="hidden md:flex items-center flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full px-4 py-2 pl-11 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+          <div className="hidden md:flex items-center flex-1 max-w-sm mx-8 h-full">
+            <div className="relative w-full h-full py-3">
+              <div
+                onClick={()=>setSearch(true)}
+                className="w-full px-4 py-2 pl-11 bg-gray-100 text-sm h-full  dark:bg-gray-800  rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 cursor-pointer"
               />
-              <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+              <Search className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-gray-800 dark:text-gray-500" size={18} />
             </div>
           </div>
 
@@ -84,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* Search Button - Mobile */}
-            <button className="md:hidden p-2.5 rounded-xl  transition-colors duration-200">
+            <button className="md:hidden p-2.5 rounded-xl  transition-colors duration-200 cursor-pointer" onClick={()=>setSearch(true)}>
               <Search size={20} className="text-gray-600 dark:text-gray-400" />
             </button>
 

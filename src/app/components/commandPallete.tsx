@@ -6,7 +6,10 @@ import { Command } from 'cmdk'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 import getExplorePosts from '../../../lib/explore'
+
 import Person from '../components/person'
+import { ThemeContext } from 'app/contexts/ThemeContext'
+import { X } from 'lucide-react'
 interface Item {
   id: string
   label: string
@@ -21,21 +24,29 @@ const COMMANDS: Item[] = [
   { id: 'profile', label: 'Open profile modal', action: () => alert('👋') },
 ]
 
-export default function CommandPalette() {
+export default function CommandPalette () {
+     const themeContext = useContext(ThemeContext);
+      if (!themeContext) {
+        throw new Error(
+          "ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider."
+        );
+      }
+    const {
+        search,
+        setSearch
+    } = themeContext;
     const ref=Cookies.get("RFTFL")
     const acc=Cookies.get("ACTFL")
-    const [open, setOpen] = useState(false)
     const [query, setQuery] = useState('')
     const [results, setResults] = useState<any>({})
     const [loading, setLoading] = useState(false)
     const abortRef = useRef<AbortController | null>(null)
     const router = useRouter()
-    const [openSearch , setOpenSearch] = useState(true)
     /* keyboard shortcut: ⌘K / CtrlK toggles palette */
     const handlePush=(data:string)=>{
         console.log(data)
         router.push(data)
-        setOpenSearch(false)
+        setSearch(false)
         setQuery("")
     }
     useEffect(() => {
@@ -43,9 +54,9 @@ export default function CommandPalette() {
         const hotKey = (e.metaKey || e.ctrlKey) && e.key === 'k'
         if (hotKey) {
             e.preventDefault()
-            setOpenSearch((prev:boolean) => !prev)
+            setSearch((prev:boolean) => !prev)
         }
-        if (e.key === 'Escape') setOpenSearch(false)
+        if (e.key === 'Escape') setSearch(false)
         }
         window.addEventListener('keydown', toggle)
         return () => window.removeEventListener('keydown', toggle)
@@ -53,8 +64,8 @@ export default function CommandPalette() {
 
     /* reset search text whenever we close */
     useEffect(() => {
-        if (!openSearch) setQuery('')
-    }, [open])
+        if (!search) setQuery('')
+    }, [search])
     async function petch(){
         const data : any=await getExplorePosts(query,ref,acc)
         const result :any= await data
@@ -90,14 +101,14 @@ export default function CommandPalette() {
 
     }, [query])
     useEffect(()=>{
-        if (openSearch==false){
+        if (search==false){
             setQuery("")
         }
-    },[openSearch])
+    },[search])
     return (
-        <Transition show={openSearch} as={Fragment}>
+        <Transition show={search} as={Fragment}>
         <Dialog onClose={() => {
-            setOpenSearch(false)
+            setSearch(false)
             setQuery("")
         }} className="fixed bg-black/60 inset-0 z-50">
             {/* backdrop */}
@@ -123,47 +134,40 @@ export default function CommandPalette() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-50 scale-95"
             >
-            <Dialog.Panel className="mx-auto mt-0 sm:bg-transparent bg-[hsl(var(--background))] sm:max-h-90vh w-full sm:max-w-[600px] max-w-full sm:px-4 h-screen sm:py-10">
+            <Dialog.Panel className="mx-auto mt-0 sm:bg-transparent sm:max-h-90vh w-full  h-screen sm:pb-10">
                 <Command
-                    className="sm:rounded-xl sm:border max-h-full overflow-y-auto sm:border-[hsl(var(--border-color))] sm:shadow-2xl sm:bg-[hsl(var(--background))]"
+                    className="max-h-full overflow-y-auto w-full  sm:shadow-2xl py-10 bg-gray-100"
                 >
-                {/* search input */}
-                <div className="border-b sticky top-0 bg-[hsl(var(--background))] z-10 border-zinc-200 dark:border-zinc-700 h-[55px] flex flex-row gap-1">
-                    <div className='aspect-square h-[55px] p-2'>
-                        <button className="h-full aspect-square hover:bg-[hsl(var(--accent))] rounded-full flex justify-center items-center"
-                            onClick={()=>setOpenSearch(false)}
-                        >
+               <div className="w-full">
+                    <div className="w-full m-auto max-w-3xl  flex flex-row px-4" >
                         
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            className="fill-black dark:fill-white size-5"
-                            style={{ color: "rgb(239, 243, 244)" }}
+                         {/* search input */}
+                        <div className="border sticky  flex-1 rounded-full top-0 bg-[hsl(var(--background))] z-10 border-zinc-200 dark:border-zinc-700 h-[60px] flex flex-row gap-1">
+                            
+                            <input
+                            
+                                type='text'
+                                value={query}
+                                onChange={(e)=>setQuery(e.target.value)}
+                                placeholder="What are you searching for…"
+                                className="flex-1  px-5 text-[--color] bg-transparent py-3 text-xl
+                                            outline-none focus:ring-2 rounded-full focus:ring-orange-500 placeholder:text-zinc-400"
+                                autoFocus
+                            />
+                        
+                        </div> 
+                         <div className=' h-[60px] flex items-center'>
+                            <button className="h-full  flex  items-center px-2"
+                                onClick={()=>setSearch(false)}
                             >
-                            <g>
-                                <path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z" />
-                            </g>
-                            </svg>
-
-                        </button>
+                            
+                            <X size={20}/>
+                            </button>
+                            </div>
+               
                     </div>
-                    <input
-                    
-                        type='search'
-                        value={query}
-                        onChange={(e)=>setQuery(e.target.value)}
-                        placeholder="Type a command or search…"
-                        className="flex-1 text-[--color] bg-transparent px-4 py-3 pl-0 text-sm
-                                    outline-none placeholder:text-zinc-400"
-                        autoFocus
-                    />
-                    <div className="loader_holder">
-                      <div className={`loader-line ${loading ?"" :"hidden"}`}></div>
-                    </div>
-                </div>
-
-                {/* results */}
-                <Command.List className="h-fit  p-2 flex flex-col">
+                     {/* results */}
+                <Command.List className="h-fit w-full  max-w-3xl m-auto  p-2 flex flex-col font-[famil]">
                     {query && results && <Command.Item tabIndex={-1} className='flex-1 aria-selected:bg-[hsl(var(--accent))] flex px-2 py-2 cursor-pointer rounded-lg'>
                         <div className='w-full flex-1 h-10 rounded-xl flex flex-row ' onClick={()=>handlePush(`/explore/${query}`)}>
                             <div className='h-full aspect-square flex justify-center items-center'>
@@ -176,27 +180,27 @@ export default function CommandPalette() {
                             </div>
                         </div>
                     </Command.Item>}
-                    {results.user && results.user.map((cmd:any,index:number) => (
+                   
                         <Command.Item
-                            key={index}
-                            value={cmd._id}
-                            onSelect={() => {
-                                setOpenSearch(false)
-                                router.push(`/${cmd.username}`)
-                            // if (cmd.action) cmd.action()
-                            }}
+                            // key={index}
+                            // value={cmd._id}
+                            // onSelect={() => {
+                            //     setSearch(false)
+                            //     router.push(`/${cmd.username}`)
+                            // }}
                             className="flex cursor-pointer items-center justify-between
                                     rounded-md px-3 py-2 text-sm text-[--color]
                                     aria-selected:bg-zinc-100 dark:aria-selected:bg-[hsl(var(--accent))]"
                         >
-                            <Person userObj={cmd} key={index} />
+                           <h3 className='text-lg'>Top Searches</h3>
                         </Command.Item>
-                    ))}
+                    
 
                     <Command.Empty className="p-3 text-center text-xs text-zinc-500">
                         No result
                     </Command.Empty>
                 </Command.List>
+               </div>
                 </Command>
             </Dialog.Panel>
             </Transition.Child>

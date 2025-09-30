@@ -42,9 +42,9 @@ export default function FilterItemDropdown({ list }: { list: ListItem[] }) {
         onClick={() => {
           setOpenSelect(!openSelect);
         }}
-        className="flex w-full items-center justify-between rounded border border-black/30 px-4 py-2 text-sm dark:border-white/30"
+        className="flex w-full items-center justify-between rounded bg-gray-100 px-4 py-2 text-sm dark:border-white/30"
       >
-        <div>{active}</div>
+        <div>{active ? active :"Collections"}</div>
         <ChevronDownIcon className="h-4" />
       </div>
       {openSelect && (

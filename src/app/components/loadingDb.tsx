@@ -2,7 +2,7 @@ import React from 'react';
 
 function LoadingDb() {
   return (
-    <div className="h-screen w-full bg-white right-0 flex items-center justify-center">
+    <div className="h-[calc(100vh-160px)] w-full bg-white right-0 flex items-center justify-center">
       <div className="text-center">
         {/* Main sleeping icon */}
         <div className="mb-6">

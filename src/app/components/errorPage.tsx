@@ -4,7 +4,7 @@ type Prop={
 }
 export default function ErrorPage({refresh}:Prop) {
   return (
-     <div className="min-h-screen bg-white flex items-center justify-center">
+     <div className="min-h-[calc(100vh-160px)]  bg-white flex items-center justify-center">
       <div className="text-center">
         {/* Error icon */}
         <div className="mb-6">

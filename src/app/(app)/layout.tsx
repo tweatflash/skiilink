@@ -20,6 +20,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     setSearchQuery,
     handleUpdateQuantity,
     handleRemoveItem,
+    search,
+    setSearch
   } = themeContext;
   const cartItemCount: number = cartItems.reduce(
     (sum, item) => sum + item.quantity,

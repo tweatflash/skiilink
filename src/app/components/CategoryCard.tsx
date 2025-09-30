@@ -13,21 +13,21 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="group cursor-pointer bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 overflow-hidden"
+      className="group cursor-pointer bg-white rounded-2xl  border border-gray-100  transition-all duration-300 overflow-hidden"
     >
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative  py-4  overflow-hidden hrpi flex flex-col gap-4 sm:gap-6">
         <img
           src={category.image}
           alt={category.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className=" w-[85%] xsmall:w-[70%] aspect-square object-contain  m-auto transition-transform duration-300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        <div className="absolute bottom-4 left-4 text-white">
-          <div className="flex items-center space-x-2 mb-2">
-            {IconComponent && <IconComponent size={24} />}
-            <h3 className="text-lg font-semibold">{category.name}</h3>
+        <div className="absolute inset-0 "></div>
+        <div className=" w-full text-black ">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            {/* {IconComponent && <IconComponent size={24} />} */}
+            <h3 className="text-sm font-semibold text-center">{category.name}</h3>
           </div>
-          <p className="text-sm opacity-90">{category.productCount} products</p>
+          {/* <p className="text-sm opacity-90 text-center">{category.productCount} products</p> */}
         </div>
       </div>
     </div>

@@ -2,20 +2,19 @@
 @tailwind components;
 @tailwind utilities;  
 body {
-   -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+   -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
   /* font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,  Arial, sans-serif !important; */
   font-family: boldCal !important;
-  
   /* font-family:"Segoe UI Historic", Roboto, Ubuntu, "Helvetica Neue", sans-serif */
 }
 @font-face {
   font-family: boldCal;
-  src: url(../../public/fonts/Coben.otf);
+  src: url(../../public/fonts/WB.ttf);
 }
 @font-face {
   font-family: famil;
-  src: url(../../public/fonts/Cooljazz.ttf);
+  src: url(../../public/fonts/Chococooky.ttf);
   /* src: url(../../public/fonts/Cooljazz.ttf); */
   
 
@@ -32,6 +31,7 @@ body {
     scrollbar-width: none; /* Firefox */
   }
 }
+
 html.dark {
     --typography-color: var(--color-zinc-400);
     --typography-heading: var(--color-white);
@@ -79,12 +79,14 @@ html.dark {
 .hrpi::before{
   content: "";
   position: absolute;
+  top: 0;
   width: 100%;
   height: 100% ;
   background-color:#6c757d1a ;
 }
 .hrpi2::before{
   content: "";
+  top: 0;
   position: absolute;
   width: 100%;
   height: 100% ;

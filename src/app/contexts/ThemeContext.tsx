@@ -22,6 +22,8 @@ interface ThemeContextType {
   handleRemoveItem:any
   loggedIn:{"boolean":"pending"|"true" |"false" ,"role":"user" | "admin" | null}
   setLoggedIn:Dispatch<SetStateAction<{"boolean":"pending"|"true" |"false" ,"role":"user" | "admin" | null}>>
+  search:boolean
+  setSearch:Dispatch<SetStateAction<boolean>>
 }
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(
@@ -64,6 +66,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [catalogueProducts, setCatalogueProducts] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [search,setSearch]=useState(false)
   const [userAuth,setUserAuth]=useState<UserRoot | {}>({})
   const [loggedIn,setLoggedIn]=useState<{"boolean":"pending"|"true" |"false" ,"role":"user" | "admin" | null}>({"boolean":"pending", "role":null})
   useEffect(()=>{
@@ -134,7 +137,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         searchQuery, 
         setSearchQuery,
         handleUpdateQuantity,
-        handleRemoveItem
+        handleRemoveItem,
+        search,
+        setSearch
       }}
     >
       {children}

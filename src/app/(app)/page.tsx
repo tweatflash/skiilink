@@ -1,22 +1,31 @@
-"use client"
-import React, { useState, useMemo } from 'react';
+"use client";
+import React, { useState, useMemo } from "react";
 
-import HeroSection from '../components/HeroSection';
-import CategoryCard from '../components/CategoryCard';
-import ProductCard from '../components/ProductCard';
-import Cart from '../components/Cart';
-import { categories, featuredProducts, bestSellingProducts } from '../data/products';
-import { Product, CartItem } from '../types/product';
-import { useRouter } from 'next/navigation';
-import Header from 'app/components/Header';
+import HeroSection from "../components/HeroSection";
+import CategoryCard from "../components/CategoryCard";
+import ProductCard from "../components/ProductCard";
+import Cart from "../components/Cart";
+import {
+  categories,
+  featuredProducts,
+  bestSellingProducts,
+} from "../data/products";
+import { Product, CartItem } from "../types/product";
+import { useRouter } from "next/navigation";
+import Header from "app/components/Header";
+import ShopByInterest from "app/components/layout/catalogue/shopWithInterest";
 
 function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<'home' | 'catalog' | 'product' | 'admin'>('home');
-  const [selectedProduct, setSelectedProduct] = useState<dummyStore | null>(null);
+  const [currentView, setCurrentView] = useState<
+    "home" | "catalog" | "product" | "admin"
+  >("home");
+  const [selectedProduct, setSelectedProduct] = useState<dummyStore | null>(
+    null
+  );
 
   const allProducts = [...featuredProducts, ...bestSellingProducts];
 
@@ -24,27 +33,34 @@ function App() {
     let filtered = allProducts;
 
     if (searchQuery) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     if (selectedCategory) {
-      filtered = filtered.filter(product => product.category === selectedCategory);
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
     }
 
     return filtered;
   }, [searchQuery, selectedCategory, allProducts]);
 
-  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleAddToCart = (product: CartItem['product'], quantity: number) => {
+  const handleAddToCart = (product: CartItem["product"], quantity: number) => {
     setCartItems((prev: CartItem[]) => {
-      const existingItem = prev.find(item => item.product._id === product._id);
+      const existingItem = prev.find(
+        (item) => item.product._id === product._id
+      );
       if (existingItem) {
-        return prev.map(item =>
+        return prev.map((item) =>
           item.product._id === product._id
             ? { ...item, quantity: item.quantity + quantity }
             : item
@@ -59,56 +75,50 @@ function App() {
       handleRemoveItem(productId);
       return;
     }
-    setCartItems((prev:CartItem[]) =>
-      prev.map(item =>
-        item.product._id === productId
-          ? { ...item, quantity }
-          : item
+    setCartItems((prev: CartItem[]) =>
+      prev.map((item) =>
+        item.product._id === productId ? { ...item, quantity } : item
       )
     );
   };
 
   const handleRemoveItem = (productId: string) => {
-    setCartItems(prev => prev.filter(item => item.product._id !== productId));
+    setCartItems((prev) =>
+      prev.filter((item) => item.product._id !== productId)
+    );
   };
-  const router =useRouter()
+  const router = useRouter();
   const handleCategoryClick = (categoryId: string) => {
-    router.push(`/products?category=${categoryId}`)
-    
+    router.push(`/products?sort=${categoryId}`);
   };
 
   const handleShopNow = () => {
-    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleViewCatalog = () => {
-    router.push("/products")
+    router.push("/products");
   };
 
   const handleBackToHome = () => {
-    setCurrentView('home');
+    setCurrentView("home");
     setSelectedCategory(null);
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   const handleProductClick = (product: dummyStore) => {
     setSelectedProduct(product);
-    setCurrentView('product');
+    setCurrentView("product");
   };
 
   const handleBackToCatalog = () => {
-    setCurrentView('catalog');
+    setCurrentView("catalog");
     setSelectedProduct(null);
   };
-
-
-
 
   return (
     // <ThemeProvider>
     <>
-      
-      
       {/* Admin Access Button - Remove in production */}
       {/* <div className="fixed bottom-6 right-6 z-50">
         <button
@@ -119,20 +129,26 @@ function App() {
         </button>
       </div> */}
 
-      <HeroSection onShopNow={handleShopNow} onViewCatalog={handleViewCatalog} />
+      <HeroSection
+        onShopNow={handleShopNow}
+        onViewCatalog={handleViewCatalog}
+      />
 
       {/* Categories Section */}
       <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">Shop by Category</h2>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+              Shop by Category
+            </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Explore our comprehensive range of solar, security, and electrical products designed for modern living.
+              Explore our comprehensive range of solar, security, and electrical
+              products designed for modern living.
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-            {categories.slice(0, 8).map((category:any) => (
+
+          <div className="grid grid-cols-2  sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-4">
+            {categories.slice(0, 8).map((category: any) => (
               <CategoryCard
                 key={category.id}
                 category={category}
@@ -142,19 +158,32 @@ function App() {
           </div>
         </div>
       </section>
-
+      <ShopByInterest />
       {/* Featured Products */}
-      <section id="products" className="py-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
+      <section
+        id="products"
+        className="py-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-300"
+      >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-                {selectedCategory ? 'Filtered Products' : searchQuery ? 'Search Results' : 'Featured Products'}
+                {selectedCategory
+                  ? "Filtered Products"
+                  : searchQuery
+                  ? "Search Results"
+                  : "Featured Products"}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
                 {selectedCategory && (
                   <span>
-                    Showing products in: <strong>{categories.find((c:any) => c.id === selectedCategory)?.name}</strong>
+                    Showing products in:{" "}
+                    <strong>
+                      {
+                        categories.find((c: any) => c.id === selectedCategory)
+                          ?.name
+                      }
+                    </strong>
                     <button
                       onClick={() => setSelectedCategory(null)}
                       className="ml-2 text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 underline font-medium"
@@ -167,24 +196,28 @@ function App() {
                   <span>
                     Search results for: <strong>"{searchQuery}"</strong>
                     <button
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => setSearchQuery("")}
                       className="ml-2 text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 underline font-medium"
                     >
                       Clear search
                     </button>
                   </span>
                 )}
-                {!selectedCategory && !searchQuery && 'Discover our most popular and highest-rated products.'}
+                {!selectedCategory &&
+                  !searchQuery &&
+                  "Discover our most popular and highest-rated products."}
               </p>
             </div>
           </div>
 
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-400 text-xl mb-4">No products found matching your criteria.</p>
+              <p className="text-gray-500 dark:text-gray-400 text-xl mb-4">
+                No products found matching your criteria.
+              </p>
               <button
                 onClick={() => {
-                  setSearchQuery('');
+                  setSearchQuery("");
                   setSelectedCategory(null);
                 }}
                 className="text-orange-500 dark:text-orange-400 hover:text-orange-600 dark:hover:text-orange-300 underline font-medium"
@@ -195,33 +228,30 @@ function App() {
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
               {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}
         </div>
       </section>
-
+          
       {/* Best Sellers - Only show when no filters are active */}
       {!selectedCategory && !searchQuery && (
         <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">Best Sellers</h2>
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+                Best Sellers
+              </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                Our customers' favorite products - tried, tested, and highly rated.
-              </p>  
+                Our customers' favorite products - tried, tested, and highly
+                rated.
+              </p>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-              {bestSellingProducts.map((product:any) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                />
+              {bestSellingProducts.map((product: any) => (
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>

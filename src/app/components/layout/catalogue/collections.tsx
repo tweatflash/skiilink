@@ -127,11 +127,11 @@ export default function Collections() {
 
   useEffect(() => {
     // Simulate async fetch
-    const timer = setTimeout(() => {
+    // const timer = setTimeout(() => {
       setCollections(COLLECTIONS_DATA);
       setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+    // }, 2000);
+    // return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
