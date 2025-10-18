@@ -27,7 +27,7 @@ export default function SearchLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense>
+    <Suspense fallback={<div className="min-h-screen"></div>}>
     <div className="mx-auto w-full min-h-screen h-max flex max-screen flex-col gap-4 pt-4 md:pt-0 md:gap-8 px-4 pb-4 bg-white md:flex-row">
       <div className="order-first w-full flex-none md:max-w-[125px] z-30 ">
         <Collections />

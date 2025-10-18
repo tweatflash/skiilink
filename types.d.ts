@@ -106,3 +106,118 @@ type UserAuth ={
   updatedAt: string
   __v: number
 }
+
+
+
+type Product2 ={
+  _id: number | string
+  title: string
+  description: string
+  category: string
+  price: number
+  discountPercentage: number
+  rating: number
+  stock: number
+  tags: string[]
+  brand: string
+  sku: string
+  fullDescription?: string
+  features?: string[]
+  specifications?: string[]
+  weight: number
+  model: string
+  dimensions: {
+    width: number
+    height: number
+    depth: number
+  }
+  warrantyInformation: string
+  shippingInformation: string
+  availabilityStatus: string
+  reviews: {
+    rating: number
+    comment: string
+    date: string
+    reviewerName: string
+    reviewerEmail: string
+  }[]
+  returnPolicy: string
+  minimumOrderQuantity: number
+  meta: {
+    createdAt: string
+    updatedAt: string
+    barcode: string
+    qrCode: string
+  }
+  thumbnail: string
+  image: ImageObj[]
+  variant?: string
+  // Legacy fields for backward compatibility
+  id?: string
+  name?: string
+  inStock?: boolean
+}
+
+type CartItem2 ={
+  product: Product2
+  quantity: number
+}
+
+type ShippingOption ={
+  id: string
+  name: string
+  price: number
+  estimatedDays: string
+  description: string
+}
+
+type CustomerDetails ={
+  email: string
+  firstName: string
+  lastName: string
+  phone: string
+  phone?:any
+  address: {
+    street: string
+    city: string
+    state: string
+    zipCode: string
+    country: string
+    
+  }
+}
+type customerDetails2= {
+      email:string
+      emailOffers: boolean,
+      country: string,
+      firstName: string,
+      lastName: string,
+      address: string,
+      apartment: string,
+      city: string,
+      state: string,
+      zipCode: string,
+      phone?:any
+      saveInfo: boolean,
+    } 
+
+type PaymentDetails ={
+  cardNumber: string
+  expiryDate: string
+  cvv: string
+  cardholderName: string
+}
+
+type Order ={
+  id: string
+  items: CartItem2[]
+  customerDetails: CustomerDetails
+  shippingOption: ShippingOption
+  subtotal: number
+  shipping: number
+  tax: number
+  total: number
+  status: "pending" | "processing" | "shipped" | "delivered"
+  createdAt: Date
+  trackingNumber?: string
+}

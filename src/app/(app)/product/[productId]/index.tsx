@@ -19,6 +19,7 @@ import {
 // import { Product } from "../../../types/product";
 import { ThemeContext } from "app/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
+import BackpackCatalog from "app/components/moreToLove";
 
 interface ProductOverviewProps {
   product: dummyStore;
@@ -90,18 +91,18 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
     }
      
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="">
+        <div className="max-screen mx-auto px-4 pt-4">
           <div className="flex w-full no-scrollbar overflow-x-auto items-center space-x-4">
-            <button
+            {/* <button
               onClick={onBack}
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft size={20} />
               <span className="whitespace-nowrap">Back to Products</span>
-            </button>
+            </button> */}
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <span className="whitespace-nowrap">Products</span>
               <span>/</span>
@@ -115,82 +116,12 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-screen mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Product Images */}
-          <div className="space-y-4">
-            {/* Main Image */}
-            <div className="relative hrpi2 rounded-2xl shadow-lg overflow-hidden">
-              <img
-                src={images[selectedImage].url}
-                alt={product.title}
-                className="w-full h-96 lg:h-[500px] object-cover"
-              />
-
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col space-y-2">
-                {product.meta && (
-                  <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
-                    NEW
-                  </span>
-                )}
-                {product.brand && (
-                  <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
-                    BESTSELLER
-                  </span>
-                )}
-                {discountPercentage > 0 ? (
-                  <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
-                    -{discountPercentage}% OFF
-                  </span>
-                ) : null}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="absolute top-4 right-4 flex flex-col space-y-2">
-                <button className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
-                  <Heart
-                    size={20}
-                    className="text-gray-600 hover:text-red-500"
-                  />
-                </button>
-                <button className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
-                  <Share2
-                    size={20}
-                    className="text-gray-600 hover:text-blue-500"
-                  />
-                </button>
-              </div>
-            </div>
-
-            {/* Thumbnail Images */}
-            {images.length > 1 && (
-              <div className="flex space-x-3 w-full relative h-20 overflow-x-scroll no-scrollbar pb-2">
-                <div className="w-fit flex space-x-3 absolute overflow-x-auto no-scrollbar">
-                  {images.map((image:any , index: number) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                      selectedImage === index
-                        ? "border-orange-500 shadow-lg"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <img
-                      src={image.url}
-                      alt={`${product.title} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-                </div>
-              </div>
-            )}
-          </div>
+        
 
           {/* Product Details */}
-          <div className="space-y-6">
+          <div className="space-y-6 order-2 lg:order-1">
             {/* Product Info */}
             <div>
               {product.brand && (
@@ -201,9 +132,11 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
               <h1 className="text-3xl lg:text-4xl font-bold break-all break-words whitespace-pre-wrap text-gray-900 mb-4 leading-tight">
                 {product.title}
               </h1>
-
+               <p className="text-gray-600 mb-4 text-lg leading-relaxed whitespace-pre-wrap">
+                {product.description}
+              </p>
               {/* Rating */}
-              <div className="flex flex-wrap items-center space-x-4 mb-4">
+              <div className="flex flex-wrap items-center space-x-4 ">
                 <div className="flex items-center space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
@@ -222,13 +155,11 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                 </span>
               </div>
 
-              <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
-                {product.description}
-              </p>
+             
             </div>
 
             {/* Price */}
-            <div className="bg-gray-50 rounded-xl sm:p-6">
+            <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
               <div className="flex items-center space-x-4 mb-4">
                 <span className="text-4xl font-bold text-gray-900">
                   {formatPrice(product.price)}
@@ -288,13 +219,12 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
               <button
                 onClick={()=>handleAddToCart(product,quantity)}
                 disabled={!product.stock}
-                className={`w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
+                className={`w-full flex items-center justify-center space-x-3 py-2 px-6 rounded-lg font-semibold text-base transition-all duration-200 ${
                   product.stock
-                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transform hover:scale-105"
+                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 "
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
-                <ShoppingCart size={20} />
                 <span>
                   {product.stock ? `Add ${quantity} to Cart` : "Out of Stock"}
                 </span>
@@ -337,6 +267,78 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                 </div>
               </div>
             </div>
+          </div>
+
+            {/* Product Images */}
+          <div className="space-y-4 lg:order-2 order-1">
+            {/* Main Image */}
+            <div className="relative hrpi rounded-2xl overflow-hidden">
+              <img
+                src={images[selectedImage].url}
+                alt={product.title}
+                className="w-full h-96 lg:h-[500px] object-cover"
+              />
+
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-col space-y-2">
+                {product.meta && (
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
+                    NEW
+                  </span>
+                )}
+                {product.brand && (
+                  <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
+                    BESTSELLER
+                  </span>
+                )}
+                {discountPercentage > 0 ? (
+                  <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-lg">
+                    -{discountPercentage}% OFF
+                  </span>
+                ) : null}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                <button className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
+                  <Heart
+                    size={20}
+                    className="text-gray-600 hover:text-red-500"
+                  />
+                </button>
+                <button className="p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white hover:scale-110 transition-all duration-200">
+                  <Share2
+                    size={20}
+                    className="text-gray-600 hover:text-blue-500"
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Thumbnail Images */}
+            {images.length > 1 && (
+              <div className="flex space-x-3 w-full relative h-20 overflow-x-scroll no-scrollbar pb-2">
+                <div className="w-fit flex space-x-3 absolute overflow-x-auto no-scrollbar">
+                  {images.map((image:any , index: number) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg relative  overflow-hidden border-2 transition-all duration-200 ${
+                      selectedImage === index
+                        ? "border-orange-500 shadow-lg"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <img
+                      src={image.url}
+                      alt={`${product.title} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -578,6 +580,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             )}
           </div>
         </div>
+        <BackpackCatalog/>
       </div>
     </div>
   );

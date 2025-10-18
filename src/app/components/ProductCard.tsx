@@ -200,7 +200,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
    <Card hover className="group cursor-pointer relative my-4 sm:my-1">
       <div className=" w-full max-w-xs  dark:bg-gray-900 rounded-lg  transition duration-300 cursor-pointer">
   {/* Product Image */}
-  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-sm">
+  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-2xl">
     <img
       src={product.image}
       alt={product.name}

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { ThemeProvider } from "./contexts/ThemeContext";
+import { CartProvider, CheckoutProvider, ThemeProvider } from "./contexts/ThemeContext";
 export default function Index({
   children,
 }: {
@@ -9,7 +9,11 @@ export default function Index({
   return (
     <>
         <ThemeProvider>
-            {children}
+          <CartProvider>
+            <CheckoutProvider>
+              {children}
+            </CheckoutProvider>
+          </CartProvider>
         </ThemeProvider>
     </>
   )

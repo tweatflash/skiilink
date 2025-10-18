@@ -57,18 +57,18 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>
-      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
-        <div className="flex flex-col h-full">
+      <div className="absolute right-0 top-0 h-full p-2 w-full max-w-md  shadow-xl">
+        <div className="flex flex-col h-full bg-white border border-gray-200 rounded-lg">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b">
+          <div className="flex items-center justify-between px-4 pt-3 border-b">
             <h2 className="text-xl font-semibold">Shopping Cart</h2>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
+            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-md">
               <X size={20} />
             </button>
           </div>
 
           {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto px-4 pt-3">
             {items.length === 0 ? (
               <div className="text-center py-12">
                 <ShoppingBag size={48} className="mx-auto text-gray-400 mb-4" />

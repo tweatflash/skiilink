@@ -49,13 +49,13 @@ const ProductCard2: React.FC<ProductCardProps> = ({
   // Grid view with enhanced modern design
   return (
     <Card hover className="group cursor-pointer relative my-4 sm:my-1">
-      <div className=" w-full max-w-xs bg-white dark:bg-gray-900 rounded-lg  transition duration-300 cursor-pointer">
+      <div className=" w-full max-w-xs bg-white dark:bg-gray-900 rounded-lg  transition duration-300 cursor-pointer" onClick={()=>console.log(product)}>
   {/* Product Image */}
-  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-sm">
+  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-xl">
     <img
       src={product.image[0].url}
       alt={product.title}
-      className="w-full h-full object-cover transition-transform duration-300 "
+      className="size-full object-cover transition-transform duration-300 "
     />
     <div className="absolute rounded-lg inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
     {product.sku && (
@@ -65,29 +65,29 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     )}
   </div>
 
-  {/* Product Title */}
-  <h3 onClick={()=>handleProductClick()} className="mt-3 text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-orange-500 transition-colors">
-    {product.title}
-  </h3>
+ 
 
   {/* Rating & Sold Count */}
-  <div className="flex items-center gap-1 mt-1">
+  <div className="flex items-center gap-1 mt-3">
     {[...Array(5)].map((_, i) => (
       <Star
         key={i}
         size={14}
         className={
           i < Math.floor(product.rating)
-            ? "text-yellow-400"
+            ? "text-yellow-400 fill-current"
             : "text-gray-300 dark:text-gray-600"
         }
       />
     ))}
     <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-      (200+ sold)
+      (237+ sold)
     </span>
   </div>
-
+ {/* Product Title */}
+  <h3 onClick={()=>handleProductClick()} className="mt-1 text-sm text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-orange-500 transition-colors">
+    {product.title}
+  </h3>
   {/* Price Section */}
   <div className="mt-2 flex items-center flex-wrap gap-2">
     <span className="text-lg font-bold text-red-600 dark:text-red-400">
@@ -103,7 +103,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
   {/* Optional: Quick Action Buttons */}
   <div className="mt-3 flex gap-2" > 
     <button onClick={() => onAddToCart(product)} className="flex-1 text-xs font-medium bg-orange-500 text-white py-[6px] rounded hover:bg-orange-600 transition">
-      Add to Cart
+     Shop Now
     </button>
     <button className="flex-1 text-xs font-medium border border-gray-300 dark:border-gray-600 py-[6px] rounded hover:border-orange-500 transition">
       Wishlist

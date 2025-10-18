@@ -25,7 +25,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, onClick }) => {
         <div className=" w-full text-black ">
           <div className="flex items-center justify-center space-x-2 mb-2">
             {/* {IconComponent && <IconComponent size={24} />} */}
-            <h3 className="text-sm font-semibold text-center">{category.name}</h3>
+            <h3 className="text-sm  text-center">{category.name}</h3>
           </div>
           {/* <p className="text-sm opacity-90 text-center">{category.productCount} products</p> */}
         </div>

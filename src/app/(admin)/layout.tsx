@@ -15,6 +15,7 @@ import {
   Store
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Sidebar } from 'app/components/sidebar';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -44,117 +45,47 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex transition-colors duration-300">
-      {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 dark:bg-gray-900 dark:shadow-gray-900/50`}>
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">⚡</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100">Skiilink LTD</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Admin Panel</p>
-            </div>
-          </div>
-          <button
-            onClick={() => setIsSidebarOpen(false)}
-            className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        <nav className="mt-6 px-3">
-          <div className="space-y-1">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    onTabChange(item.id);
-                    setIsSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors ${
-                    activeTab === item.id
-                      ? 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 border-r-2 border-orange-600 dark:border-orange-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
-                  }`}
-                >
-                  <Icon size={20} className="mr-3" />
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
-            <button className="w-full flex items-center px-3 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors">
-              <LogOut size={20} className="mr-3" />
-              Sign Out
-            </button>
-          </div>
-        </nav>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Header */}
-        <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 h-14 lg:h-16 flex items-center justify-between px-4 lg:px-6 transition-colors duration-300">
-          <div className="flex items-center space-x-2 lg:space-x-4">
+     <div className={`lg:pl-[263px] lg:py-2 lg:pr-2 relative isolate flex min-h-screen w-full bg-white max-lg:flex-col lg:bg-zinc-100`}>
+      <Sidebar />
+      <div className="flex flex-1 rounded-lg flex-col inset-2 bg-white w-full ring-1 ring-zinc-200">
+         <header className="flex items-center px-4 lg:hidden">
+        <div className="py-2.5">
+          <span className="relative">
             <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-1.5 lg:p-2 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              aria-label="Open navigation"
+              className="relative flex min-w-0 items-center gap-3 rounded-lg p-2 text-left text-base font-medium text-zinc-950 sm:text-sm hover:bg-zinc-950/5 active:bg-zinc-950/5 dark:text-white dark:hover:bg-white/5 dark:active:bg-white/5"
+              type="button"
             >
-              <Menu size={18} className="lg:w-5 lg:h-5" />
+              <svg viewBox="0 0 20 20" aria-hidden="true" className="w-6 h-6 shrink-0 fill-zinc-500 sm:w-5 sm:h-5">
+                <path d="M2 6.75C2 6.33579 2.33579 6 2.75 6H17.25C17.6642 6 18 6.33579 18 6.75C18 7.16421 17.6642 7.5 17.25 7.5H2.75C2.33579 7.5 2 7.16421 2 6.75ZM2 13.25C2 12.8358 2.33579 12.5 2.75 12.5H17.25C17.6642 12.5 18 12.8358 18 13.25C18 13.6642 17.6642 14 17.25 14H2.75C2.33579 14 2 13.6642 2 13.25Z"></path>
+              </svg>
             </button>
-            
-            <div className="hidden sm:flex items-center space-x-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-48 lg:w-64 px-3 lg:px-4 py-1.5 lg:py-2 pl-8 lg:pl-10 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
-                />
-                <Search className="absolute left-2 lg:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={14} />
-              </div>
+          </span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <nav className="flex flex-1 items-center gap-4 py-2.5">
+            <div aria-hidden="true" className="-ml-4 flex-1"></div>
+            <div className="flex items-center gap-3">
+              <span className="relative">
+                <button
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  className="relative flex min-w-0 items-center gap-3 rounded-lg p-2 text-left text-base font-medium text-zinc-950 sm:text-sm hover:bg-zinc-950/5 active:bg-zinc-950/5 "
+                >
+                 
+                  <span className="inline-grid shrink-0 align-middle rounded-[20%] outline outline-1 -outline-offset-1 outline-black/10 dark:outline-white/10">
+                    <img className="size-7 col-start-1 row-start-1 rounded-[20%]" src="/images/image_1.jpg" alt="" />
+                  </span>
+                </button>
+              </span>
             </div>
-          </div>
-
-          <div className="flex items-center space-x-2 lg:space-x-4">
-            <button className="relative p-1.5 lg:p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
-              <Bell size={16} className="lg:w-5 lg:h-5" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-            
-            <div className="flex items-center space-x-2 lg:space-x-3">
-              <div className="w-7 h-7 lg:w-8 lg:h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
-                <span className="text-orange-600 dark:text-orange-400 font-semibold text-xs lg:text-sm">A</span>
-              </div>
-              <div className="hidden lg:block">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Admin User</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">admin@solartech.com</p>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
-          {children}
-        </main>
+          </nav>
+        </div>
+      </header>
+        {/* <DashboardContent /> */}
+        {children}
       </div>
-
-      {/* Sidebar Overlay */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        ></div>
-      )}
     </div>
   );
 };

@@ -345,7 +345,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
           
 
           {/* Products Grid */}
-          <div className="w-full mx-auto py-4 bg-white">
+          <div className="w-full mx-auto sm:py-4 bg-white">
             {displayedProducts.length === 0 && !loading ? (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">
@@ -397,7 +397,7 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                     ))}
                 </div>
                 {/* Mobile View */}
-                <div className={`flex sm:hidden flex-row gap-3 flex-nowrap`}>
+                <div className={`flex sm:hidden flex-row gap-3 flex-nowrap justify-around`}>
                   {/* Mobile View */}
                   {/* First Row */}
                   <div className="flex-1 flex-col gap-3 overflow-x-auto">

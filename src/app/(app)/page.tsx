@@ -14,6 +14,8 @@ import { Product, CartItem } from "../types/product";
 import { useRouter } from "next/navigation";
 import Header from "app/components/Header";
 import ShopByInterest from "app/components/layout/catalogue/shopWithInterest";
+import { NewsletterSection } from "app/components/newletter";
+import BrandsSection from "app/components/brandsSection";
 
 function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -138,7 +140,7 @@ function App() {
       <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+            <h2 className=" text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
               Shop by Category
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
@@ -162,12 +164,12 @@ function App() {
       {/* Featured Products */}
       <section
         id="products"
-        className="py-20 bg-gray-50 dark:bg-gray-950 transition-colors duration-300"
+        className="py-20 dark:bg-gray-950 transition-colors duration-300"
       >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+              <h2 className=" text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 {selectedCategory
                   ? "Filtered Products"
                   : searchQuery
@@ -234,13 +236,13 @@ function App() {
           )}
         </div>
       </section>
-          
+      <BrandsSection/>
       {/* Best Sellers - Only show when no filters are active */}
       {!selectedCategory && !searchQuery && (
         <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+              <h2 className=" text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 Best Sellers
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -257,6 +259,7 @@ function App() {
           </div>
         </section>
       )}
+      <NewsletterSection />
     </>
     // </ThemeProvider>
   );

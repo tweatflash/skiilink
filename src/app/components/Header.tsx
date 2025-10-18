@@ -26,31 +26,22 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-screen mx-auto px-4">
-        <div className="flex items-center justify-between h-14 lg:h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link href={"/"}>
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">⚡</span>
-            </div>
-            <div className="hidden sm:block">
-              <h1 className="text-2xl font-bold font-[famil] bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
-                SKIILINK
-                
-              </h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1 font-[famil]">VENTURES LIMITED</p>
-            </div>
+           <img src="/logo.png" alt="Skiilink Logo" className="h-8 w-auto"/>
           </div>
           </Link>
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+          <nav className="hidden lg:flex items-center space-x-8 text-sm">
+            <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
               Home
             </Link>
-            <Link href="products" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+            <Link href="products" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
               Products
             </Link>
-            <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors">
+            <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
               Solutions
             </Link>
             
@@ -88,11 +79,11 @@ const Header: React.FC<HeaderProps> = ({
             {/* Cart Button */}
             <button
               onClick={onCartClick}
-              className="relative p-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+              className="relative p-2.5 text-gray-600 transition-all duration-200 transform hover:scale-105"
             >
               <ShoppingCart size={20} />
               {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg animate-pulse">
+                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full size-4 flex items-center justify-center animate-pulse">
                   {cartItemCount > 99 ? '99+' : cartItemCount}
                 </span>
               )}

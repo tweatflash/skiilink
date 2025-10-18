@@ -1,393 +1,654 @@
 "use client"
-import React, { useEffect, useState } from 'react';
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Edit, 
-  Trash2, 
-  Eye, 
-  MoreVertical,
-  Star,
-  Package,
-  AlertTriangle,
-  CheckCircle
-} from 'lucide-react';
-import { Product } from '../../../types/product';
-import { featuredProducts, bestSellingProducts, categories } from '../../../data/products';
-import ProductForm from '../../../components/admin/ProductForm';
+import { useState,useEffect } from 'react';
+import { Search, ChevronDown, Plus, RefreshCw, ShoppingCart } from 'lucide-react';
+import clsx from 'clsx';
 import getWikiResults from '../../../../../lib/getProducts';
-import deleteProduct from '../../../../../lib/deleteProduct';
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
+interface Product {
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+  price: number;
+  stock: number;
+  color: string;
+  discount: number;
+  rating: number;
+  sales: number;
+  lastUpdate: string;
+}
+
+const mockProducts: Product[] = [
+  {
+    id: 'PRD-001',
+    name: 'Apple MacBook Pro 17" with Retina Display and Touch Bar',
+    image: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Laptop',
+    price: 2999,
+    stock: 15,
+    color: 'Space Gray',
+    discount: 10,
+    rating: 5.0,
+    sales: 300,
+    lastUpdate: 'Just now',
+  },
+  {
+    id: 'PRD-002',
+    name: 'Microsoft Surface Pro 8 with Type Cover and Surface Pen',
+    image: 'https://images.pexels.com/photos/7974/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Laptop',
+    price: 1999,
+    stock: 8,
+    color: 'Platinum',
+    discount: 0,
+    rating: 4.5,
+    sales: 856,
+    lastUpdate: 'This week',
+  },
+  {
+    id: 'PRD-003',
+    name: 'Magic Mouse 2 Wireless Rechargeable Multi-Touch Surface',
+    image: 'https://images.pexels.com/photos/2115256/pexels-photo-2115256.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Accessories',
+    price: 99,
+    stock: 45,
+    color: 'Silver',
+    discount: 15,
+    rating: 4.8,
+    sales: 10,
+    lastUpdate: 'Just now',
+  },
+  {
+    id: 'PRD-004',
+    name: 'Apple Watch Series 8 GPS + Cellular 45mm Stainless Steel',
+    image: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Watches',
+    price: 399,
+    stock: 22,
+    color: 'Midnight',
+    discount: 5,
+    rating: 5.0,
+    sales: 500,
+    lastUpdate: '2 days ago',
+  },
+  {
+    id: 'PRD-005',
+    name: 'Apple iMac 27" 5K Retina Display Desktop Computer with Magic Keyboard',
+    image: 'https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Desktop',
+    price: 2499,
+    stock: 5,
+    color: 'Silver',
+    discount: 20,
+    rating: 4.9,
+    sales: 1000,
+    lastUpdate: 'This week',
+  },
+  {
+    id: 'PRD-006',
+    name: 'Apple AirPods Pro 2nd Generation with MagSafe Charging Case',
+    image: 'https://images.pexels.com/photos/8000616/pexels-photo-8000616.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Accessories',
+    price: 249,
+    stock: 67,
+    color: 'White',
+    discount: 0,
+    rating: 4.7,
+    sales: 3500,
+    lastUpdate: 'Just now',
+  },
+  {
+    id: 'PRD-007',
+    name: 'iPad Pro 12.9" 6th Generation with M2 Chip and Liquid Retina Display',
+    image: 'https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Tablet',
+    price: 1099,
+    stock: 18,
+    color: 'Space Gray',
+    discount: 8,
+    rating: 4.6,
+    sales: 750,
+    lastUpdate: '3 days ago',
+  },
+  {
+    id: 'PRD-008',
+    name: 'Magic Keyboard with Touch ID and Numeric Keypad for Mac Models',
+    image: 'https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Accessories',
+    price: 149,
+    stock: 31,
+    color: 'Black',
+    discount: 12,
+    rating: 4.4,
+    sales: 2021,
+    lastUpdate: 'This week',
+  },
+  {
+    id: 'PRD-001',
+    name: 'Apple MacBook Pro 17" with Retina Display and Touch Bar',
+    image: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Laptop',
+    price: 2999,
+    stock: 15,
+    color: 'Space Gray',
+    discount: 10,
+    rating: 5.0,
+    sales: 300,
+    lastUpdate: 'Just now',
+  },
+  {
+    id: 'PRD-002',
+    name: 'Microsoft Surface Pro 8 with Type Cover and Surface Pen',
+    image: 'https://images.pexels.com/photos/7974/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Laptop',
+    price: 1999,
+    stock: 8,
+    color: 'Platinum',
+    discount: 0,
+    rating: 4.5,
+    sales: 856,
+    lastUpdate: 'This week',
+  },
+  {
+    id: 'PRD-003',
+    name: 'Magic Mouse 2 Wireless Rechargeable Multi-Touch Surface',
+    image: 'https://images.pexels.com/photos/2115256/pexels-photo-2115256.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Accessories',
+    price: 99,
+    stock: 45,
+    color: 'Silver',
+    discount: 15,
+    rating: 4.8,
+    sales: 10,
+    lastUpdate: 'Just now',
+  },
+  {
+    id: 'PRD-004',
+    name: 'Apple Watch Series 8 GPS + Cellular 45mm Stainless Steel',
+    image: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Watches',
+    price: 399,
+    stock: 22,
+    color: 'Midnight',
+    discount: 5,
+    rating: 5.0,
+    sales: 500,
+    lastUpdate: '2 days ago',
+  },
+  {
+    id: 'PRD-005',
+    name: 'Apple iMac 27" 5K Retina Display Desktop Computer with Magic Keyboard',
+    image: 'https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Desktop',
+    price: 2499,
+    stock: 5,
+    color: 'Silver',
+    discount: 20,
+    rating: 4.9,
+    sales: 1000,
+    lastUpdate: 'This week',
+  },
+  {
+    id: 'PRD-006',
+    name: 'Apple AirPods Pro 2nd Generation with MagSafe Charging Case',
+    image: 'https://images.pexels.com/photos/8000616/pexels-photo-8000616.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Accessories',
+    price: 249,
+    stock: 67,
+    color: 'White',
+    discount: 0,
+    rating: 4.7,
+    sales: 3500,
+    lastUpdate: 'Just now',
+  },
+  {
+    id: 'PRD-007',
+    name: 'iPad Pro 12.9" 6th Generation with M2 Chip and Liquid Retina Display',
+    image: 'https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Tablet',
+    price: 1099,
+    stock: 18,
+    color: 'Space Gray',
+    discount: 8,
+    rating: 4.6,
+    sales: 750,
+    lastUpdate: '3 days ago',
+  },
+  {
+    id: 'PRD-008',
+    name: 'Magic Keyboard with Touch ID and Numeric Keypad for Mac Models',
+    image: 'https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=400',
+    category: 'Accessories',
+    price: 149,
+    stock: 31,
+    color: 'Black',
+    discount: 12,
+    rating: 4.4,
+    sales: 2021,
+    lastUpdate: 'This week',
+  },
+];
+const getRandomWidth = () => {
+  const widths = [
+    "w-1/2",
+    "w-2/3",
+    "w-3/4",
+    "w-4/5",
+    "w-5/6",
+    "w-full",
+    "w-[60%]",
+    "w-[70%]",
+    "w-[80%]",
+  ];
+  return widths[Math.floor(Math.random() * widths.length)];
 };
+const skeletonBase = " h-[10px] animate-pulse rounded bg-gray-200";
+export default function Products() {
+   const [searchQuery, setSearchQuery] = useState('');
 
-const ProductManagement: React.FC = () => {
-  const [products] = useState<Product[]>([...featuredProducts, ...bestSellingProducts]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [showProductForm, setShowProductForm] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
-  const [productItems, setProductItems] = useState<dummyStore[]>([]);
-  const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredProducts = mockProducts.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    product.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const handleAddProduct = () => {
-    setEditingProduct(null);
-    setShowProductForm(true);
-  };
-
-  const handleEditProduct = (product: Product) => {
-    setEditingProduct(product);
-    setShowProductForm(true);
-  };
-
-  const handleDeleteProduct = async (productId: string | number) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      try {
-        const result = await deleteProduct(productId);
-        console.log('Product deleted:', result);
-      } catch (error) {
-        console.error('Error deleting product:', error);
-      }
+  const totalProducts = mockProducts.length;
+  const totalSales = mockProducts.reduce((sum, p) => {
+    const salesNum = p.sales;
+    return sum + salesNum;
+  }, 0);
+  const discountPercent = (actualPrice: number, discountPrice: number) => {
+   if (actualPrice && discountPrice) {
+      return Math.round(
+          ((actualPrice - discountPrice) / actualPrice) * 100
+        )
     }
+    return 0;
+    }
+    
+  const renderStars = (rating: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <svg
+          key={i}
+          aria-hidden="true"
+          className={`w-5 h-5 ${i <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      );
+    }
+    return stars;
   };
 
-  const getStockStatus = (product: dummyStore) => {
-    if (!product.stock) return { label: 'Out of Stock', color: 'text-red-600 bg-red-50' };
-    // Simulate low stock warning
-    const isLowStock = Math.random() > 0.7;
-    if (isLowStock) return { label: 'Low Stock', color: 'text-yellow-600 bg-yellow-50' };
-    return { label: 'In Stock', color: 'text-green-600 bg-green-50' };
+  const getStockColor = (stock: number) => {
+    if (stock > 50) return 'bg-green-400';
+    if (stock > 20) return 'bg-yellow-300';
+    if (stock > 10) return 'bg-orange-400';
+    return 'bg-red-500';
   };
+  const [productItems, setProductItems] = useState<dummyStore[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const fetchProducts = async () => {
+      setLoading(true)
+      setError("")
       const request: Promise<ProductRes> = await getWikiResults("all");
       const response: dummyStore[] | undefined = (await request)?.products;
-      if (response && response.length) {
+      if (response) {
+        setLoading(false)
         setProductItems([...productItems, ...response]);
+      }else{
+        setLoading(false)
+        setError("Failed to load products");
       }
     };
-    useEffect(()=>{
+    useEffect(() => {
       fetchProducts();
-    },[])
-  if (showProductForm) {
-    return (
-      <ProductForm
-        product={editingProduct}
-        onClose={() => setShowProductForm(false)}
-        onSave={(productData) => {
-          console.log('Save product:', productData);
-          setShowProductForm(false);
-        }}
-      />
-    );
-  }
-
+    }, []);
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Product Management</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your product inventory and listings</p>
+    <div className="p-4 lg:p-10">
+      <div className="max-w-6xl w-full  mx-auto">
+        <div className="flex items-end justify-between gap-4">
+          <h1 className="text-2xl/8 font-semibold text-zinc-950 sm:text-xl/8">
+            Products
+          </h1>
+          <button
+            className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border text-base/6 font-semibold px-4 py-1 sm:text-sm/6 border-transparent bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
+            type="button"
+          >
+            Add Product
+          </button>
         </div>
-        <button
-          onClick={handleAddProduct}
-          className="flex items-center space-x-2 px-4 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors"
-        >
-          <Plus size={20} />
-          <span>Add Product</span>
-        </button>
-      </div>
 
-      {/* Filters */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full sm:w-64 px-4 py-2 pl-10 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
-              />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={16} />
-            </div>
-            
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        <div className="mt-8 mb-4 flex flex-col gap-4 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-zinc-500" />
+            <input
+              placeholder="Search products..."
+              className="w-full rounded-lg border border-zinc-950/10 bg-white py-2 pl-10 pr-3 text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          {/* <div className="relative">
+            <button
+              type="button"
+              className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-950/10 bg-white px-3 py-2 text-base/6 text-zinc-950 sm:text-sm/6 hover:bg-zinc-50 transition-colors min-w-[140px]"
             >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              <Filter size={16} />
-              <span>More Filters</span>
+              <span>Category</span>
+              <ChevronDown className="size-4 text-zinc-500" />
             </button>
-            
-            <div className="flex border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
-              <button
-                onClick={() => setViewMode('table')}
-                className={`px-3 py-2 text-sm ${viewMode === 'table' ? 'bg-orange-500 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-              >
-                Table
-              </button>
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`px-3 py-2 text-sm ${viewMode === 'grid' ? 'bg-orange-500 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-              >
-                Grid
-              </button>
+          </div> */}
+          {/* <div className="relative">
+            <button
+              type="button"
+              className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-950/10 bg-white px-3 py-2 text-base/6 text-zinc-950 sm:text-sm/6 hover:bg-zinc-50 transition-colors min-w-[140px]"
+            >
+              <span>Stock Status</span>
+              <ChevronDown className="size-4 text-zinc-500" />
+            </button>
+          </div> */}
+        </div>
+
+<div className="flex-1 overflow-y-auto">
+      <div className="mx-auto">
+        <section>
+          <div className="relative overflow-hidden bg-white shadow-md sm:rounded-lg">
+            <div className="flex flex-col py-3 space-y-3 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-4">
+              <div className="flex items-center flex-1 space-x-4">
+                <h5>
+                  <span className="text-gray-500">All Products: </span>
+                  <span className="text-gray-900 font-semibold">{totalProducts}</span>
+                </h5>
+                <h5>
+                  <span className="text-gray-500">Total sales: </span>
+                  <span className="text-gray-900 font-semibold">${totalSales.toFixed(1)}M</span>
+                </h5>
+              </div>
+              <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+                <button
+                  type="button"
+                  className="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh products
+                </button>
+               
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Products Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
-        {/* Mobile Card View */}
-        <div className="block lg:hidden">
-          <div className="p-4 space-y-4">
-            {productItems.map((product) => {
-              const stockStatus = getStockStatus(product);
-              return (
-                <div key={product._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <img
-                      src={product.image[0].url}
-                      alt={product.title}
-                      className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2">{product.title}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">{product.description}</p>
-                      <div className="flex items-center space-x-2 mt-2">
-                        {product.brand && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            New
-                          </span>
-                        )}
-                        {product.brand && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                            Best Seller
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{formatPrice(product.price)}</span>
-                      {product.price && (
-                        <div className="text-xs text-gray-500 dark:text-gray-400 line-through">
-                          {formatPrice(product.price)}
-                        </div>
-                      )}
-                    </div>
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${stockStatus.color}`}>
-                      {stockStatus.label}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1">
-                      <Star size={12} className="text-yellow-400 fill-current" />
-                      <span className="text-xs font-medium text-gray-900 dark:text-gray-100">{product.rating}</span>
-                      {/* <span className="text-xs text-gray-500 dark:text-gray-400">({product.reviews})</span> */}
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <button
-                        // onClick={() => handleEditProduct(product)}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                        title="Edit Product"
-                      >
-                        <Edit size={14} />
-                      </button>
-                      <button
-                        className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
-                        title="View Product"
-                      >
-                        <Eye size={14} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product._id)}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                        title="Delete Product"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+          
 
-        {/* Desktop Table View */}
-        <div className="hidden lg:block overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-              <tr>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-gray-100">Product</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-gray-100">Category</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-gray-100">Price</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-gray-100">Stock Status</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-gray-100">Rating</th>
-                <th className="text-left py-4 px-6 font-semibold text-gray-900 dark:text-gray-100">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {productItems.map((product) => {
-                const stockStatus = getStockStatus(product);
-                return (
-                  <tr key={product._id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                    <td className="py-4 px-6">
-                      <div className="flex items-center space-x-3">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left text-gray-500">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-4 py-3">
+                      Product
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Category
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Color
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Price
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Discount
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Stock
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Rating
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Sales
+                    </th>
+                    <th scope="col" className="px-4 py-3 whitespace-nowrap">
+                      Last Update
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productItems.map((product:dummyStore) => (
+                    <tr
+                      key={product._id}
+                      className="border-b border-gray-200 hover:bg-gray-100"
+                    >
+                      <th
+                        scope="row"
+                        className="flex items-center px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+                      >
                         <img
                           src={product.image[0].url}
                           alt={product.title}
-                          className="w-12 h-12 rounded-lg object-cover"
+                          className="w-8 h-8 border border-gray-200 bg- relative rounded-md mr-3 object-cover"
                         />
-                        <div>
-                          <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-1">{product.title}</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{product.description}</p>
-                          <div className="flex items-center space-x-2 mt-1">
-                            {product.brand && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                New
-                              </span>
-                            )}
-                            {product.brand && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                Best Seller
-                              </span>
-                            )}
+                        <div className="max-w-xs">
+                          <div className="text-sm font-medium text-gray-900 truncate">
+                            {product.title}
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <span className="text-sm text-gray-900 dark:text-gray-100 capitalize">
-                        {categories.find(c => c.id === product.category)?.name || product.category}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div>
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">{formatPrice(product.price)}</span>
-                        {product.price && (
-                          <div className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                            {formatPrice(product.price)}
-                          </div>
+                      </th>
+                      <td className="px-4 py-3">
+                        <span className="bg-blue-100 whitespace-nowrap text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
+                          {product.category}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-gray-900 whitespace-nowrap">
+                        {product.sku}
+                      </td>
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        N{product.price.toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {product.discountPercentage > 0 ? (
+                          <span className="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-0.5 rounded">
+                            {discountPercent(product.price,product.discountPercentage)}% off
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 text-xs">-</span>
                         )}
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${stockStatus.color}`}>
-                        {stockStatus.label === 'In Stock' && <CheckCircle size={12} className="mr-1" />}
-                        {stockStatus.label === 'Low Stock' && <AlertTriangle size={12} className="mr-1" />}
-                        {stockStatus.label === 'Out of Stock' && <Package size={12} className="mr-1" />}
-                        {stockStatus.label}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center space-x-1">
-                        <Star size={14} className="text-yellow-400 fill-current" />
-                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{product.rating}</span>
-                        {/* <span className="text-sm text-gray-500 dark:text-gray-400">({product.reviews.length})</span> */}
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center space-x-2">
-                        <button
-                          // onClick={() => handleEditProduct(product)}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                          title="Edit Product"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        <button
-                          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
-                          title="View Product"
-                        >
-                          <Eye size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProduct(product._id)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
-                          title="Delete Product"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                        <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                          <MoreVertical size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <div className="flex items-center">
+                         
+                           <span
+                      className={`inline-flex rounded-md border px-2.5 py-0.5 text-xs font-medium ${
+                        product.stock > 20
+                          ? 'bg-green-50 text-green-700 border-green-200'
+                          : product.stock > 10
+                          ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                          : 'bg-red-50 text-red-700 border-red-200'
+                      }`}
+                    >
+                      {product.stock} units
+                    </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <span className="ml-1 text-gray-500">
+                            {product.rating}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <div className="flex items-center">
+                          0
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        Undefined 
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                        <div className="flex items-center gap-2">
+                          <button
+                            className="px-3 py-0.5 text-sm font-medium text-blue-600 hover:text-white hover:bg-blue-600 border border-blue-600 rounded-lg transition-colors"
+                            type="button"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="px-3 py-0.5 text-sm font-medium text-red-600 hover:text-white hover:bg-red-600 border border-red-600 rounded-lg transition-colors"
+                            type="button"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                   {
+                                    [...Array(10)].map(item=> <tr
+                                      key={item}
+                                      className="hover:bg-gray-50 border-b border-gray-200 hover:border-gray-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer"
+                                    >
+                                        <th
+                                            scope="row"
+                                            className="flex items-center px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+                                          >
+                                            <div
+                                            
+                                              className="w-8 h-8 animate-pulse bg-gray-200 rounded-md mr-3 object-cover"
+                                            />
+                                             <div className={clsx(skeletonBase, getRandomWidth(),"min-w-40")}/>
+                                          </th>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth(),"!h-4 min-w-20")}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth()," min-w-20")}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth()," min-w-14")}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth())}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth()," min-w-10")}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth())}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth()," min-w-5")}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth())}/>
+                                      </td>
+                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                          <div className={clsx(skeletonBase, getRandomWidth())}/>
+                                      </td>
+                                    </tr>)
+                                   }
+                </tbody>
+              </table>
+            </div>
 
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <Package size={48} className="mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No products found</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">Try adjusting your search or filter criteria</p>
-            <button
-              onClick={handleAddProduct}
-              className="inline-flex items-center space-x-2 px-4 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg hover:bg-orange-600 dark:hover:bg-orange-700 transition-colors"
+            <nav
+              className="flex flex-col items-start justify-between p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
+              aria-label="Table navigation"
             >
-              <Plus size={16} />
-              <span>Add Your First Product</span>
-            </button>
+              <span className="text-sm font-normal text-gray-500">
+                Showing{' '}
+                <span className="font-semibold text-gray-900">1-{filteredProducts.length}</span>
+                {' '}of{' '}
+                <span className="font-semibold text-gray-900">{mockProducts.length}</span>
+              </span>
+              <ul className="inline-flex items-stretch -space-x-px">
+                <li>
+                  <button
+                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    <span className="sr-only">Previous</span>
+                    <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </li>
+                <li>
+                  <button className="flex items-center justify-center px-3 py-3 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    1
+                  </button>
+                </li>
+                <li>
+                  <button className="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    2
+                  </button>
+                </li>
+                <li>
+                  <button
+                    aria-current="page"
+                    className="z-10 flex items-center justify-center px-3 py-2 text-sm leading-tight border text-blue-600 bg-blue-50 border-blue-300 hover:bg-blue-100 hover:text-blue-700"
+                  >
+                    3
+                  </button>
+                </li>
+                <li>
+                  <button className="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    ...
+                  </button>
+                </li>
+                <li>
+                  <button className="flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    10
+                  </button>
+                </li>
+                <li>
+                  <button className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    <span className="sr-only">Next</span>
+                    <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
-        )}
+        </section>
       </div>
-
-      {/* Pagination */}
-      {filteredProducts.length > 0 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredProducts.length}</span> of{' '}
-            <span className="font-medium">{filteredProducts.length}</span> results
-          </p>
-          <div className="flex items-center space-x-2">
-            <button className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              Previous
-            </button>
-            <button className="px-3 py-2 bg-orange-500 dark:bg-orange-600 text-white rounded-lg">1</button>
-            <button className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-               Next
-            </button>
+    </div>
+        {/* <div className="mt-6 flex items-center justify-between">
+          <div className="text-sm text-zinc-500">
+            Showing{' '}
+            <span className="font-medium text-zinc-950">1</span> to{' '}
+            <span className="font-medium text-zinc-950">{filteredProducts.length}</span> of{' '}
+            <span className="font-medium text-zinc-950">{mockProducts.length}</span> results
           </div>
-        </div>
-      )}
+        </div> */}
+      </div>
     </div>
   );
-};
-
-export default ProductManagement;
+}
