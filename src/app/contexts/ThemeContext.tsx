@@ -25,6 +25,9 @@ interface ThemeContextType {
   setLoggedIn:Dispatch<SetStateAction<{"boolean":"pending"|"true" |"false" ,"role":"user" | "admin" | null}>>
   search:boolean
   setSearch:Dispatch<SetStateAction<boolean>>
+  getSubtotal: () => number;
+  getItemCount: () => number;
+  clearCart: () => void;
 }
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(
@@ -69,6 +72,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [search,setSearch]=useState(false)
   const [userAuth,setUserAuth]=useState<UserRoot | {}>({})
+    const [isLoaded, setIsLoaded] = useState(false)
   const [loggedIn,setLoggedIn]=useState<{"boolean":"pending"|"true" |"false" ,"role":"user" | "admin" | null}>({"boolean":"pending", "role":null})
   useEffect(()=>{
     if (cookies) {
@@ -78,6 +82,27 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       setLoggedIn({"boolean":"false", "role":null})
     }
   },[])
+  // Load from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("cart-items-storage")
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored)
+        setCartItems(parsed.cartItems || [])
+        console.log(parsed)
+      } catch (e) {
+        console.error("Failed to parse cart storage", e)
+      }
+    }
+    setIsLoaded(true)
+  }, [])
+
+  // Save to localStorage whenever items change
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("cart-items-storage", JSON.stringify({ cartItems }))
+    }
+  }, [cartItems, isLoaded])
    const handleUpdateQuantity = (productId: string, quantity: number) => {
     if (quantity === 0) {
       handleRemoveItem(productId);
@@ -94,6 +119,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleRemoveItem = (productId: string) => {
     setCartItems(prev => prev.filter((item:any) => item.product.id !== productId));
   };
+
+  const clearCart = () => setCartItems([])
+
+  const getSubtotal = () => {
+    return cartItems.reduce((total, item:CartItem) => total + item.product.price * item.quantity, 0)
+  }
+
+  const getItemCount = () => {
+    return cartItems.reduce((total, item:CartItem) => total + item.quantity, 0)
+  }
+
   const ranOnce = useRef(false);
     const Authentication=async ()=>{
     const request=await checkLoggedInStatus()
@@ -140,7 +176,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         handleUpdateQuantity,
         handleRemoveItem,
         search,
-        setSearch
+        setSearch,
+        getSubtotal,
+        getItemCount,
+        clearCart
       }}
     >
       {children}
@@ -423,7 +462,7 @@ interface CheckoutContextType {
   selectedShipping: ShippingOption | null
   order: Order | null
   setStep: (step: number) => void
-  setCustomerDetails: (details: customerDetails2) => void
+  setCustomerDetails: (details: customerDetails2,item?:any,data?:any) => void
   setShippingOption: (option: ShippingOption) => void
   setOrder: (order: Order) => void
   reset: () => void
@@ -471,7 +510,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
   }, [currentStep, customerDetails, selectedShipping, order, isLoaded])
 
   const setStep = (step: number) => setCurrentStep(step)
-  const setCustomerDetails = (details: customerDetails2) => setCustomerDetailsState(details)
+  const setCustomerDetails = (details: customerDetails2,item?:any,data?:any) => setCustomerDetailsState(details)
   const setShippingOption = (option: ShippingOption) => setSelectedShippingState(option)
   const setOrder = (orderData: Order) => setOrderState(orderData)
 
@@ -492,6 +531,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
         setStep,
         setCustomerDetails,
         setShippingOption,
+        
         setOrder,
         reset
       }}

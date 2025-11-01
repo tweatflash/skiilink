@@ -1,7 +1,7 @@
 import Index from "app";
 import "./globals.css";
 import type { Metadata } from 'next'
-import { Manrope, Geist ,Afacad_Flux,Reddit_Sans} from "next/font/google";
+import { Manrope, Geist ,Afacad_Flux,Reddit_Sans,Flow_Circular} from "next/font/google";
 export const metadata :Metadata= {
     title: 'Skiilink Ventures Limited',
     description:'Skiilink Ventures Limited',
@@ -10,11 +10,11 @@ export const metadata :Metadata= {
 //   weight:"400",
 //   subsets: ["latin"],
 // });
-const manrope = Manrope({
+const manrope = Flow_Circular({
   weight: "400",
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-manrope'
+  variable: '--font-flow-rounded',
 });
 export default function RootLayout({
   children,
@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
   return (
-      <html lang="en" className={manrope.className} >
+      <html lang="en" className={`${manrope.className}`} >
         {/* <link href="https://fonts.googleapis.com/css2?family=Outfit&display=swap" rel="stylesheet"/> */}
         <meta
           name="viewport"

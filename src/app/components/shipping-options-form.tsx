@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { shippingOptions, calculateTax } from "../../../lib/data"
-import { ArrowLeft, ArrowRight, Truck, Clock, Zap } from "lucide-react"
+import { ArrowLeft, ArrowRight, Truck, Clock, Zap, MapPin, Home } from "lucide-react"
 import { Button } from "./ui/button2"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card2"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
@@ -17,9 +17,45 @@ const shippingIcons = {
   express: Clock,
   overnight: Zap,
 }
+type ShippingOption2 = {
+  id: string;
+  name: string;
+  price: number | string;
+  estimatedDays: string;
+  type: 'Delivery' | 'pickup';
+  address?: string;
+  popular?: boolean;
+}
 
+const shippingOptions2: ShippingOption2[] = [
+  {
+    id: 'home-delivery',
+    name: 'Home Delivery',
+    price: "Pay on Delivery",
+    estimatedDays: '3-5 business days',
+    type: 'Delivery',
+    
+  },
+  {
+    id: 'shop-pickup-downtown',
+    name: 'Shop Pickup - Downtown',
+    price: "Free",
+    estimatedDays: 'Ready in 2-3 hours',
+    type: 'pickup',
+    address: '123 Main Street, Downtown, NY 10001'
+  },
+  {
+    id: 'shop-pickup-uptown',
+    name: 'Shop Pickup - Uptown',
+    price: "Free",
+    estimatedDays: 'Ready in 2-3 hours',
+    type: 'pickup',
+    address: '456 Park Avenue, Uptown, NY 10065',
+    popular: true
+  }
+];
 export function ShippingOptionsForm() {
-  const { setShippingOption, setStep, selectedShipping ,customerDetails} = useCheckoutStore()
+  const { setShippingOption, setStep, selectedShipping,setCustomerDetails ,customerDetails} = useCheckoutStore()
   const { getSubtotal } = useCartStore()
   const [selectedOption, setSelectedOption] = useState(selectedShipping?.id || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -27,16 +63,26 @@ export function ShippingOptionsForm() {
   const subtotal = getSubtotal()
   const selectedShippingOption = shippingOptions.find((option) => option.id === selectedOption)
   const shippingCost = selectedShippingOption?.price || 0
-  const tax = calculateTax(subtotal + shippingCost)
-  const total = subtotal + shippingCost + tax
+  const tax = calculateTax(subtotal)
+  const total = subtotal  + tax
+
 
   const handleContinue = async () => {
-    if (!selectedShippingOption) return
+    // setStep(3)
+    if (!selectedOption) return
 
     setIsSubmitting(true)
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    setShippingOption(selectedShippingOption)
+    const data={
+      phoneNumber: customerDetails?.phoneNumber || "",
+      name:  customerDetails?.name || "",
+      address:  customerDetails?.address || "",
+      appartment:  customerDetails?.appartment || "",
+      states:  customerDetails?.states || "",
+      shippingMethod: selectedShipping?.type ?? null,
+    }
+    setCustomerDetails(data)
     setStep(3)
     setIsSubmitting(false)
   }
@@ -54,7 +100,7 @@ export function ShippingOptionsForm() {
                     <span className="text-gray-600">Contact</span>
                   </div>
                   <div className="flex-1 pr-3">
-                    {customerDetails?.email}
+                    {customerDetails?.phoneNumber}
                   </div>
                 </div>
                 <div className="">
@@ -68,7 +114,7 @@ export function ShippingOptionsForm() {
                     <span className="text-gray-600">Ship to</span>
                   </div>
                   <div className="flex-1 min-w-56 w-full pr-3">
-                    <span className="w-full break-keep"> {customerDetails?.address} {","} {customerDetails?.city}{","} {customerDetails?.zipCode} {","} {customerDetails?.country}</span>
+                    <span className="w-full break-keep"> {customerDetails?.address} {","} {customerDetails?.states}{","} {customerDetails?.appartment} </span>
                   </div>
                 </div>
                 <div className="">
@@ -76,48 +122,66 @@ export function ShippingOptionsForm() {
                 </div>
             </div>
         </Card>
-          <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  Shipping Method
-                </h2>
-                <div className="space-y-4">
-                           <RadioGroup value={selectedOption} onValueChange={setSelectedOption}>
-            {shippingOptions.map((option) => {
-              return (
-                <div key={option.id} className="relative">
-                  <Label
-                    htmlFor={option.id}
-                    className={`flex bg-gray-50 items-center space-x-4 p-[14px] rounded-lg border-2 cursor-pointer transition-colors ${
-                      selectedOption === "option.id"
-                        ? "border-orange-500 bg-primary/5"
-                        : "border-orange-500 hover:border-primary/50"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3 flex-1">
-                     
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <h3 className="font-semibold text-balance">{option.name}</h3>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-semibold">${option.price.toFixed(2)}</span>
-                            {option.id === "express" && (
-                              <Badge variant="success" className="text-xs">
-                                Popular
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                        {/* <p className="text-sm text-muted-foreground text-pretty">{option.description}</p> */}
-                        <p className="text-sm font-medium text-primary mt-1">{option.estimatedDays}</p>
-                      </div>
+          <div className="w-full">
+      <h2 className="text-xl mb-4">Shipping Method</h2>
+
+      <div className="space-y-3">
+        {shippingOptions2.map((option) => (
+          <div key={option.id}>
+            <label
+              htmlFor={option.id}
+              className="cursor-pointer block"
+            >
+              <div
+                className={`flex bg-gray-50 items-start gap-4 p-4 border rounded-lg transition-all ${
+                  selectedOption === option.id
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <input
+                  type="radio"
+                  id={option.id}
+                  name="shipping-method"
+                  value={option.id}
+                  checked={selectedOption === option.id}
+                  onChange={(e) => {
+                    setSelectedOption(option.id)
+                    setShippingOption(option)
+                  }}
+                  className="mt-1 w-4 h-4 text-blue-600 focus:ring-blue-500"
+                />
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-balance">{option.name}</h3>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-normal">
+                        {option.price === 0 ? 'FREE' :option.price}
+                      </span>
+                      {option.popular && (
+                        <Badge variant="success" className="text-xs">
+                          Popular
+                        </Badge>
+                      )}
                     </div>
-                  </Label>
-                </div>
-              )
-            })}
-          </RadioGroup>
+                  </div>
+                  <p className="text-sm font-medium text-blue-600 mt-1">
+                    {option.estimatedDays}
+                  </p>
+                  {option.address && (
+                    <p className="text-sm text-gray-600 mt-2 flex items-start gap-1">
+                      <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                      <span>{option.address}</span>
+                    </p>
+                  )}
                 </div>
               </div>
+            </label>
+          </div>
+        ))}
+      </div>
+    </div>
       {/* Updated Order Summary */}
       {selectedShippingOption && (
         <Card>
@@ -132,7 +196,7 @@ export function ShippingOptionsForm() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Shipping ({selectedShippingOption.name})</span>
-                <span>${shippingCost.toFixed(2)}</span>
+                <span>${shippingCost}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Tax (8%)</span>
@@ -161,14 +225,14 @@ export function ShippingOptionsForm() {
       <div className="flex justify-between flex-wrap gap-4">
         <Button variant="outline" className="flex-1 whitespace-nowrap" onClick={handleBack} size="lg">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Details
+          Back
         </Button>
         <Button onClick={handleContinue} disabled={!selectedOption || isSubmitting} size="lg" className="flex-1 whitespace-nowrap min-w-32">
           {isSubmitting ? (
             "Processing..."
           ) : (
             <>
-              Continue to Payment
+               Payment
               <ArrowRight className="w-4 h-4 ml-2" />
             </>
           )}

@@ -10,23 +10,18 @@ import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
 import { useCheckoutStore } from "app/contexts/ThemeContext";
 const customerDetailsSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  emailOffers: z.boolean().optional(),
-  country: z.string().min(1, "Country is required"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  phoneNumber: z.string().min(10, "Please enter a valid phone number"),
+  name: z.string().min(1, "Name is required"),
   address: z.string().min(1, "Address is required"),
-  apartment: z.string().optional(),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  zipCode: z.string().min(5, "Enter a valid ZIP code"),
-  saveInfo: z.boolean().optional(),
+  appartment: z.string().min(1, "Apartment is required"),
+  states: z.string().min(1, "State is required"),
+  shippingMethod: z.string().nullable()
 });
 
 type CustomerDetailsForm = z.infer<typeof customerDetailsSchema>;
 
 export function CustomerDetailsForm() {
-  const { setCustomerDetails, setStep, customerDetails } = useCheckoutStore();
+  const { setCustomerDetails, setStep, customerDetails,selectedShipping } = useCheckoutStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -37,62 +32,58 @@ export function CustomerDetailsForm() {
   } = useForm<CustomerDetailsForm>({
     resolver: zodResolver(customerDetailsSchema),
     defaultValues: customerDetails ? customerDetails : {
-      email: "",
-      emailOffers: false,
-      country: "Nigeria",
-      firstName: "",
-      lastName: "",
+      phoneNumber: "",
+      name: "",     
       address: "",
-      apartment: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      saveInfo: false,
-    }, 
+      appartment: "",      
+      states: "",
+      shippingMethod:selectedShipping? selectedShipping.type : null,
+    },
   });
 
-  const onSubmit = async (data: customerDetails2) => {
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setCustomerDetails(data);
-    setStep(2);
-    setIsSubmitting(false);
-  };
+  const onSubmit = async (data: CustomerDetailsForm) => {
+    setIsSubmitting(true)
+    setCustomerDetails(data)
+    console.log(customerDetails)
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    setStep(2)
+    setIsSubmitting(false)
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Contact Section */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Contact</h2>
+        <h2 className="text-xl text-gray-900 mb-4">Contact</h2>
         <div className="space-y-4">
           <div>
             <Input
-              {...register("email")}
-              type="email"
-              placeholder="Email or mobile phone number"
+              {...register("phoneNumber")}
+              type="tel"
+              placeholder="Mobile phone number"
               className={`h-12 ${
-                errors.email ? "border-red-500" : "border-gray-300"
+                errors.phoneNumber ? "border-red-500" : "border-gray-300"
               }`}
             />
-            {errors.email && (
+            {errors.phoneNumber && (
               <p className="text-sm text-red-600 mt-1">
-                {errors.email.message}
+                {errors.phoneNumber.message}
               </p>
             )}
           </div>
 
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Checkbox id="emailOffers" {...register("emailOffers")} />
             <label htmlFor="emailOffers" className="text-sm text-gray-700">
               Email me with news and offers
             </label>
-          </div>
+          </div> */}
         </div>
       </div>
 
       {/* Shipping Address Section */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-xl text-gray-900 mb-4">
           Shipping address
         </h2>
         <div className="space-y-4">
@@ -102,16 +93,57 @@ export function CustomerDetailsForm() {
               htmlFor="country"
               className="text-sm text-gray-700 mb-1.5 block"
             >
-              Country/Region
+              State
             </Label>
             <select
               id="country"
-              {...register("country")}
+              {...register("states")}
               className="w-full h-12 px-3 border border-gray-300 rounded-md bg-white text-gray-900"
             >
-              <option value="United States">Lagos</option>
-              <option value="Canada">Abuja</option>
-              <option value="United Kingdom">Edo</option>
+              {[
+  "Abia",
+  "Adamawa",
+  "Akwa Ibom",
+  "Anambra",
+  "Bauchi",
+  "Bayelsa",
+  "Benue",
+  "Borno",
+  "Cross River",
+  "Delta",
+  "Ebonyi",
+  "Edo",
+  "Ekiti",
+  "Enugu",
+  "Gombe",
+  "Imo",
+  "Jigawa",
+  "Kaduna",
+  "Kano",
+  "Katsina",
+  "Kebbi",
+  "Kogi",
+  "Kwara",
+  "Lagos",
+  "Nasarawa",
+  "Niger",
+  "Ogun",
+  "Ondo",
+  "Osun",
+  "Oyo",
+  "Plateau",
+  "Rivers",
+  "Sokoto",
+  "Taraba",
+  "Yobe",
+  "Zamfara",
+  "FCT"
+].map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))  }
+              
             </select>
           </div>
 
@@ -119,29 +151,29 @@ export function CustomerDetailsForm() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Input
-                {...register("firstName")}
+                {...register("name")}
                 placeholder="First name (optional)"
                 className={`h-12 ${
-                  errors.firstName ? "border-red-500" : "border-gray-300"
+                  errors.name ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.firstName && (
+              {errors.name && (
                 <p className="text-sm text-red-600 mt-1">
-                  {errors.firstName.message}
+                  {errors.name.message}
                 </p>
               )}
             </div>
             <div>
               <Input
-                {...register("lastName")}
+                {...register("name")}
                 placeholder="Last name"
                 className={`h-12 ${
-                  errors.lastName ? "border-red-500" : "border-gray-300"
+                  errors.name ? "border-red-500" : "border-gray-300"
                 }`}
               />
-              {errors.lastName && (
+              {errors.name && (
                 <p className="text-sm text-red-600 mt-1">
-                  {errors.lastName.message}
+                  {errors.name.message}
                 </p>
               )}
             </div>
@@ -165,7 +197,7 @@ export function CustomerDetailsForm() {
 
           {/* Add house number hint */}
           <p className="text-sm text-gray-500 flex items-center">
-            <span className="inline-block w-4 h-4 rounded-full border border-gray-400 text-gray-400 text-xs  items-center justify-center mr-2">
+            <span className="inline-flex w-4 h-4 rounded-full border border-gray-400 text-gray-400 text-xs  items-center justify-center mr-2">
               i
             </span>
             Add a house number if you have one
@@ -174,14 +206,14 @@ export function CustomerDetailsForm() {
           {/* Apartment */}
           <div>
             <Input
-              {...register("apartment")}
-              placeholder="Apartment, suite, etc. (optional)"
+              {...register("appartment")}
+              placeholder="Appartment, suite, etc. (optional)"
               className="h-12 border-gray-300"
             />
           </div>
 
           {/* City, State, ZIP */}
-          <div className="grid grid-cols-3 gap-4">
+          {/* <div className="grid grid-cols-3 gap-4">
             <div>
               <Input
                 {...register("city")}
@@ -228,15 +260,15 @@ export function CustomerDetailsForm() {
                 </p>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Save Information */}
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Checkbox id="saveInfo" {...register("saveInfo")} />
             <label htmlFor="saveInfo" className="text-sm text-gray-700">
               Save this information for next time
             </label>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -245,7 +277,8 @@ export function CustomerDetailsForm() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white text-base font-medium rounded-md"
+          onClick={()=>console.log(customerDetails)}
+          className="w-full text-white text-base font-medium rounded-md"
         >
           {isSubmitting ? "Processing..." : "Continue to shipping"}
         </Button>

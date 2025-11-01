@@ -20,6 +20,7 @@ import getWikiResults from "../../../lib/getProducts";
 import ProductCard2 from "./ProductCard2";
 import LoadingDb from "./loadingDb";
 import ErrorPage from "./errorPage";
+import Skeleton from "./productSkeleton";
 interface CatalogPageProps {
   onBack: () => void;
   onAddToCart: (product: dummyStore) => void;
@@ -48,7 +49,6 @@ const generateMoreProducts = (
   }
   return moreProducts;
 };
-
 const allProducts = [...featuredProducts, ...bestSellingProducts];
 const extendedProducts = [
   ...allProducts,
@@ -382,19 +382,10 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                   ))}
                   {/* Loading Indicator */}
                   {!loading &&
-                    [1, 2, 5, 5, 5, 2, 5, 5, 5].map((item) => (
-                      <div className="flex flex-col w-full h-full items-start">
-                        <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                        <div className="flex flex-col items-center justify-start py-4 w-full">
-                          <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                          <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                          <div className="grid grid-cols-3 w-full gap-2">
-                            <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                            <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
-                          </div>
-                        </div>
-                      </div>
+                    [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                       <Skeleton key={index}/>
                     ))}
+
                 </div>
                 {/* Mobile View */}
                 <div className={`flex sm:hidden flex-row gap-3 flex-nowrap justify-around`}>
@@ -411,19 +402,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                           viewMode={viewMode}
                         />
                       ))}
-                    {loading &&
+                    {!loading &&
                       [1, 2, 5, 5, 5].map((item) => (
-                        <div className="flex flex-col w-full items-start">
-                          <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                          <div className="flex flex-col items-center justify-start py-4 w-full">
-                            <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                            <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                            <div className="grid grid-cols-3 w-full gap-2">
-                              <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                              <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
-                            </div>
-                          </div>
-                        </div>
+                        <Skeleton key={item}/>
                       ))}
                   </div>
 
@@ -439,19 +420,9 @@ const CatalogPage: React.FC<CatalogPageProps> = ({
                           onAddToCart={onAddToCart}
                         />
                       ))}
-                    {loading &&
+                    {!loading &&
                       [1, 2, 5, 5, 5].map((item) => (
-                        <div className="flex flex-col w-full items-start">
-                          <div className="w-full aspect-square bg-loader rounded-lg"></div>
-                          <div className="flex flex-col items-center justify-start py-4 w-full">
-                            <div className="bg-loader  w-full h-4 rounded-md mb-2"></div>
-                            <div className="w-3/4 bg-loader  h-4 rounded-md mb-2 mr-auto"></div>
-                            <div className="grid grid-cols-3 w-full gap-2">
-                              <div className="bg-loader  col-span-2 h-4 rounded-md mb-2"></div>
-                              <div className="bg-loader  flex-1 h-4 rounded-md mb-2"></div>
-                            </div>
-                          </div>
-                        </div>
+                        <Skeleton key={item}/>
                       ))}
                   </div>
                 </div>

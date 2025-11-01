@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 import Link from "next/link"
 import {
@@ -10,6 +9,7 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline"
 import { OrdersTable } from "app/components/orders-table"
+import { RefreshCw } from "lucide-react"
 
 const orders = [
   {
@@ -108,13 +108,13 @@ export function OrdersList() {
   const [searchQuery, setSearchQuery] = useState("")
 
   return (
-    <div className="p-6 lg:p-10">
+    <div className="p-4 sm:p-6 lg:p-10">
       <div className="max-w-6xl w-full  mx-auto">
         {/* Header */}
         <div className="flex items-end justify-between gap-4">
-          <h1 className="text-2xl/8 font-semibold text-zinc-950 sm:text-xl/8">Orders</h1>
+          <h1 className="text-2xl/8 text-zinc-950 sm:text-xl/8">Orders</h1>
           <button
-            className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border text-base/6 font-semibold px-4  py-1 sm:text-sm/6 border-transparent bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
+            className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border text-base/6 px-4  py-1 sm:text-sm/6 border-transparent bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
             type="button"
           >
             Export
@@ -122,7 +122,7 @@ export function OrdersList() {
         </div>
 
         {/* Search and Filters */}
-        <div className="mt-8 mb-4 flex flex-col gap-4 sm:flex-row">
+        <div className="mt-8 mb-4 flex  gap-4 flex-row">
           {/* Search */}
           <div className="relative flex-1">
             <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-zinc-500" />
@@ -136,18 +136,19 @@ export function OrdersList() {
           </div>
 
           {/* Status Filter */}
-          <div className="relative">
-            <button
-              type="button"
-              className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-950/10 bg-white px-3 py-2 text-base/6 text-zinc-950 sm:text-sm/6 hover:bg-zinc-50 transition-colors min-w-[140px]"
-            >
-              <span>Status</span>
-              <ChevronDownIcon className="size-4 text-zinc-500" />
-            </button>
-          </div>
+          <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+                <button
+                  type="button"
+                  className="flex items-center justify-center flex-shrink-0 px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </button>
+               
+              </div>
 
           {/* Date Filter */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               type="button"
               className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-zinc-950/10 bg-white px-3 py-2 text-base/6 text-zinc-950 sm:text-sm/6 hover:bg-zinc-50 transition-colors min-w-[180px]"
@@ -156,7 +157,7 @@ export function OrdersList() {
               <span>Select date range</span>
               <ChevronDownIcon className="size-4 text-zinc-500" />
             </button>
-          </div>
+          </div> */}
         </div>
 
         <OrdersTable/>

@@ -12,7 +12,7 @@ import {
   TagIcon,
   TruckIcon,
 } from "@heroicons/react/24/outline"
-import { ChevronDown, ChevronUp, HelpCircle, Home, Layers, Settings, Sparkles, Ticket } from "lucide-react"
+import { ChevronDown, ChevronUp, HelpCircle, Home, Layers, PackageOpen, Settings, Sparkles, Ticket } from "lucide-react"
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -31,11 +31,11 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile sidebar backdrop */}
-      {isOpen && <div className="fixed  inset-0 z-40 bg-zinc-950/10 lg:hidden" onClick={() => setIsOpen(false)} />}
+      {!isOpen && <div className="fixed inset-0 z-40 bg-zinc-950/10 hidden" onClick={() => setIsOpen(false)} />}
 
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden">
-        <nav className="flex h-full min-h-0 flex-col">
+      <div className="fixed lg:block hidden inset-y-0 left-0 w-64 p-2 z-10">
+        <nav className="flex h-full min-h-0 flex-col border lg:border-none rounded-md border-gray-200 bg-gray-100 lg:bg-transparent">
           {/* Team Selector */}
           <div className="flex flex-col border-b border-zinc-950/5 p-4 dark:border-white/5">
             <button
@@ -55,7 +55,7 @@ export function Sidebar() {
               <span className="relative">
                 <span className="absolute inset-y-2 -left-4 w-0.5 rounded-full bg-zinc-950 dark:bg-white"></span>
                 <a
-                  href="/"
+                  href="/administration_dashboard"
                   className="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-zinc-950 hover:bg-zinc-950/5 dark:text-white dark:hover:bg-white/5 sm:py-2 sm:text-sm/5"
                 >
                   <Home className="size-6 shrink-0 sm:size-5" />
@@ -65,20 +65,20 @@ export function Sidebar() {
 
               <span className="relative">
                 <a
-                  href="/events"
+                  href="/administration_dashboard/products"
                   className="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-zinc-950 hover:bg-zinc-950/5 dark:text-white dark:hover:bg-white/5 sm:py-2 sm:text-sm/5"
                 >
                   <Layers className="size-6 shrink-0 sm:size-5" />
-                  <span className="truncate">Events</span>
-                </a>
+                  <span className="truncate">Products</span>
+                </a>  
               </span>
 
               <span className="relative">
                 <a
-                  href="/orders"
+                  href="/administration_dashboard/orders"
                   className="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-zinc-950 hover:bg-zinc-950/5 dark:text-white dark:hover:bg-white/5 sm:py-2 sm:text-sm/5"
                 >
-                  <Ticket className="size-6 shrink-0 sm:size-5" />
+                  <PackageOpen className="size-6 shrink-0 sm:size-5" />
                   <span className="truncate">Orders</span>
                 </a>
               </span>

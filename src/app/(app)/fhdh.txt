@@ -1,0 +1,28 @@
+const items= [{id:`68bda5499a3d0ae632360529`,quantity:9},{id:`68bc25f14b51b0dc0ec9c0bb`,quantity:6}]
+const shippingFee =0
+const phoneNumber='09033427341'
+const name ='rose'
+const states='Abuja '
+const address='KG 7 Ave'
+const appartment='No 5'
+const shippingMethod='Delivery' | 'self-pickup'
+function ORDER1() {
+axios
+.post('http://localhost:8000/api/v1/orders/create', {
+signedCookies,
+items,
+shippingFee,
+phoneNumber,
+name,
+states,
+address,
+appartment,
+shippingMethod,
+refreshToken:refreshTokenJWT
+})
+.then(res => {
+showOutput(res)
+console.log(http://res.data)
+})
+.catch(err => console.error(err));
+}

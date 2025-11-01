@@ -20,10 +20,10 @@ export default function BrandsSection() {
         {/* Header Content */}
         <div className="text-center mb-16">
           <p className="text-[#a89090] text-sm font-medium tracking-[0.2em] uppercase mb-4">Brands</p>
-          <h2 className="text-white text-5xl md:text-6xl font-bold mb-6 text-balance">
+          <h2 className="text-white text-3xl sm:text-5xl md:text-6xl mb-6 text-balance">
             Trusted Brands We Partner With
           </h2>
-          <p className="text-[#a89090] text-lg md:text-xl max-w-3xl mx-auto mb-10 text-balance">
+          <p className="text-[#a89090] px-4 sm:px-0 text-lg md:text-xl max-w-3xl mx-auto mb-10 text-balance">
             Connect your workflows with integrations that actually work. Use our off-the-shelf integrations, or build a
             custom integration with our REST API.
           </p>

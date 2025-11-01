@@ -51,7 +51,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     <Card hover className="group cursor-pointer relative my-4 sm:my-1">
       <div className=" w-full max-w-xs bg-white dark:bg-gray-900 rounded-lg  transition duration-300 cursor-pointer" onClick={()=>console.log(product)}>
   {/* Product Image */}
-  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-xl">
+  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-sm">
     <img
       src={product.image[0].url}
       alt={product.title}
@@ -90,9 +90,9 @@ const ProductCard2: React.FC<ProductCardProps> = ({
   </h3>
   {/* Price Section */}
   <div className="mt-2 flex items-center flex-wrap gap-2">
-    <span className="text-lg font-bold text-red-600 dark:text-red-400">
-      NGN {product.price.toLocaleString("en-NG")}
-    </span>
+    <h2 className="text-lg  text-red-600 dark:text-red-400">
+      <small>NGN </small>{product.price.toLocaleString("en-NG")}
+    </h2>
     {product.discountPercentage ? (
       <span className="text-sm text-gray-500 line-through">
         {formatPrice(product.discountPercentage)}

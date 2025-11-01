@@ -1,4 +1,4 @@
-export enum BigCommerceSortKeys {
+  export enum BigCommerceSortKeys {
   A_TO_Z = 'A_TO_Z',
   BEST_REVIEWED = 'BEST_REVIEWED',
   BEST_SELLING = 'BEST_SELLING',

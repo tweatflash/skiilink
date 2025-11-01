@@ -1,7 +1,8 @@
 import React from 'react';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
-
 import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
+import { Button } from './ui/button2';
+import { useRouter } from 'next/navigation';
 interface CartProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,6 +21,7 @@ const formatPrice = (price: number) => {
 };
 
 const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, onRemoveItem }) => {
+  const router=useRouter()
   const total = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
   const config = {
       public_key: 'FLWPUBK_TEST-be991d4a6e11f924beafb5b15d5721f6-X',
@@ -60,8 +62,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
       <div className="absolute right-0 top-0 h-full p-2 w-full max-w-md  shadow-xl">
         <div className="flex flex-col h-full bg-white border border-gray-200 rounded-lg">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 pt-3 border-b">
-            <h2 className="text-xl font-semibold">Shopping Cart</h2>
+          <div className="flex items-center justify-between px-4 pt-3">
+            <h2 className="text-xl">Shopping Cart</h2>
             <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-md">
               <X size={20} />
             </button>
@@ -85,7 +87,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
                     />
                     <div className="flex-1">
                       <h3 className="font-medium text-sm">{item.product.title}</h3>
-                      <p className="text-orange-600 font-semibold">{formatPrice(item.product.price)}</p>
+                      <p className="text-orange-600">{formatPrice(item.product.price)}</p>
                       <div className="flex items-center space-x-2 mt-2">
                         <button
                           onClick={() => onUpdateQuantity(item.product._id.toString(), Math.max(0, item.quantity - 1))}
@@ -113,14 +115,15 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               </div>
             )}
           </div>
-
           {/* Footer */}
           {items.length > 0 && (
             <div className="border-t p-6 space-y-4">
               <div className="flex justify-between text-lg font-semibold">
                 <span>Total: {formatPrice(total)}</span>
               </div>
-              <FlutterWaveButton className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors" {...fwConfig} />
+              <Button size="lg" onClick={()=>router.push("/checkout")} className="flex-1 whitespace-nowrap w-full">
+                     Checkout
+                </Button>
             </div>
           )}
         </div>

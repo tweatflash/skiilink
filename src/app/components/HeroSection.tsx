@@ -11,7 +11,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow, onViewCatalog }) =
   return (
     <section className="relative min-h-sc overflow-hidden bg-gray-50 py-20 md:py-32">
       
-      <div className="container mx-auto px-4 md:px-6">
+      <div className=" mx-auto px-4 md:px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="font-serif text-5xl font-normal leading-tight tracking-tight text-balance md:text-7xl lg:text-8xl">
             Power meets protection
@@ -20,7 +20,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow, onViewCatalog }) =
             Discover cutting-edge solar accessories and security gadgets designed for modern living. Sustainable energy
             solutions and advanced protection for your home.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-10 flex items-center justify-center gap-4 sm:flex-row">
             <Link href="/products">
               <Button size="lg" className="group gap-2 bg-primary hover:bg-primary/90">
                 Explore Products

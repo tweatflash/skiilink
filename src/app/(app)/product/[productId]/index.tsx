@@ -20,6 +20,7 @@ import {
 import { ThemeContext } from "app/contexts/ThemeContext";
 import { useRouter } from "next/navigation";
 import BackpackCatalog from "app/components/moreToLove";
+import { Button } from "app/components/ui/button2";
 
 interface ProductOverviewProps {
   product: dummyStore;
@@ -116,7 +117,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
         </div>
       </div>
 
-      <div className="max-screen mx-auto px-4 py-8">
+      <div className="max-w-2xl lg:max-w-[1400px] mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-12">
         
 
@@ -129,10 +130,10 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                   {product.brand}
                 </p>
               )}
-              <h1 className="text-3xl lg:text-4xl font-bold break-all break-words whitespace-pre-wrap text-gray-900 mb-4 leading-tight">
+              <h1 className="text-2xl lg:text-3xl break-all break-words text-gray-900 mb-4 leading-tight">
                 {product.title}
               </h1>
-               <p className="text-gray-600 mb-4 text-lg leading-relaxed whitespace-pre-wrap">
+               <p className="text-gray-600 mb-4 text-lg leading-relaxed">
                 {product.description}
               </p>
               {/* Rating */}
@@ -159,7 +160,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             </div>
 
             {/* Price */}
-            <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-6">
               <div className="flex items-center space-x-4 mb-4">
                 <span className="text-4xl font-bold text-gray-900">
                   {formatPrice(product.price)}
@@ -216,51 +217,52 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
               </div>
 
               {/* Add to Cart Button */}
-              <button
+              
+              <Button
                 onClick={()=>handleAddToCart(product,quantity)}
                 disabled={!product.stock}
-                className={`w-full flex items-center justify-center space-x-3 py-2 px-6 rounded-lg font-semibold text-base transition-all duration-200 ${
+                className={`w-full ${
                   product.stock
-                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 "
+                    ? ""
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               >
                 <span>
                   {product.stock ? `Add ${quantity} to Cart` : "Out of Stock"}
                 </span>
-              </button>
+              </Button>
             </div>
                
             {/* Trust Indicators */}
             <div className="flex justify-between flex-wrap gap-4 shrink-0">
-              <div className="flex  items-center space-x-2 text-center">
+              <div className="flex  items-center space-x-2">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Shield size={20} className="text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm text-gray-900">
                     Warranty
                   </p>
                   <p className="text-xs text-gray-600">Protected</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2 text-center">
+              <div className="flex items-center space-x-2">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <Truck size={20} className="text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm text-gray-900">
                     Free Shipping
                   </p>
                   <p className="text-xs text-gray-600">On orders ₦500k+</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2 text-center">
+              <div className="flex items-center space-x-2">
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <RotateCcw size={20} className="text-orange-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm text-gray-900">
                     Easy Returns
                   </p>
                   <p className="text-xs text-gray-600">30-day policy</p>
@@ -272,11 +274,11 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             {/* Product Images */}
           <div className="space-y-4 lg:order-2 order-1">
             {/* Main Image */}
-            <div className="relative hrpi rounded-2xl overflow-hidden">
+            <div className="relative hrpi border border-gray-200 rounded-2xl overflow-hidden">
               <img
                 src={images[selectedImage].url}
                 alt={product.title}
-                className="w-full h-96 lg:h-[500px] object-cover"
+                className="w-full aspect-[1/.9] lg:h-[500px] object-cover"
               />
 
               {/* Badges */}
@@ -345,7 +347,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
         {/* Product Details Tabs */}
         <div className="mt-16">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8">
+            <nav className="flex space-x-4">
               {[
                 { id: "description", label: "Description" },
                 { id: "specifications", label: "Specifications" },
@@ -369,11 +371,11 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
           <div className="py-8">
             {activeTab === "description" && (
               <div className="prose max-w-none">
-                <div className="bg-white rounded-xl p-8 shadow-sm">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                <div className="bg-gray-50 rounded-lg border sm:p-8 p-4 border-gray-200">
+                  <h3 className="text-2xl text-gray-900 mb-6">
                     Product Description
                   </h3>
-                  <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                  <p className="text-gray-700 text-lg whitespace-pre-wrap leading-relaxed mb-6">
                     {product.fullDescription || product.description}
                   </p>
 
@@ -405,13 +407,13 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             )}
 
             {activeTab === "specifications" && (
-              <div className="bg-white rounded-xl p-8 shadow-sm">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 sm:p-8">
+                <h3 className="text-2xl text-gray-900 mb-6">
                   Technical Specifications
                 </h3>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                    <h4 className="text-lg text-gray-900 mb-4">
                       General
                     </h4>
                     <dl className="space-y-3">
@@ -483,9 +485,9 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
             )}
 
             {activeTab === "reviews" && (
-              <div className="bg-white rounded-xl p-8 shadow-sm">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-8">
                 <div className="flex items-center flex-wrap justify-between mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900">
+                  <h3 className="text-2xl text-gray-900">
                     Customer Reviews
                   </h3>
                   <div className="flex items-center space-x-4">
@@ -503,7 +505,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                           />
                         ))}
                       </div>
-                      <span className="text-xl font-semibold text-gray-900">
+                      <span className="text-xl text-gray-900">
                         {product.rating.toFixed(2)}
                       </span>
                     </div>
@@ -550,7 +552,7 @@ const ProductOverview: React.FC<ProductOverviewProps> = ({
                             </span>
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900">
+                            <p className="text-gray-900">
                               {review.name}
                             </p>
                             <p className="text-sm text-gray-500">

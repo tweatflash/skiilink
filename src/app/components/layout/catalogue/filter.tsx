@@ -19,7 +19,7 @@ function FilterItemList({ list }: { list: ListItem[] }) {
 export default function FilterList({ list, title }: { list: ListItem[]; title?: string }) {
   return (
     <>
-      <nav className='sm:sticky sm:top-20'>
+      <nav className='sm:sticky sm:top-20 '>
         {title ? (
           <h3 className="hidden z-10 text-xs text-neutral-500 dark:text-neutral-400 md:block">
             {title}

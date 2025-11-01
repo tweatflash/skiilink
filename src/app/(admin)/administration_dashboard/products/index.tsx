@@ -3,6 +3,7 @@ import { useState,useEffect } from 'react';
 import { Search, ChevronDown, Plus, RefreshCw, ShoppingCart } from 'lucide-react';
 import clsx from 'clsx';
 import getWikiResults from '../../../../../lib/getProducts';
+import Link from 'next/link';
 interface Product {
   id: string;
   name: string;
@@ -312,11 +313,11 @@ export default function Products() {
     <div className="p-4 lg:p-10">
       <div className="max-w-6xl w-full  mx-auto">
         <div className="flex items-end justify-between gap-4">
-          <h1 className="text-2xl/8 font-semibold text-zinc-950 sm:text-xl/8">
+          <h1 className="text-2xl/8  text-zinc-950 sm:text-xl/8">
             Products
           </h1>
           <button
-            className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border text-base/6 font-semibold px-4 py-1 sm:text-sm/6 border-transparent bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
+            className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border text-base/6  px-4 py-1 sm:text-sm/6 border-transparent bg-zinc-950 text-white hover:bg-zinc-800 transition-colors"
             type="button"
           >
             Add Product
@@ -362,11 +363,11 @@ export default function Products() {
               <div className="flex items-center flex-1 space-x-4">
                 <h5>
                   <span className="text-gray-500">All Products: </span>
-                  <span className="text-gray-900 font-semibold">{totalProducts}</span>
+                  <span className="text-gray-900 ">{totalProducts}</span>
                 </h5>
                 <h5>
                   <span className="text-gray-500">Total sales: </span>
-                  <span className="text-gray-900 font-semibold">${totalSales.toFixed(1)}M</span>
+                  <span className="text-gray-900 ">${totalSales.toFixed(1)}M</span>
                 </h5>
               </div>
               <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
@@ -427,8 +428,9 @@ export default function Products() {
                     >
                       <th
                         scope="row"
-                        className="flex items-center px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+                        className="flex relative items-center px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
                       >
+                         <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         <img
                           src={product.image[0].url}
                           alt={product.title}
@@ -440,18 +442,22 @@ export default function Products() {
                           </div>
                         </div>
                       </th>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 relative">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         <span className="bg-blue-100 whitespace-nowrap text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
                           {product.category}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-gray-900 whitespace-nowrap">
+                      <td className="px-4 py-3 text-gray-900 whitespace-nowrap relative">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         {product.sku}
                       </td>
-                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="relative px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         N{product.price.toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">
+                      <td className="relative px-4 py-3 whitespace-nowrap">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         {product.discountPercentage > 0 ? (
                           <span className="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-0.5 rounded">
                             {discountPercent(product.price,product.discountPercentage)}% off
@@ -460,7 +466,8 @@ export default function Products() {
                           <span className="text-gray-400 text-xs">-</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="relative px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         <div className="flex items-center">
                          
                            <span
@@ -476,22 +483,25 @@ export default function Products() {
                     </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="relative px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         <div className="flex items-center">
                           <span className="ml-1 text-gray-500">
                             {product.rating}
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="relative px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         <div className="flex items-center">
                           0
                         </div>
                       </td>
-                      <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="relative px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
+                        <Link href={`/administration_dashboard/product/${product._id}`} className="absolute inset-0 focus:outline-hidden"/>
                         Undefined 
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <td className="relative px-4 py-3 whitespace-nowrap text-sm">
                         <div className="flex items-center gap-2">
                           <button
                             className="px-3 py-0.5 text-sm font-medium text-blue-600 hover:text-white hover:bg-blue-600 border border-blue-600 rounded-lg transition-colors"
@@ -563,9 +573,9 @@ export default function Products() {
             >
               <span className="text-sm font-normal text-gray-500">
                 Showing{' '}
-                <span className="font-semibold text-gray-900">1-{filteredProducts.length}</span>
+                <span className=" text-gray-900">1-{filteredProducts.length}</span>
                 {' '}of{' '}
-                <span className="font-semibold text-gray-900">{mockProducts.length}</span>
+                <span className=" text-gray-900">{mockProducts.length}</span>
               </span>
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>

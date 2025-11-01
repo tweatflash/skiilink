@@ -1,9 +1,9 @@
 'use client';
-
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Skeleton from 'app/components/productSkeleton';
 
 interface CategoryCard {
   id: string;
@@ -18,7 +18,7 @@ const categories: CategoryCard[] = [
     id: 'business',
     title: 'Security Gadgets',
     href: '/category/business',
-    image: 'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=464&h=580&fit=crop'
+    image: '/images/securityIntrest.jpg '
   },
   {
     id: 'gaming',
@@ -30,7 +30,7 @@ const categories: CategoryCard[] = [
     id: 'education',
     title: 'Solar Products',
     href: '/category/education',
-    image: 'https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=464&h=580&fit=crop'
+    image: '/images/solarIntrest.jpg'
   },
   {
     id: 'creative',
@@ -73,9 +73,9 @@ const ShopByInterest: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-0 ">
         {/* Section Header */}
         <div className="text-center mb-8 lg:mb-12">
-          <h2 className=" text-3xl lg:text-4xl font-bold text-white mb-4">
+          <h1 className=" text-3xl lg:text-4xl text-white mb-4">
             Shop by Interest
-          </h2>
+          </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Discover products tailored to your passions and lifestyle
           </p>
@@ -176,8 +176,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
             src={category.image}
             alt=""
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700"
+            // sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             priority={false}
           />
           {/* Overlay Gradient */}
@@ -187,7 +187,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-end p-6 lg:p-8">
           <div className="transform transition-transform duration-300 group-hover:translate-y-[-4px]">
-            <h3 className="text-lg font-bold text-white mb-2 drop-shadow-lg">
+            <h3 className="text-lg text-white mb-2 drop-shadow-lg">
               {category.title}
             </h3>
             

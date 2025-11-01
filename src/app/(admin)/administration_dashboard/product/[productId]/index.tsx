@@ -21,18 +21,18 @@ export default function Index({data}:product) {
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <h1 className="text-2xl font-semibold text-zinc-950 sm:text-xl">{data.title}</h1>
+                  <h1 className="text-2xl text-zinc-950 sm:text-xl">{data.title}</h1>
                   <span className="inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm font-medium sm:text-xs bg-lime-400/20 text-lime-700">Laptops</span>
                 </div>
                 <div className="mt-2 text-sm text-zinc-500">{data.description}</div>
               </div>
             </div>
             <div className="flex gap-4">
-              <button className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border font-semibold px-3 py-1.5 sm:text-sm focus:outline-none focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 disabled:opacity-50 border-zinc-950/10 text-zinc-950 hover:bg-zinc-950/5 active:bg-zinc-950/5" type="button">
+              <button className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border px-3 py-1.5 sm:text-sm focus:outline-none focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 disabled:opacity-50 border-zinc-950/10 text-zinc-950 hover:bg-zinc-950/5 active:bg-zinc-950/5" type="button">
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"></span>
                 Update 
               </button>
-              <button className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border font-semibold px-3 py-1.5 sm:text-sm focus:outline-none focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 disabled:opacity-50 border-transparent bg-zinc-900 text-white shadow-sm hover:bg-zinc-800 active:bg-zinc-800" type="button">
+              <button className="relative isolate inline-flex items-baseline justify-center gap-x-2 rounded-lg border px-3 py-1.5 sm:text-sm focus:outline-none focus:outline-2 focus:outline-offset-2 focus:outline-blue-500 disabled:opacity-50 border-transparent bg-zinc-900 text-white shadow-sm hover:bg-zinc-800 active:bg-zinc-800" type="button">
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"></span>
                 Delete Product
               </button>
@@ -42,7 +42,7 @@ export default function Index({data}:product) {
             <div>
               <hr role="presentation" className="w-full border-t border-zinc-950/10" />
               <div className="mt-6 text-lg font-medium sm:text-sm">Total revenue</div>
-              <div className="mt-3 text-3xl font-semibold sm:text-2xl">$102,552</div>
+              <div className="mt-3 text-3xl sm:text-2xl">$102,552</div>
               <div className="mt-3 text-sm sm:text-xs">
                 <span className="inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm font-medium sm:text-xs bg-lime-400/20 text-lime-700">+3.2%</span>
                 <span className="text-zinc-500"> from last week</span>
@@ -51,7 +51,7 @@ export default function Index({data}:product) {
             <div>
               <hr role="presentation" className="w-full border-t border-zinc-950/10" />
               <div className="mt-6 text-lg font-medium sm:text-sm">Product sold</div>
-              <div className="mt-3 text-3xl font-semibold sm:text-2xl">350/500</div>
+              <div className="mt-3 text-3xl sm:text-2xl">350/500</div>
               <div className="mt-3 text-sm sm:text-xs">
                 <span className="inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm font-medium sm:text-xs bg-lime-400/20 text-lime-700">+8.1%</span>
                 <span className="text-zinc-500"> from last week</span>
@@ -60,14 +60,14 @@ export default function Index({data}:product) {
             <div>
               <hr role="presentation" className="w-full border-t border-zinc-950/10" />
               <div className="mt-6 text-lg font-medium sm:text-sm">Pageviews</div>
-              <div className="mt-3 text-3xl font-semibold sm:text-2xl">0</div>
+              <div className="mt-3 text-3xl sm:text-2xl">{data.views.length}</div>
               <div className="mt-3 text-sm sm:text-xs">
                 <span className="inline-flex items-center gap-x-1.5 rounded-md px-1.5 py-0.5 text-sm font-medium sm:text-xs bg-pink-400/15 text-pink-700">-0.75%</span>
                 <span className="text-zinc-500"> from last week</span>
               </div>
             </div>
           </div>
-          <h2 className="mt-12 text-base font-semibold text-zinc-950 sm:text-sm">Recent orders</h2>
+          <h2 className="mt-12 text-base text-zinc-950 sm:text-sm">Recent orders</h2>
           <div className="flow-root">
             <div className="mt-4 -mx-6 overflow-x-auto whitespace-nowrap lg:-mx-10">
               <div className="inline-block min-w-full align-middle sm:px-6 lg:px-10">

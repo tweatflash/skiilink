@@ -14,8 +14,8 @@ const orders = [
 ];
 
 const stats = [
-  { label: 'Total revenue', value: '₦0.00', change: '+4.5%', positive: true },
-  { label: 'Average order value', value: '₦0.00', change: '-0.5%', positive: false },
+  { label: 'Total revenue', value: 'N0.00', change: '+4.5%', positive: true },
+  { label: 'Average order value', value: 'N0.00', change: '-0.5%', positive: false },
   { label: 'products sold', value: '0', change: '+4.5%', positive: true },
   { label: 'Pageviews', value: '87', change: '+21.2%', positive: true },
 ];

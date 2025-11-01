@@ -44,7 +44,8 @@ type dummyStore={
         "qrCode": string
     },
     "thumbnail": string,
-    "image":ImageObj[]
+    "image":ImageObj[],
+    "views":any[]
 }
 type ImageObj={
     "url": string,
@@ -166,9 +167,11 @@ type CartItem2 ={
 type ShippingOption ={
   id: string
   name: string
-  price: number
+  price: number | string
   estimatedDays: string
-  description: string
+  description?: string
+  address?:string
+  type:string
 }
 
 type CustomerDetails ={
@@ -187,18 +190,13 @@ type CustomerDetails ={
   }
 }
 type customerDetails2= {
-      email:string
-      emailOffers: boolean,
-      country: string,
-      firstName: string,
-      lastName: string,
+      phoneNumber:string
+      name: string,
       address: string,
-      apartment: string,
-      city: string,
-      state: string,
-      zipCode: string,
-      phone?:any
-      saveInfo: boolean,
+      appartment: string,
+      states: string,
+      shippingMethod: string | null,
+
     } 
 
 type PaymentDetails ={
@@ -220,4 +218,34 @@ type Order ={
   status: "pending" | "processing" | "shipped" | "delivered"
   createdAt: Date
   trackingNumber?: string
+}
+type adminOrder= {
+  _id: string
+  shippingFee: number
+  subtotal: number
+  total: number
+  orderItems: adminOrderItem[]
+  status: string
+  user: string
+  name: string
+  phoneNumber: string
+  states: string
+  address: string
+  appartment: string
+  shippingMethod: string
+  paymentIntentId: string
+  flw_ref: string
+  tx_ref: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+
+type adminOrderItem= {
+  name: string
+  image: string
+  price: number
+  quantity: number
+  product: string
+  _id: string
 }

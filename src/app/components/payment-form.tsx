@@ -1,272 +1,215 @@
-"use client"
-
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { calculateTax } from "../../../lib/data"
-import { ArrowLeft, CreditCard, Lock, Shield } from "lucide-react"
-import { Button } from "./ui/button2"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import Badge from "./ui/Badge"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card2"
-import { useCartStore, useCheckoutStore } from "app/contexts/ThemeContext"
-import { Separator } from "./ui/separator"
-
-const paymentSchema = z.object({
-  cardNumber: z.string().min(16, "Card number must be 16 digits").max(19, "Invalid card number"),
-  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, "Please enter MM/YY format"),
-  cvv: z.string().min(3, "CVV must be 3-4 digits").max(4, "CVV must be 3-4 digits"),
-  cardholderName: z.string().min(1, "Cardholder name is required"),
-})
-
-type PaymentForm = z.infer<typeof paymentSchema>
-
+"use client";
+import Link from "next/link";
+import { Card } from "./ui/card2";
+import { Separator } from "./ui/separator";
+import {
+  ThemeContext,
+  useCartStore,
+  useCheckoutStore,
+} from "app/contexts/ThemeContext";
+import { Button } from "./ui/button2";
+import { ArrowLeft } from "lucide-react";
+import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
+import { useContext, useEffect, useState } from "react";
+import createOrder from "../../../lib/createOrder";
 export function PaymentForm() {
-  const { setStep, customerDetails, selectedShipping, setOrder } = useCheckoutStore()
-  const { items, getSubtotal, clearCart } = useCartStore()
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const subtotal = getSubtotal()
-  const shippingCost = selectedShipping?.price || 0
-  const tax = calculateTax(subtotal + shippingCost)
-  const total = subtotal + shippingCost + tax
-    const phone =  ""
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<PaymentForm>({
-    resolver: zodResolver(paymentSchema),
-  })
-
-  const cardNumber = watch("cardNumber", "")
-
-  const formatCardNumber = (value: string) => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "")
-    const matches = v.match(/\d{4,16}/g)
-    const match = (matches && matches[0]) || ""
-    const parts = []
-
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4))
-    }
-
-    if (parts.length) {
-      return parts.join(" ")
-    } else {
-      return v
-    }
+  const { setStep, customerDetails, selectedShipping, order } =
+    useCheckoutStore();
+  const themeContext = useContext(ThemeContext);
+  if (!themeContext) {
+    throw new Error(
+      "ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider."
+    );
   }
+  const { cartItems } = themeContext;
+ const [orderItems, setOrderItems] = useState<{id:string | number,quantity:number}[] | []>([]);
+  const [paymentObj, setPaymentObj] = useState<
+    | {
+        items: any[];
+        shippingFee: number;
+        phoneNumber: string;
+        name: string;
+        states: string;
+        address: string;
+        appartment: string;
+        shippingMethod: string;
+        paymentIntentId: string;
+        tx_ref: string;
+        flw_ref: string;
+      }
+    | {}
+  >({});
+  const { items, clearCart } = useCartStore();
+  const [orderLoading, setOrderloading] = useState(false);
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+  const config = {
+    public_key: "FLWPUBK_TEST-be991d4a6e11f924beafb5b15d5721f6-X",
+    tx_ref: Date.now().toString(),
+    amount: total,
+    currency: "NGN",
+    payment_options: "card,mobilemoney,ussd",
+    customer: {
+      email: "user@gmail.com",
+      phone_number: "070********",
+      name: "john doe",
+    },
+    customizations: {
+      title: "SKIILINK VENTURES LIMITED",
+      description: "Payment for items in cart",
+      logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
+    },
+  };
+  
+  const fwConfig = {
+    ...config,
+    text: "Pay Now",
+    callback: (response: any) => {
+      const { transaction_id, tx_ref, flw_ref } = response;
 
-  const getCardType = (number: string) => {
-    const num = number.replace(/\s/g, "")
-    if (num.startsWith("4")) return "Visa"
-    if (num.startsWith("5") || num.startsWith("2")) return "Mastercard"
-    if (num.startsWith("3")) return "American Express"
-    return "Card"
-  }
+      console.log(response);
+      // removeAllItems(items)
 
-  const onSubmit = async (data: PaymentForm) => {
-    if (!customerDetails || !selectedShipping) return
-
-    setIsProcessing(true)
-
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-
-    // Create order
-        const orderCustomerDetails = {
-          ...customerDetails,
-          address:
-            typeof customerDetails.address === "string"
-              ? {
-                  street: customerDetails.address,
-                  city: "",
-                  state: "",
-                  zipCode: "",
-                  country: "",
-                }
-              : customerDetails.address,
-        }
-    
-        const order = {
-          id: `ORD-${Date.now()}`,
-          items,
-          customerDetails: orderCustomerDetails,
-          shippingOption: selectedShipping,
-          subtotal,
-          shipping: shippingCost,
-          tax,
-          total,
-          status: "processing" as const,
-          createdAt: new Date(),
-          trackingNumber: `TRK${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
-        }
-    
-        setOrder(order)
-        clearCart()
-        setStep(4)
-        setIsProcessing(false)
-  }
-
+      setOrderloading(true);
+      // onClose()
+      handleCreateOrder(transaction_id,tx_ref,flw_ref);
+      closePaymentModal(); // this will close the modal programmatically      
+    },
+    onClose: () => {},
+  };
+  // if (!isOpen) return null;
+  useEffect(() => {
+    // console.log({...paymentObj});
+  }, [paymentObj]);
+  const handleCreateOrder = async (transaction_id:any,tx_ref:any,flw_ref:any) => {
+    const orderInn: { id: string | number; quantity: number }[] | undefined =
+    cartItems.map((item) => {
+      return { id: item.product._id, quantity: item.quantity };
+    });
+    const payObj={
+        ...customerDetails,
+        "items": orderInn,
+        "shippingFee": 1330,
+        "paymentIntentId": transaction_id,
+        tx_ref,
+        flw_ref,
+      };
+      // console.log({...paymentObj});
+    const response = await createOrder(payObj);
+    console.log(response);
+    setOrderloading(false);
+    // items.forEach((item:CartItem) => onRemoveItem(item.product._id.toString()));
+  };
   const handleBack = () => {
-    setStep(2)
-  }
-
+    setStep(2);
+  };
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Payment Method */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <CreditCard className="w-5 h-5" />
-              <span>Payment Information</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="cardNumber">Card Number</Label>
-              <div className="relative">
-                <Input
-                  id="cardNumber"
-                  {...register("cardNumber", {
-                    onChange: (e) => {
-                      e.target.value = formatCardNumber(e.target.value)
-                    },
-                  })}
-                  placeholder="1234 5678 9012 3456"
-                  maxLength={19}
-                  className={errors.cardNumber ? "border-destructive pr-20" : "pr-20"}
-                />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <Badge variant="default" className="text-xs">
-                    {getCardType(cardNumber)}
-                  </Badge>
-                </div>
-              </div>
-              {errors.cardNumber && <p className="text-sm text-destructive">{errors.cardNumber.message}</p>}
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="expiryDate">Expiry Date</Label>
-                <Input
-                  id="expiryDate"
-                  {...register("expiryDate")}
-                  placeholder="MM/YY"
-                  maxLength={5}
-                  className={errors.expiryDate ? "border-destructive" : ""}
-                />
-                {errors.expiryDate && <p className="text-sm text-destructive">{errors.expiryDate.message}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="cvv">CVV</Label>
-                <Input
-                  id="cvv"
-                  {...register("cvv")}
-                  placeholder="123"
-                  maxLength={4}
-                  type="password"
-                  className={errors.cvv ? "border-destructive" : ""}
-                />
-                {errors.cvv && <p className="text-sm text-destructive">{errors.cvv.message}</p>}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="cardholderName">Cardholder Name</Label>
-              <Input
-                id="cardholderName"
-                {...register("cardholderName")}
-                placeholder="John Doe"
-                className={errors.cardholderName ? "border-destructive" : ""}
-              />
-              {errors.cardholderName && <p className="text-sm text-destructive">{errors.cardholderName.message}</p>}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Security Notice */}
-        <Card className="border-success/20 bg-success/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center space-x-3">
-              <Shield className="w-5 h-5 text-success" />
-              <div>
-                <p className="text-sm font-medium text-success-foreground">Secure Payment</p>
-                <p className="text-xs text-muted-foreground">
-                  Your payment information is encrypted and secure. We never store your card details.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Final Order Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Final Order Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Shipping ({selectedShipping?.name})</span>
-                <span>${shippingCost.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Tax (8%)</span>
-                <span>${tax.toFixed(2)}</span>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="flex justify-between font-bold text-xl">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-
-            <div className="bg-muted/50 p-3 rounded-lg">
-              <div className="text-sm space-y-1">
-                <p className="font-medium">Shipping to:</p>
-                <p className="text-muted-foreground">
-                  {customerDetails?.firstName} {customerDetails?.lastName}
-                </p>
-                <p className="text-muted-foreground">
-                  {customerDetails?.address}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
+      <Card className="border-gray-200 p-4 bg-gray-50 gap-2 shadow-none">
         <div className="flex justify-between">
-          <Button variant="outline" onClick={handleBack} size="lg" disabled={isProcessing}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Shipping
-          </Button>
-          <Button type="submit" disabled={isProcessing} size="lg" className="min-w-40">
-            {isProcessing ? (
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                <span>Processing...</span>
-              </div>
-            ) : (
-              <>
-                <Lock className="w-4 h-4 mr-2" />
-                Complete Order ${total.toFixed(2)}
-              </>
-            )}
-          </Button>
+          <div className="flex-1 flex flex-wrap">
+            <div className="basis-[6em]">
+              <span className="text-gray-600">Contact</span>
+            </div>
+            <div className="flex-1 pr-3">{customerDetails?.phoneNumber}</div>
+          </div>
+          <div className="">
+            <Link
+              href={"#"}
+              className="text-sm text-orange-500 hover:underline"
+            >
+              {" "}
+              <span>Change</span>
+            </Link>
+          </div>
         </div>
-      </form>
+        <Separator />
+        <div className="flex justify-between">
+          <div className="flex-1 flex flex-wrap">
+            <div className="basis-[6em]">
+              <span className="text-gray-600">Ship to</span>
+            </div>
+            <div className="flex-1 min-w-56 w-full pr-3">
+              <span className="w-full break-keep">
+                {" "}
+                {customerDetails?.address} {","} {customerDetails?.states}
+                {","} {customerDetails?.appartment}{" "}
+              </span>
+            </div>
+          </div>
+          <div className="">
+            <Link
+              href={"#"}
+              className="text-sm text-orange-500 hover:underline"
+            >
+              {" "}
+              <span>Change</span>
+            </Link>
+          </div>
+        </div>
+        <Separator />
+        <div className="flex justify-between">
+          <div className="flex-1 flex flex-wrap">
+            <div className="basis-[6em] pr-3">
+              <span className="text-gray-600">Shipping method</span>
+            </div>
+            <div className="flex-1 min-w-56 w-full pr-3">
+              <span className="w-full break-keep">
+                {customerDetails?.shippingMethod}
+              </span>
+            </div>
+          </div>
+          <div className="">
+            <Link
+              href={"#"}
+              className="text-sm text-orange-500 hover:underline"
+            >
+              {" "}
+              <span>Change</span>
+            </Link>
+          </div>
+        </div>
+      </Card>
+      <div className="flex justify-between flex-wrap gap-4">
+        <Button
+          variant="outline"
+          className="flex-1 whitespace-nowrap"
+          size="lg"
+          onClick={handleBack}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Details
+        </Button>
+        {orderLoading ? (
+          <Button
+            disabled
+            size="lg"
+            className="flex-1 whitespace-nowrap min-w-32"
+          >
+            <div className="flex items-center justify-center space-x-1">
+              <div
+                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                style={{ animationDelay: "0s" }}
+              ></div>
+              <div
+                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
+              <div
+                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                style={{ animationDelay: "0.4s" }}
+              ></div>
+            </div>
+          </Button>
+        ) : (
+          <FlutterWaveButton
+            className="flex-1 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-900 text-white hover:bg-gray-800 h-11 px-8"
+            {...fwConfig}
+          />
+        )}
+      </div>
     </div>
-  )
+  );
 }

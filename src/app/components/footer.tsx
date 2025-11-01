@@ -3,7 +3,7 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-muted/30">
+    <footer className="border-t border-gray-200 bg-gray-100">
       <div className="max-w-7xl w-full mx-auto px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
@@ -13,7 +13,7 @@ export function Footer() {
                 <div className="h-8 w-8 rounded-md bg-gray-200" />
                 
               </div>
-              <span className=" text-xl font-semibold tracking-tight">Skiilink.V.L</span>
+              <span className=" text-xl tracking-tight">Skiilink.V.L</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
               Premium solar accessories and security gadgets for modern living. Sustainable energy meets advanced
@@ -41,7 +41,7 @@ export function Footer() {
 
           {/* Products */}
           <div>
-            <h3 className="mb-4 font-semibold">Products</h3>
+            <h3 className="mb-4">Products</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/solar" className="text-muted-foreground transition-colors hover:text-primary">
@@ -68,7 +68,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="mb-4 font-semibold">Company</h3>
+            <h3 className="mb-4">Company</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/about" className="text-muted-foreground transition-colors hover:text-primary">
@@ -95,7 +95,7 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="mb-4 font-semibold">Support</h3>
+            <h3 className="mb-4">Support</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/help" className="text-muted-foreground transition-colors hover:text-primary">

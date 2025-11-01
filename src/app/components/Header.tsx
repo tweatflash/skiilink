@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { ShoppingCart, Search, Sun, Moon, Menu, X, User } from 'lucide-react';
+import { ShoppingCart, Search, Sun, Moon, Menu, X, User, CircleUser, ChevronDownIcon } from 'lucide-react';
 import { ThemeContext, useTheme } from '../contexts/ThemeContext';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { Button } from './ui/button2';
 interface HeaderProps {
   cartItemCount: number;
   onCartClick: () => void;
@@ -25,28 +26,45 @@ const Header: React.FC<HeaderProps> = ({
   const {setSearch}=themeContext;
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="max-screen mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
+      <div className="max-screen mx-auto px-4 md:px-8">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href={"/"}>
           <div className="flex items-center space-x-2">
-           <img src="/logo.png" alt="Skiilink Logo" className="h-8 w-auto"/>
+           <img src="/logo.PNG" alt="Skiilink Logo" className="max-h-6 h-auto w-auto max-w-full"/>
           </div>
           </Link>
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 text-sm">
-            <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
-              Home
-            </Link>
-            <Link href="products" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
-              Products
-            </Link>
-            <Link href="#" className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 transition-colors">
-              Solutions
-            </Link>
-            
-          </nav>
+          
+          <div className="hidden lg:flex items-center gap-6">
+            <Button
+              variant="ghost"
+              className="inline-flex items-center gap-1 h-auto p-0"
+            >
+              <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
+                Shop
+              </span>
+              <ChevronDownIcon className="w-4 h-4" />
+            </Button>
 
+            <Button variant="ghost" className="h-auto p-0">
+              <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
+                On Sale
+              </span>
+            </Button>
+
+            <Button variant="ghost" className="h-auto p-0">
+              <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
+                New Arrivals
+              </span>
+            </Button>
+
+            <Button variant="ghost" className="h-auto p-0">
+              <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
+                Brands
+              </span>
+            </Button>
+          </div>
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex items-center flex-1 max-w-sm mx-8 h-full">
             <div className="relative w-full h-full py-3">
@@ -66,8 +84,7 @@ const Header: React.FC<HeaderProps> = ({
               className="p-2.5 rounded-xl  transition-colors duration-200"
               aria-label="User"
             >
-             
-                <User size={20} className="text-gray-600 dark:text-gray-400" />
+               <CircleUser size={20} className="text-gray-600 dark:text-gray-400" />
              
             </button>
 

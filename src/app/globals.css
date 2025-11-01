@@ -3,12 +3,12 @@
 @tailwind utilities;  
 @font-face {
   font-family: markd;
-  src: url('../../public/fonts/Whipsmart\ Bold.ttf');
+  src: url('../../public/fonts/Livvic-Medium.ttf');
   /* font-weight: 100 900; */
   /* font-display: swap; */
 }
 body {
-  font-family: markd !important;  
+  font-family: markd;  
 }
 
 body {
@@ -19,7 +19,7 @@ body {
 }
 @font-face {
   font-family: boldCal;
-  src: url(../../public/fonts/BrownMedium\ Regular.ttf);
+  src: url(../../public/fonts/CalSans-Regular.ttf);
 }
 @font-face {
   font-family: famil;
@@ -109,11 +109,28 @@ html.dark {
     transform: translateX(-50%);
   }
 }
-
+h1,h2,h3,h4{
+  /* text-transform: uppercase !important; */
+  /* font-family: boldCal !important; */
+}
 .animate-scroll {
   animation: scroll 30s linear infinite;
 }
 
 .animate-scroll:hover {
   animation-play-state: paused;
+}
+@layer utilities {
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
 }
