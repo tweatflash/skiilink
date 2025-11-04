@@ -238,10 +238,10 @@ export default function NewPage() {
 
                 <div className="inline-flex items-center gap-[13px] mb-2">
                   {renderStars(product.rating)}
-                  <span className=" font-[boldCal] text-sm tracking-[0] leading-[normal]">
+                  {/* <span className=" font-[boldCal] text-sm tracking-[0] leading-[normal]">
                     <span className="text-black">{product.rating}/</span>
                     <span className="text-[#00000099]">5</span>
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className="inline-flex flex-wrap items-center gap-2.5">
@@ -299,10 +299,10 @@ export default function NewPage() {
 
                 <div className="inline-flex font-[boldCal] items-center gap-[13px] mb-2">
                   {renderStars(product.rating)}
-                  <span className=" font-normal text-sm tracking-[0] leading-[normal]">
+                  {/* <span className=" font-normal text-sm tracking-[0] leading-[normal]">
                     <span className="text-black">{product.rating}/</span>
                     <span className="text-[#00000099]">5</span>
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className="inline-flex flex-wrap items-center gap-2.5">

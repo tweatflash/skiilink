@@ -140,20 +140,6 @@ export function FooterSection(){
                   src="/brands/flutterwave.svg"
                 />
               </div>
-              <div className="h-full w-32 rounded-lg bg-white py-2 px-3">
-                <img
-                  className="w-auto h-full"
-                  alt="Payment methods"
-                  src="/brands/flutterwave.svg"
-                />
-              </div>
-              <div className="h-full w-32 rounded-lg bg-white py-2 px-3">
-                <img
-                  className="w-auto h-full"
-                  alt="Payment methods"
-                  src="/brands/flutterwave.svg"
-                />
-              </div>
             </div>
           </div>
         </div>
