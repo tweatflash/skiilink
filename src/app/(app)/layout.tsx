@@ -8,7 +8,7 @@ import { FooterSection } from "app/components/new/FooterSection";
 import React, { useContext } from "react";
 import { Button } from "app/components/ui/button2";
 import { XIcon } from "lucide-react";
-
+import Link from "next/link";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const themeContext = useContext(ThemeContext);
   if (!themeContext) {
@@ -37,10 +37,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="w-full min-h-[38px] bg-black flex items-center justify-center relative px-4">
               <p className=" font-normal text-white text-sm tracking-[0] leading-[normal]">
                 <span className=" font-normal text-white text-sm tracking-[0]">
-                  Sign up and get 20% off to your first order.{" "}
+                  Sign up to make your first order.{" "}
                 </span>
                 <span className="font-medium underline cursor-pointer">
-                  Sign Up Now
+                  <Link href={"/sign-up"}>Sign Up Now</Link>
+                  
                 </span>
               </p>
               <Button

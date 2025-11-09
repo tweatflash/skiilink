@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({
           {/* Logo */}
           <Link href={"/"}>
           <div className="flex items-center space-x-2">
-           <img src="/logo.PNG" alt="Skiilink Logo" className="max-h-6 h-auto w-auto max-w-full"/>
+           <img src="/l.png" alt="Skiilink Logo" className="max-h-6 h-auto w-auto max-w-full"/>
           </div>
           </Link>
           {/* Desktop Navigation */}

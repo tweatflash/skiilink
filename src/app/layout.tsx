@@ -25,6 +25,7 @@ export default function RootLayout({
   return (
       <html lang="en" className={`${manrope.className}`} >
         {/* <link href="https://fonts.googleapis.com/css2?family=Outfit&display=swap" rel="stylesheet"/> */}
+        <meta name="google-site-verification" content="QZoD7D2w3ii4ogkCJxvcitzTQyuYxIMgM3N2DOzXfgE" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
