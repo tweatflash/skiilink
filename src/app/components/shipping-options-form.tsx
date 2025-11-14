@@ -22,7 +22,7 @@ type ShippingOption2 = {
   name: string;
   price: number | string;
   estimatedDays: string;
-  type: 'Delivery' | 'pickup';
+  type: 'Delivery' | 'Pickup';
   address?: string;
   popular?: boolean;
 }
@@ -41,7 +41,7 @@ const shippingOptions2: ShippingOption2[] = [
     name: 'Shop Pickup - Downtown',
     price: "Free",
     estimatedDays: 'Ready in 2-3 hours',
-    type: 'pickup',
+    type: 'Pickup',
     address: '123 Main Street, Downtown, NY 10001'
   },
   {
@@ -49,7 +49,7 @@ const shippingOptions2: ShippingOption2[] = [
     name: 'Shop Pickup - Uptown',
     price: "Free",
     estimatedDays: 'Ready in 2-3 hours',
-    type: 'pickup',
+    type: 'Pickup',
     address: '456 Park Avenue, Uptown, NY 10065',
     popular: true
   }

@@ -167,34 +167,34 @@ export default function NewPage() {
 
           <div className="relative w-full px-5 md:px-8 pt-12 sm:pt-[103px] pb-12 md:pb-[116px]">
             <div className="max-w-full mx-auto md:max-w-6xl">
-              <h2 className="text-center max-w-3xl mx-auto font-bold text-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[0] leading-tight mb-6 md:mb-8">
+              <h2 className="text-center max-w-3xl mx-auto font-[boldCal] text-black text-5xl sm:text-6xl md:text-7xl lg:text-[110px] tracking-[0] leading-tight mb-6 md:mb-8">
                 Smart Security<br/>Solar Simplicity
               </h2>
 
               <p className="text-center mx-auto font-normal text-[#00000099] text-lg md:text-xl tracking-[0] leading-[22px] mb-6 md:mb-8 max-w-full md:max-w-[545px]">
                 We deliver trusted security gadgets and solar gear to protect
-                your space and power your lifestyle—effortlessly.
+                your space and power your lifestyle effortlessly.
               </p>
 
-              <Button className="bg-black block w-full sm:w-auto text-white rounded-[62px] px-8 md:px-[54px] h-[52px] mx-auto  font-medium text-lg">
+              <Button className="bg-black block w-full sm:w-auto text-white rounded-2xl px-8 md:px-[54px] h-[52px] mx-auto  font-medium text-lg">
                 Shop Now
               </Button>
 
-              <div className="flex justify-center mx-auto flex-wrap items-center gap-4 md:gap-8 mt-8 md:mt-12">
-                {stats.map((stat, index) => (
-                  <React.Fragment key={index}>
-                    {index > 0 && <Separator orientation="vertical" />}
-                    <div className="inline-flex flex-col items-start">
-                      <h1 className=" text-black text-2xl md:text-[40px] tracking-[0] leading-[normal]">
-                        {stat.value}
-                      </h1>
-                      <div className=" font-normal text-[#00000099] text-sm md:text-base tracking-[0] leading-[22px]">
-                        {stat.label}
+                {/* <div className="flex justify-center mx-auto flex-wrap items-center gap-4 md:gap-8 mt-8 md:mt-12">
+                  {stats.map((stat, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && <Separator orientation="vertical" />}
+                      <div className="inline-flex flex-col items-start">
+                        <h1 className=" text-black text-2xl md:text-[40px] tracking-[0] leading-[normal]">
+                          {stat.value}
+                        </h1>
+                        <div className=" font-normal text-[#00000099] text-sm md:text-base tracking-[0] leading-[22px]">
+                          {stat.label}
+                        </div>
                       </div>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
+                    </React.Fragment>
+                  ))}
+                </div> */}
             </div>
           </div>
         </div>
@@ -244,7 +244,7 @@ export default function NewPage() {
                   </span> */}
                 </div>
 
-                <div className="inline-flex flex-wrap items-center gap-2.5">
+                <div className="inline-flex flex-wrap font-bold items-center gap-2.5">
                   <span className=" text-black text-xl md:text-2xl tracking-[0] leading-[normal]">
                     {formatPrice(product.price)}
                   </span>

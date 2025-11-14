@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './CustomerReviews.css';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Review {
   id: number;
@@ -138,7 +139,7 @@ export default function CustomerReviews() {
               className="nav-button"
               aria-label="Previous reviews"
             >
-              ‹
+              <ChevronLeft size={20}/>
             </button>
             <div className="pagination-dots">
               {[...Array(totalPages)].map((_, i) => (
@@ -155,7 +156,7 @@ export default function CustomerReviews() {
               className="nav-button"
               aria-label="Next reviews"
             >
-              ›
+              <ChevronRight size={20}/>
             </button>
           </div>
         )}

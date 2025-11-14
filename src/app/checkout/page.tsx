@@ -37,14 +37,10 @@ export default function CheckoutPage() {
       getItemCount
     } = themeContext;
   useEffect(() => {
-    if (items.length === 0 && currentStep < 4) {
-      //   router.push("/cart")
+    if (cartItems.length === 0) {
+        router.push("/products")
     }
-  }, [items.length, currentStep, router]);
-
-  if (items.length === 0 && currentStep < 4) {
-    // return null;
-  }
+  }, []);
 
   const subtotal = getSubtotal();
   const shipping = selectedShipping?.price || 4.9;

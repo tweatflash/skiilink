@@ -72,7 +72,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [search,setSearch]=useState(false)
   const [userAuth,setUserAuth]=useState<UserRoot | {}>({})
-    const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [userObj,setUserObj]=useState({})
   const [loggedIn,setLoggedIn]=useState<{"boolean":"pending"|"true" |"false" ,"role":"user" | "admin" | null}>({"boolean":"pending", "role":null})
   useEffect(()=>{
     if (cookies) {
@@ -134,7 +135,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     const Authentication=async ()=>{
     const request=await checkLoggedInStatus()
     const response:UserRoot | undefined =await request?.data
-    console.log(request)
+  
     if (request === undefined ){
        setLoggedIn({"boolean":"false", "role":null})
     }else if (request.status && request.status===200){

@@ -53,8 +53,8 @@ export function PaymentForm() {
     payment_options: "card,mobilemoney,ussd",
     customer: {
       email: "user@gmail.com",
-      phone_number: "070********",
-      name: "john doe",
+      phone_number: customerDetails?.phoneNumber || "0000000000",
+      name: customerDetails?.name || "john doe",
     },
     customizations: {
       title: "SKIILINK VENTURES LIMITED",
@@ -100,6 +100,7 @@ export function PaymentForm() {
     const response = await createOrder(payObj);
     console.log(response);
     setOrderloading(false);
+    setStep(4);
     // items.forEach((item:CartItem) => onRemoveItem(item.product._id.toString()));
   };
   const handleBack = () => {

@@ -25,41 +25,39 @@ const Header: React.FC<HeaderProps> = ({
     }
   const {setSearch}=themeContext;
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-50">
+      
       <div className="max-screen mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href={"/"}>
           <div className="flex items-center space-x-2">
-           <img src="/l.png" alt="Skiilink Logo" className="max-h-6 h-auto w-auto max-w-full"/>
+           <img src="/logo.PNG" alt="Skiilink Logo" className="max-h-5 h-auto w-auto max-w-full"/>
           </div>
           </Link>
           {/* Desktop Navigation */}
           
           <div className="hidden lg:flex items-center gap-6">
-            <Button
-              variant="ghost"
-              className="inline-flex items-center gap-1 h-auto p-0"
+            <Button variant="ghost" className="hover:bg-transparent inline-flex items-center gap-1 h-auto p-0"
             >
               <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
                 Shop
               </span>
-              <ChevronDownIcon className="w-4 h-4" />
             </Button>
 
-            <Button variant="ghost" className="h-auto p-0">
+            <Button variant="ghost" className="hover:bg-transparent h-auto p-0">
               <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
                 On Sale
               </span>
             </Button>
 
-            <Button variant="ghost" className="h-auto p-0">
+            <Button variant="ghost" className="hover:bg-transparent h-auto p-0">
               <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
                 New Arrivals
               </span>
             </Button>
 
-            <Button variant="ghost" className="h-auto p-0">
+            <Button variant="ghost" className="hover:bg-transparent h-auto p-0">
               <span className=" font-normal text-black text-base tracking-[0] leading-[normal]">
                 Brands
               </span>
@@ -136,9 +134,11 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden  border-t border-gray-200 dark:border-gray-800 py-4 animate-fade-in">
-            <nav className="flex flex-col space-y-3">
-              <Link
+          <div className="lg:hidden fixed w-full z-10 top-0 m-auto left-0 border-gray-200 dark:border-gray-800 animate-fade-in">
+            <div className="absolute inset-0 bg-black/50 w-full h-screen" onClick={() => setIsMobileMenuOpen(false)}></div>
+            <nav className="flex flex-col p-2 h-auto absolute space-y-3 z-20 w-full">
+              <div className="p-2 bg-white rounded-xl flex flex-col">
+                <Link
                 href="/"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -173,6 +173,7 @@ const Header: React.FC<HeaderProps> = ({
               >
                 Sign in
               </Link>
+              </div>
             </nav>
           </div>
         )}
