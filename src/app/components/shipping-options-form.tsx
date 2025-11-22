@@ -30,23 +30,23 @@ type ShippingOption2 = {
 const shippingOptions2: ShippingOption2[] = [
   {
     id: 'home-delivery',
-    name: 'Home Delivery',
+    name: 'Home Address',
     price: "Pay on Delivery",
     estimatedDays: '3-5 business days',
     type: 'Delivery',
-    
+    address:""
   },
   {
     id: 'shop-pickup-downtown',
-    name: 'Shop Pickup - Downtown',
+    name: 'Office Address - 1',
     price: "Free",
     estimatedDays: 'Ready in 2-3 hours',
     type: 'Pickup',
-    address: '123 Main Street, Downtown, NY 10001'
+    address: 'Suite A8 Diwani Plaza No.14 Akufo Street along Aso Saving Road Kubwa,Abuja'
   },
   {
     id: 'shop-pickup-uptown',
-    name: 'Shop Pickup - Uptown',
+    name: 'Office Address - 2',
     price: "Free",
     estimatedDays: 'Ready in 2-3 hours',
     type: 'Pickup',
@@ -66,7 +66,33 @@ export function ShippingOptionsForm() {
   const tax = calculateTax(subtotal)
   const total = subtotal  + tax
 
-
+  const shippingOptions2: ShippingOption2[] = [
+  {
+    id: 'home-delivery',
+    name: 'Home Address',
+    price: "Pay on Delivery",
+    estimatedDays: '3-5 business days',
+    type: 'Delivery',
+    address:customerDetails? customerDetails?.address +" "+ customerDetails?.states + " "+ customerDetails?.appartment :""
+  },
+  {
+    id: 'shop-pickup-downtown',
+    name: 'Office Address - 1',
+    price: "Free",
+    estimatedDays: 'Ready in 2-3 hours',
+    type: 'Pickup',
+    address: 'Suite A8 Diwani Plaza No.14 Akufo Street along Aso Saving Road Kubwa, Abuja'
+  },
+  {
+    id: 'shop-pickup-uptown',
+    name: 'Office Address - 2',
+    price: "Free",
+    estimatedDays: 'Ready in 2-3 hours',
+    type: 'Pickup',
+    address: 'Suite C6 Banex Plaza Vina, Plot 741 Aminu Kano Crescent Wuse II, Abuja',
+    popular: true
+  }
+];
   const handleContinue = async () => {
     // setStep(3)
     if (!selectedOption) return
@@ -166,12 +192,11 @@ export function ShippingOptionsForm() {
                       )}
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-blue-600 mt-1">
+                  {/* <p className="text-sm font-medium text-blue-600 mt-1">
                     {option.estimatedDays}
-                  </p>
+                  </p> */}
                   {option.address && (
-                    <p className="text-sm text-gray-600 mt-2 flex items-start gap-1">
-                      <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-gray-600 mt-2 flex items-start gap-1">                      
                       <span>{option.address}</span>
                     </p>
                   )}

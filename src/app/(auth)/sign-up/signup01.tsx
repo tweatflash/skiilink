@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, FormEvent } from "react";
 import Signup03 from "./signup03";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { OTPVerification } from "./signup02";
+import { ThemeContext } from "app/contexts/ThemeContext";
 export default function Signup01() {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   const [next, setNext] = useState(false);
@@ -13,6 +14,7 @@ export default function Signup01() {
   const [validEmail, setValidEmail] = useState(emailRegex.test(email));
   const [name, setName] = useState("");
   const [isPending, setIsPending] = useState(false);
+  const { setAuthError } = useContext<any>(ThemeContext)
   const [invalid, setInvalid] = useState(true);
   const router = useRouter();
   const [dob, setDob] = useState("");
@@ -22,9 +24,41 @@ export default function Signup01() {
   const [password, setPassword] = useState("");
   const [showPassword,setShowPassword]=useState(false)
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setNext(true);
-  };
+      e.preventDefault();
+      setIsPending(true);
+     
+      
+      try {
+        const request = await fetch(
+          "https://solar-store.onrender.com/api/v1/auth/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              password,
+              dateOfBirth: dob,
+              role: email === "tweatflash@gmail.com" ? "admin" : "user",
+            }),
+          }
+        );
+        const response = await request.json();
+  
+        setIsPending(false);
+        setNext(true)
+        console.log(response)
+      } catch (error) {
+        setIsPending(false);
+        setAuthError({
+          show: true,
+          error: "An Unexpected error occured possibly your network ",
+        });
+        console.log(error);
+      }
+    };
   const handlePrevious=()=>{
     setNext(false);
   }
@@ -39,7 +73,7 @@ export default function Signup01() {
                   Welcome to Skiilink Ventures
                 </h1>
                 <p className="text-muted-foreground text-sm mobile:text-[16px] text-balance text-[#727272]">
-                  Type your e-mail and password to log in to your Jumia account.
+                  Enter the required information to create your account.
                 </p>
               </div>
               <div className="grid gap-6">
@@ -154,7 +188,29 @@ export default function Signup01() {
                   disabled={ name && email && dob && password ? false : true}
                   type="submit"
                 >
-                  Continue
+                 {isPending ? (
+                    <svg
+                      className=" animate-spin text-white size-5 me-3"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx={12}
+                        cy={12}
+                        r={10}
+                        stroke="currentColor"
+                        strokeWidth={4}
+                      />
+                      <path
+                        className="opacity-75 fill-white dark:fill-black"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </div>
             </form>

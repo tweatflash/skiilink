@@ -46,7 +46,7 @@ export function FooterSection(){
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-start gap-8 md:gap-4 mb-12">
             <div className="flex flex-col col-span-2 items-start gap-[35px]">
               <div className="flex flex-col items-start gap-[25px]">
-                <img src="/brands/ecoflow.png" className="h-4 w-auto invert" />
+                <img src="/ali.png" className="h-7 relative hrpi w-auto" />
 
                 <p className="w-full md:w-[248px]  font-normal text-[#00000099] text-sm tracking-[0] leading-[22px]">
                  We deliver trusted security gadgets and solar gear to protect your space and power your lifestyle

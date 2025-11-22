@@ -71,10 +71,10 @@ export default function Login({clientId}:Prop) {
             const response=await request
             
             const data =await response.json()
-            console.log(data)
             if (response.status ==200 && data.refreshTokenJWT && data.accessTokenJWT) {
                 Cookies.set("RFTFL", data.refreshTokenJWT, { expires: 7 });
                 Cookies.set("ACTFL", data.accessTokenJWT, { expires: 7 });
+                window.location.reload()
             }
             response?.status===500? setAuthError({
                 "show":true,
@@ -103,9 +103,9 @@ export default function Login({clientId}:Prop) {
         <div className="w-full max-w-[480px]">
             <form className="flex flex-col gap-6" method="POST" onSubmit={handleSubmit}>
             <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-[22px] mobile:text-[26px] w-full text-black dark:text-white">Welcome back to Skiilink</h1>
+                <h1 className="text-[22px] mobile:text-[26px] w-full text-black dark:text-white">Welcome back to Skiilink Ventures</h1>
                 <p className="text-muted-foreground text-sm mobile:text-[16px] text-balance text-[#727272]" >
-                    Type your e-mail and  password to log in to your Jumia account.
+                    Type your e-mail and  password to log in to your  account.
                 </p>
             </div>
             <div className="grid gap-6">

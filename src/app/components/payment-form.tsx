@@ -12,8 +12,9 @@ import { ArrowLeft } from "lucide-react";
 import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
 import { useContext, useEffect, useState } from "react";
 import createOrder from "../../../lib/createOrder";
+import PaymentConfirmation from "./paymentConfrimModal";
 export function PaymentForm() {
-  const { setStep, customerDetails, selectedShipping, order } =
+  const { setStep, customerDetails } =
     useCheckoutStore();
   const themeContext = useContext(ThemeContext);
   if (!themeContext) {
@@ -22,7 +23,9 @@ export function PaymentForm() {
     );
   }
   const { cartItems } = themeContext;
- const [orderItems, setOrderItems] = useState<{id:string | number,quantity:number}[] | []>([]);
+  const [orderItems, setOrderItems] = useState<
+    { id: string | number; quantity: number }[] | []
+  >([]);
   const [paymentObj, setPaymentObj] = useState<
     | {
         items: any[];
@@ -46,7 +49,7 @@ export function PaymentForm() {
     0
   );
   const config = {
-    public_key: "FLWPUBK_TEST-be991d4a6e11f924beafb5b15d5721f6-X",
+    public_key: "FLWPUBK-92a0a4f29a6ddc5801203c56a869c24e-X",
     tx_ref: Date.now().toString(),
     amount: total,
     currency: "NGN",
@@ -62,7 +65,7 @@ export function PaymentForm() {
       logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
     },
   };
-  
+
   const fwConfig = {
     ...config,
     text: "Pay Now",
@@ -74,8 +77,8 @@ export function PaymentForm() {
 
       setOrderloading(true);
       // onClose()
-      handleCreateOrder(transaction_id,tx_ref,flw_ref);
-      closePaymentModal(); // this will close the modal programmatically      
+      handleCreateOrder(transaction_id, tx_ref, flw_ref);
+      closePaymentModal(); // this will close the modal programmatically
     },
     onClose: () => {},
   };
@@ -83,20 +86,24 @@ export function PaymentForm() {
   useEffect(() => {
     // console.log({...paymentObj});
   }, [paymentObj]);
-  const handleCreateOrder = async (transaction_id:any,tx_ref:any,flw_ref:any) => {
+  const handleCreateOrder = async (
+    transaction_id: any,
+    tx_ref: any,
+    flw_ref: any
+  ) => {
     const orderInn: { id: string | number; quantity: number }[] | undefined =
-    cartItems.map((item) => {
-      return { id: item.product._id, quantity: item.quantity };
-    });
-    const payObj={
-        ...customerDetails,
-        "items": orderInn,
-        "shippingFee": 1330,
-        "paymentIntentId": transaction_id,
-        tx_ref,
-        flw_ref,
-      };
-      // console.log({...paymentObj});
+      cartItems.map((item) => {
+        return { id: item.product._id, quantity: item.quantity };
+      });
+    const payObj = {
+      ...customerDetails,
+      items: orderInn,
+      shippingFee: 1330,
+      paymentIntentId: transaction_id,
+      tx_ref,
+      flw_ref,
+    };
+    // console.log({...paymentObj});
     const response = await createOrder(payObj);
     console.log(response);
     setOrderloading(false);
@@ -107,110 +114,114 @@ export function PaymentForm() {
     setStep(2);
   };
   return (
-    <div className="space-y-6">
-      <Card className="border-gray-200 p-4 bg-gray-50 gap-2 shadow-none">
-        <div className="flex justify-between">
-          <div className="flex-1 flex flex-wrap">
-            <div className="basis-[6em]">
-              <span className="text-gray-600">Contact</span>
+    <>
+      <div className="space-y-6">
+        <Card className="border-gray-200 p-4 bg-gray-50 gap-2 shadow-none">
+          <div className="flex justify-between">
+            <div className="flex-1 flex flex-wrap">
+              <div className="basis-[6em]">
+                <span className="text-gray-600">Contact</span>
+              </div>
+              <div className="flex-1 pr-3">{customerDetails?.phoneNumber}</div>
             </div>
-            <div className="flex-1 pr-3">{customerDetails?.phoneNumber}</div>
-          </div>
-          <div className="">
-            <Link
-              href={"#"}
-              className="text-sm text-orange-500 hover:underline"
-            >
-              {" "}
-              <span>Change</span>
-            </Link>
-          </div>
-        </div>
-        <Separator />
-        <div className="flex justify-between">
-          <div className="flex-1 flex flex-wrap">
-            <div className="basis-[6em]">
-              <span className="text-gray-600">Ship to</span>
-            </div>
-            <div className="flex-1 min-w-56 w-full pr-3">
-              <span className="w-full break-keep">
+            <div className="">
+              <Link
+                href={"#"}
+                className="text-sm text-orange-500 hover:underline"
+              >
                 {" "}
-                {customerDetails?.address} {","} {customerDetails?.states}
-                {","} {customerDetails?.appartment}{" "}
-              </span>
+                <span>Change</span>
+              </Link>
             </div>
           </div>
-          <div className="">
-            <Link
-              href={"#"}
-              className="text-sm text-orange-500 hover:underline"
-            >
-              {" "}
-              <span>Change</span>
-            </Link>
-          </div>
-        </div>
-        <Separator />
-        <div className="flex justify-between">
-          <div className="flex-1 flex flex-wrap">
-            <div className="basis-[6em] pr-3">
-              <span className="text-gray-600">Shipping method</span>
+          <Separator />
+          <div className="flex justify-between">
+            <div className="flex-1 flex flex-wrap">
+              <div className="basis-[6em]">
+                <span className="text-gray-600">Ship to</span>
+              </div>
+              <div className="flex-1 min-w-56 w-full pr-3">
+                <span className="w-full break-keep">
+                  {" "}
+                  {customerDetails?.address} {","} {customerDetails?.states}
+                  {","} {customerDetails?.appartment}{" "}
+                </span>
+              </div>
             </div>
-            <div className="flex-1 min-w-56 w-full pr-3">
-              <span className="w-full break-keep">
-                {customerDetails?.shippingMethod}
-              </span>
+            <div className="">
+              <Link
+                href={"#"}
+                className="text-sm text-orange-500 hover:underline"
+              >
+                {" "}
+                <span>Change</span>
+              </Link>
             </div>
           </div>
-          <div className="">
-            <Link
-              href={"#"}
-              className="text-sm text-orange-500 hover:underline"
-            >
-              {" "}
-              <span>Change</span>
-            </Link>
+          <Separator />
+          <div className="flex justify-between">
+            <div className="flex-1 flex flex-wrap">
+              <div className="basis-[6em] pr-3">
+                <span className="text-gray-600">Shipping method</span>
+              </div>
+              <div className="flex-1 min-w-56 w-full pr-3">
+                <span className="w-full break-keep">
+                  {customerDetails?.shippingMethod}
+                </span>
+              </div>
+            </div>
+            <div className="">
+              <Link
+                href={"#"}
+                className="text-sm text-orange-500 hover:underline"
+              >
+                {" "}
+                <span>Change</span>
+              </Link>
+            </div>
           </div>
-        </div>
-      </Card>
-      <div className="flex justify-between flex-wrap gap-4">
-        <Button
-          variant="outline"
-          className="flex-1 whitespace-nowrap"
-          size="lg"
-          onClick={handleBack}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Details
-        </Button>
-        {orderLoading ? (
+        </Card>
+        <div className="flex justify-between flex-wrap gap-4">
           <Button
-            disabled
+            variant="outline"
+            className="flex-1 whitespace-nowrap"
             size="lg"
-            className="flex-1 whitespace-nowrap min-w-32"
+            onClick={handleBack}
           >
-            <div className="flex items-center justify-center space-x-1">
-              <div
-                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
-                style={{ animationDelay: "0s" }}
-              ></div>
-              <div
-                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
-                style={{ animationDelay: "0.2s" }}
-              ></div>
-              <div
-                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
-                style={{ animationDelay: "0.4s" }}
-              ></div>
-            </div>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Details
           </Button>
-        ) : (
-          <FlutterWaveButton
-            className="flex-1 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-900 text-white hover:bg-gray-800 h-11 px-8"
-            {...fwConfig}
-          />
-        )}
+          {orderLoading ? (
+            <Button
+              disabled
+              size="lg"
+              className="flex-1 whitespace-nowrap min-w-32"
+            >
+              <div className="flex items-center justify-center space-x-1">
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                  style={{ animationDelay: "0s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+                  style={{ animationDelay: "0.4s" }}
+                ></div>
+              </div>
+            </Button>
+          ) : (
+            <FlutterWaveButton
+              className="flex-1 inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-900 text-white hover:bg-gray-800 h-11 px-8"
+              {...fwConfig}
+            />
+          )}
+        </div>
+        
       </div>
-    </div>
+      <PaymentConfirmation/>
+    </>
   );
 }

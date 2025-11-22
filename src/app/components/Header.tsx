@@ -4,6 +4,7 @@ import { ThemeContext, useTheme } from '../contexts/ThemeContext';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { Button } from './ui/button2';
+import { useRouter } from 'next/navigation';
 interface HeaderProps {
   cartItemCount: number;
   onCartClick: () => void;
@@ -20,20 +21,29 @@ const Header: React.FC<HeaderProps> = ({
   // const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
    const themeContext = useContext(ThemeContext)
+   const router=useRouter()
+   const handleAccount=()=>{
+    router.push("/account")
+   }
     if (!themeContext) {
         throw new Error("ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider.");
     }
   const {setSearch}=themeContext;
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-50">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
       
-      <div className="max-screen mx-auto px-4 md:px-8">
+      <div className="max-screen mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href={"/"}>
-          <div className="flex items-center space-x-2">
-           <img src="/logo.PNG" alt="Skiilink Logo" className="max-h-5 h-auto w-auto max-w-full"/>
-          </div>
+          <Link href={"/"} className='flex flex-row'>
+            <div className="flex items-center space-x-2 mr-2">
+            <img src="/ali.png" alt="Skiilink Logo" title='Skiilink Ventures Nigeria Limited' className="flex size-8 max-w-full"/>
+            </div>
+            <div>
+              <span className='text-gray-700 text-[24px] font-[famil] tracking-wide hidden sm:flex uppercase leading-[1]'>SKIILINK</span>
+              <span className='text-gray-700 hidden font-[bold-livvic] sm:flex text-xs uppercase leading-[1]'>VENTURES LIMITED</span>
+            </div>
+
           </Link>
           {/* Desktop Navigation */}
           
@@ -78,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-1">
             {/* User */}
             <button
-              // onClick={toggleTheme}
+              onClick={handleAccount}
               className="p-2.5 rounded-xl  transition-colors duration-200"
               aria-label="User"
             >
@@ -146,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({
                 Home
               </Link>
               <Link
-                href="products"
+                href="/products"
                 className="px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl font-medium transition-all duration-200"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

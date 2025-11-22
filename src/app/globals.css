@@ -22,11 +22,20 @@ body {
   src: url(../../public/fonts/bricolage.ttf);
 }
 @font-face {
+  font-family: bold-Livvic;
+  src: url(../../public/fonts/Livvic-SemiBold.ttf);
+}
+@font-face {
   font-family: famil;
-  src: url(../../public/fonts/WB.ttf);
+  src: url(../../public/fonts/Millik\ Regular.otf);
   /* src: url(../../public/fonts/Cooljazz.ttf); */
   
 
+}
+.bg-image{
+  background-image: url(../../public/images/Image_1.jpg) !important;
+  background-size: cover !important;
+  background-position: center;
 }
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari, and Opera */

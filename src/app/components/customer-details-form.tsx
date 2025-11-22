@@ -207,9 +207,14 @@ export function CustomerDetailsForm() {
           <div>
             <Input
               {...register("appartment")}
-              placeholder="Appartment, suite, etc. (optional)"
+              placeholder="Appartment, suite, etc."
               className="h-12 border-gray-300"
             />
+            {errors.appartment && (
+              <p className="text-sm text-red-600 mt-1">
+                {errors.appartment.message}
+              </p>
+            )}
           </div>
 
           {/* City, State, ZIP */}

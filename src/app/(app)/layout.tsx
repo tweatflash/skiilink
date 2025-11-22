@@ -24,8 +24,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     setSearchQuery,
     handleUpdateQuantity,
     handleRemoveItem,
-    search,
-    setSearch,
+    loggedIn,
+    authLoading,
   } = themeContext;
   const cartItemCount: number = cartItems.reduce(
     (sum, item) => sum + item.quantity,
@@ -34,7 +34,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen  dark:bg-gray-950 transition-colors duration-300">
-      <div className="w-full min-h-[38px] bg-black flex items-center justify-center relative px-4">
+      {
+        authLoading ? <div className="w-full min-h-[38px] bg-black flex items-center justify-center relative px-4">
+              <div className="max-w-2xl w-4/5 h-4 bg-white/25 rounded-md animate-pulse"></div>
+            </div>:!authLoading && !loggedIn ? <div className="w-full min-h-[38px] bg-black flex items-center justify-center relative px-4">
               <p className=" font-normal text-white text-sm tracking-[0] leading-[normal]">
                 <span className=" font-normal text-white text-sm tracking-[0]">
                   Sign up to make your first order.{" "}
@@ -50,7 +53,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               >
                 <XIcon className="w-5 h-5 text-white" />
               </Button>
-            </div>
+            </div>:<></>
+      }
+      
+      
       <Header
         cartItemCount={cartItemCount}
         onCartClick={() => setIsCartOpen(true)}

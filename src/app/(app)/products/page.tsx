@@ -1,137 +1,79 @@
-"use client";
-import React, { useState, useMemo, useContext, useEffect, Suspense } from "react";
-import {
-  categories,
-  featuredProducts,
-  bestSellingProducts,
-} from "../../data/products";
-import { Product, CartItem } from "../../types/product";
-import CatalogPage from "app/components/CatalogPage";
-import { ThemeContext, ThemeProvider } from "app/contexts/ThemeContext";
-function App() {
-  let searchCategory: string | null = null;
-  const jdjs=["all-products","solar-panels","solar-batteries","inverters","security-cameras","led-lights","electrical-tools","smart-home","cables-wires"]
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<
-    "home" | "catalog" | "product" | "admin"
-  >("home");
-   useEffect(() => {
-    if (searchCategory && jdjs.includes(searchCategory)) {
-      console.log("Filtering by searchCategory:", searchCategory);
-      setSelectedCategory(searchCategory)
-    } else {
-      setSelectedCategory(null)
-    }
-  }, []);
+import React from 'react'
+import MainProducts from '.'
+import { Metadata } from 'next'
 
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-   const themeContext = useContext(ThemeContext)
-      if (!themeContext) {
-          throw new Error("ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider.");
-      }
-      const { cartItems, setIsCartOpen,setCartItems, searchQuery, setSearchQuery ,} = themeContext;
-  const allProducts = [...featuredProducts, ...bestSellingProducts];
+const siteUrl = 'https://skiilinkventures.com'
 
-  const filteredProducts = useMemo(() => {
-    let filtered = allProducts;
-
-    if (searchQuery) {
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.description
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          product.category.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (selectedCategory) {
-      filtered = filtered.filter(
-        (product) => product.category === selectedCategory
-      );
-    }
-
-    return filtered;
-  }, [searchQuery, selectedCategory, allProducts]);
-
-  const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-  const handleAddToCart = (product: dummyStore, quantity: number = 1) => {
-    setCartItems((prev:any) => {
-      const existingItem = prev.find((item:any) => item.product.id === product._id);
-      if (existingItem) {
-        return prev.map((item:any) =>
-          item.product._id === product._id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      }
-      return [...prev, { product, quantity }];
-    });
-  };
-
-  const handleUpdateQuantity = (productId: string, quantity: number) => {
-    if (quantity === 0) {
-      handleRemoveItem(productId);
-      return;
-    }
-    setCartItems((prev:any) =>
-      prev.map((item:any) =>
-        item.product.id === productId ? { ...item, quantity } : item
-      )
-    );
-  };
-
-  const handleRemoveItem = (productId: string) => {
-    setCartItems((prev:any) =>
-      prev.filter((item:any) => item.product.id !== productId)
-    );
-  };
-
- 
-
-  const handleShopNow = () => {
-    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleBackToHome = () => {
-    setCurrentView("home");
-    setSearchQuery("");
-  };
-
-  const handleProductClick = (product: Product) => {
-    setSelectedProduct(product);
-  };
-
-  const handleBackToCatalog = () => {
-    setSelectedProduct(null);
-  };
-
-  
-
- 
-  return (
-    // <ThemeProvider>
-    <Suspense>
-      <div className="min-h-screen w-full">
-      
-      <div className="w-full relative"></div>
+export const metadata: Metadata = {
+  title: {
+    default: 'Products — Skiilink Ventures Nigeria Limited',
+    template: '%s | Skiilink',
+  },
+  description:
+    'Skiilink Ventures Nigeria Limited — an e-commerce store offering high-quality solar and security gadgets. Browse solar panels, inverters, batteries, CCTV cameras, alarms, and smart access solutions.',
+  keywords: [
+    'solar gadgets',
+    'solar panels',
+    'inverters',
+    'solar batteries',
+    'security gadgets',
+    'CCTV cameras',
+    'alarms',
+    'access control',
+    'Skiilink Ventures',
+    'Skiilink',
+    'ecommerce',
+    'Nigeria',
+  ],
+  authors: [{ name: 'Skiilink Ventures Nigeria Limited', url: siteUrl }],
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  alternates: {
+    canonical: `${siteUrl}/products`,
+  },
+  openGraph: {
+    title: 'Products — Skiilink Ventures Nigeria Limited',
+    description:
+      'Shop solar and security gadgets at Skiilink Ventures Nigeria Limited. Quality solar panels, inverters, batteries, CCTV systems, and smart security solutions.',
+    url: `${siteUrl}/products`,
+    siteName: 'Skiilink Ventures',
+    images: [
       {
-        (selectedCategory || selectedCategory==null) && <CatalogPage
-          onBack={handleBackToHome}
-          onAddToCart={handleAddToCart}
-          onProductClick={handleProductClick}
-          searchQuery={searchQuery}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-      }
-      
-    </div>
-    </Suspense>
-    // </ThemeProvider>
-  );
+        url: `${siteUrl}/og-images/products-og.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'Skiilink products - solar and security gadgets',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Products — Skiilink Ventures Nigeria Limited',
+    description:
+      'Shop solar and security gadgets at Skiilink Ventures Nigeria Limited. Quality solar panels, inverters, batteries, CCTV systems, and smart security solutions.',
+    creator: '@skiilink',
+    images: [`${siteUrl}/og-images/products-og.jpg`],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
-export default App;
+export default function Products() {
+  return (
+    <MainProducts />
+  )
+}

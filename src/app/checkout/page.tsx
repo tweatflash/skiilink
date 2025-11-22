@@ -38,7 +38,7 @@ export default function CheckoutPage() {
     } = themeContext;
   useEffect(() => {
     if (cartItems.length === 0) {
-        router.push("/products")
+        // router.push("/products")
     }
   }, []);
 

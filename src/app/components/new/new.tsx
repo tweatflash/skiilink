@@ -110,7 +110,7 @@ const topSellingProducts = [
   },
   {
     image:
-      "https://res.cloudinary.com/dt6naawfk/image/upload/v1756807681/Post-images/tmp-3-1756807679873_ejekyk.png",
+      "https://res.cloudinary.com/dlsngc9fb/image/upload/v1754154469/Post-images/tmp-2-1754154469459_rk7vvp.jpg",
     title: "Tubular Solar Battery",
     rating: 5.0,
     price: 280000,
@@ -129,6 +129,9 @@ export default function NewPage() {
   const router = useRouter();
   const handleCategoryClick = (categoryId: string) => {
     router.push(`/products?sort=${categoryId}`);
+  };
+  const handleShopClick = () => {
+    router.push(`/products`);
   };
   const renderStars = (rating: number) => {
     const fullStars = Math.floor(rating);
@@ -151,53 +154,26 @@ export default function NewPage() {
     <div className="bg-white w-full relative flex flex-col">
       {/* Hero Section with Background */}
       <section className="relative w-full bg-[#F2F0F1]">
-        <div className="max-w-7xl w-full mx-auto relative">
-          {/* <div className="absolute top-0 left-0 w-full h-full">
-          <img
-            className="absolute w-[7.22%] h-[2.38%] top-[5.03%] left-[87.15%]"
-            alt="Vector"
-            src="/vector.svg"
-          />
-          <img
-            className="absolute w-[3.89%] h-0 top-[9.86%] left-[52.08%]"
-            alt="Vector"
-            src="/vector.svg"
-          />
-        </div> */}
+        <div className="max-w-7xl z-10 w-full mx-auto relative">
 
           <div className="relative w-full px-5 md:px-8 pt-12 sm:pt-[103px] pb-12 md:pb-[116px]">
             <div className="max-w-full mx-auto md:max-w-6xl">
               <h2 className="text-center max-w-3xl mx-auto font-[boldCal] text-black text-5xl sm:text-6xl md:text-7xl lg:text-[110px] tracking-[0] leading-tight mb-6 md:mb-8">
-                Smart Security<br/>Solar Simplicity
+                Smart Security<br/> Solar Simplicity
               </h2>
 
-              <p className="text-center mx-auto font-normal text-[#00000099] text-lg md:text-xl tracking-[0] leading-[22px] mb-6 md:mb-8 max-w-full md:max-w-[545px]">
+              <p className="text-center mx-auto font-normal text-gray-800 text-lg md:text-xl tracking-[0] leading-[22px] mb-6 md:mb-8 max-w-full md:max-w-[545px]">
                 We deliver trusted security gadgets and solar gear to protect
                 your space and power your lifestyle effortlessly.
               </p>
 
-              <Button className="bg-black block w-full sm:w-auto text-white rounded-2xl px-8 md:px-[54px] h-[52px] mx-auto  font-medium text-lg">
+              <Button onClick={handleShopClick} className=" block w-full sm:w-auto text-white rounded-2xl px-8 md:px-[54px] h-[52px] mx-auto  font-medium text-lg">
                 Shop Now
               </Button>
-
-                {/* <div className="flex justify-center mx-auto flex-wrap items-center gap-4 md:gap-8 mt-8 md:mt-12">
-                  {stats.map((stat, index) => (
-                    <React.Fragment key={index}>
-                      {index > 0 && <Separator orientation="vertical" />}
-                      <div className="inline-flex flex-col items-start">
-                        <h1 className=" text-black text-2xl md:text-[40px] tracking-[0] leading-[normal]">
-                          {stat.value}
-                        </h1>
-                        <div className=" font-normal text-[#00000099] text-sm md:text-base tracking-[0] leading-[22px]">
-                          {stat.label}
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  ))}
-                </div> */}
             </div>
           </div>
         </div>
+        {/* <div className="absolute inset-0 top-0 left-0 bg-black/75"/> */}
       </section>
 
       {/* Brand Logos Section */}
@@ -236,7 +212,7 @@ export default function NewPage() {
                   {product.title}
                 </h3>
 
-                <div className="inline-flex items-center gap-[13px] mb-2">
+                <div className="flex items-center gap-[13px] mb-2">
                   {renderStars(product.rating)}
                   {/* <span className=" font-[boldCal] text-sm tracking-[0] leading-[normal]">
                     <span className="text-black">{product.rating}/</span>
@@ -244,7 +220,7 @@ export default function NewPage() {
                   </span> */}
                 </div>
 
-                <div className="inline-flex flex-wrap font-bold items-center gap-2.5">
+                <div className="flex flex-wrap font-bold items-center gap-2.5">
                   <span className=" text-black text-xl md:text-2xl tracking-[0] leading-[normal]">
                     {formatPrice(product.price)}
                   </span>
@@ -264,7 +240,8 @@ export default function NewPage() {
         <div className="flex justify-center mt-6 md:mt-9">
           <Button
             variant="outline"
-            className="rounded-[62px] w-full sm:w-auto px-8 md:px-[54px] py-3 md:py-4 h-auto md:h-[52px] font-medium text-sm md:text-base border-[#0000001a]"
+            onClick={handleShopClick}
+            className="rounded-[62px] w-full sm:w-auto px-8 md:px-[54px] py-3 md:py-4 h-auto md:h-[52px] font-[bold-livvic]"
           >
             View All
           </Button>
@@ -297,7 +274,7 @@ export default function NewPage() {
                   {product.title}
                 </h3>
 
-                <div className="inline-flex font-[boldCal] items-center gap-[13px] mb-2">
+                <div className="flex font-[boldCal] items-center gap-[13px] mb-2">
                   {renderStars(product.rating)}
                   {/* <span className=" font-normal text-sm tracking-[0] leading-[normal]">
                     <span className="text-black">{product.rating}/</span>
@@ -305,7 +282,7 @@ export default function NewPage() {
                   </span> */}
                 </div>
 
-                <div className="inline-flex flex-wrap items-center gap-2.5">
+                <div className="flex flex-wrap items-center gap-2.5 font-bold">
                   <span className=" font-bold text-black text-xl md:text-2xl tracking-[0] leading-[normal]">
                     {formatPrice(product.price)}
                   </span>
@@ -325,7 +302,8 @@ export default function NewPage() {
         <div className="flex justify-center mt-6 md:mt-9">
           <Button
             variant="outline"
-            className="rounded-[62px] w-full sm:w-auto px-8 md:px-[54px] py-3 md:py-4 h-auto md:h-[52px] font-medium text-sm md:text-base border-[#0000001a]"
+            className="rounded-[62px] w-full sm:w-auto px-8 md:px-[54px] py-3 md:py-4 h-auto md:h-[52px] font-[bold-livvic]"
+            onClick={()=>handleCategoryClick("trending")}
           >
             View All
           </Button>
