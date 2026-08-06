@@ -1,0 +1,645 @@
+"use client"
+import React, { useContext, useState } from "react";
+import {
+  Star,
+  Heart,
+  Share2,
+  Shield,
+  Truck,
+  RotateCcw,
+  Check,
+  Minus,
+  Plus,
+  Zap,
+  Clock,
+} from "lucide-react";
+// import { Product } from "../../../types/product";
+import { ThemeContext } from "app/contexts/ThemeContext";
+import { useRouter } from "next/navigation";
+import BackpackCatalog from "app/components/moreToLove";
+import { Button } from "app/components/ui/button2";
+
+interface ProductOverviewProps {
+  product: dummyStore;
+  // onBack: () => void;
+  // onAddToCart: (product: Product, quantity: number) => void;
+}
+
+/**
+ * ---- Design tokens ----
+ * Palette: near-black ink, slate body copy, a deep "market green" as the
+ * primary brand color, and a burnished gold used sparingly for rating /
+ * price accents — evokes a trusted marketplace stall rather than a generic
+ * SaaS storefront. Avoids the default cream+terracotta / dark+neon combos.
+ *
+ * Type: 'Fraunces' (serif, used only for the product title + section
+ * headers) paired with 'Inter' for everything else, and 'IBM Plex Mono'
+ * for the price + quantity — giving the buy box a literal "price tag" feel.
+ *
+ * If these fonts aren't already loaded in your app, add to your root
+ * layout <head> (or via next/font):
+ *   <link rel="preconnect" href="https://fonts.googleapis.com" />
+ *   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+ */
+const tokens = {
+  "--ink": "#101828",
+  "--body": "#4A5568",
+  "--muted": "#8A93A6",
+  "--primary": "#0B6E4F",
+  "--primary-dark": "#08573F",
+  "--primary-tint": "#E7F3EE",
+  "--gold": "#B5860F",
+  "--gold-tint": "#FBF0D2",
+  "--sale": "#B3432B",
+  "--surface": "#F4F5F1",
+  "--border": "#E4E4DE",
+  "--font-display": "'Fraunces', ui-serif, Georgia, serif",
+  "--font-mono": "'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace",
+} as React.CSSProperties;
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};
+
+const ProductOverview: React.FC<ProductOverviewProps> = ({ product }) => {
+  const themeContext = useContext(ThemeContext);
+  if (!themeContext) {
+    throw new Error(
+      "ThemeContext is undefined. Make sure your component is wrapped in ThemeContext.Provider."
+    );
+  }
+  const { setCartItems } = themeContext;
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState<
+    "description" | "specifications" | "reviews"
+  >("description");
+  const router = useRouter();
+  const images = product.image;
+  const discountPercentage = product.discountPercentage
+    ? Math.round(
+        ((product.discountPercentage - product.price) /
+          product.discountPercentage) *
+          100
+      )
+    : 0;
+
+  const handleQuantityChange = (change: number) => {
+    const newQuantity = quantity + change;
+    if (newQuantity >= 1 && newQuantity <= 10) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const handleAddToCart = (product: dummyStore, quantity: number = 1) => {
+    setCartItems((prev: CartItem[]) => {
+      const existingItem = prev.find(
+        (item: CartItem) => item.product._id === product._id
+      );
+      if (existingItem) {
+        return prev.map((item: CartItem) =>
+          item.product._id === product._id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        return [...prev, { product, quantity }];
+      }
+    });
+  };
+
+  const onBack = () => {
+    router.push("/products");
+  };
+
+  const reviewCount = product.reviews?.length ?? 0;
+
+  return (
+    <div
+      className="min-h-screen bg-white"
+      style={{ ...tokens, fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}
+    >
+      {/* Breadcrumb */}
+      <div className="border-b border-[var(--border)]">
+        <div className="max-w-2xl lg:max-w-[1400px] mx-auto px-4 py-3">
+          <div className="flex w-full no-scrollbar overflow-x-auto items-center">
+            <button
+              onClick={onBack}
+              className="text-sm text-[var(--muted)] hover:text-[var(--primary)] transition-colors whitespace-nowrap mr-2"
+            >
+              Products
+            </button>
+            <span className="text-[var(--border)] mr-2">/</span>
+            <span className="text-sm text-[var(--muted)] whitespace-nowrap mr-2">
+              {product.category}
+            </span>
+            <span className="text-[var(--border)] mr-2">/</span>
+            <span className="text-sm text-[var(--ink)] font-medium whitespace-nowrap truncate">
+              {product.title}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-2xl lg:max-w-[1400px] mx-auto px-4 py-10">
+        <div className="grid lg:grid-cols-2 gap-14">
+          {/* Product Images */}
+          <div className="space-y-4 order-1">
+            <div className="relative border border-[var(--border)] rounded-lg overflow-hidden bg-[var(--surface)]">
+              <img
+                src={images[selectedImage].url}
+                alt={product.title}
+                className="w-full aspect-[1/.9] lg:h-[520px] object-cover"
+              />
+
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
+                {product.meta && (
+                  <span className="bg-[var(--ink)] text-white text-xs font-semibold tracking-wide uppercase px-2.5 py-1 rounded-sm">
+                    New
+                  </span>
+                )}
+                {product.brand && (
+                  <span className="bg-[var(--gold-tint)] text-[var(--gold)] text-xs font-semibold tracking-wide uppercase px-2.5 py-1 rounded-sm border border-[var(--gold)]/30">
+                    Bestseller
+                  </span>
+                )}
+                {discountPercentage > 0 ? (
+                  <span className="bg-[var(--sale)] text-white text-xs font-semibold tracking-wide uppercase px-2.5 py-1 rounded-sm">
+                    -{discountPercentage}% off
+                  </span>
+                ) : null}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="absolute top-4 right-4 flex flex-col gap-2">
+                <button
+                  aria-label="Save to wishlist"
+                  className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-sm border border-[var(--border)] hover:border-[var(--sale)] transition-colors group"
+                >
+                  <Heart
+                    size={18}
+                    className="text-[var(--body)] group-hover:text-[var(--sale)] transition-colors"
+                  />
+                </button>
+                <button
+                  aria-label="Share this product"
+                  className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-sm border border-[var(--border)] hover:border-[var(--primary)] transition-colors group"
+                >
+                  <Share2
+                    size={18}
+                    className="text-[var(--body)] group-hover:text-[var(--primary)] transition-colors"
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Thumbnail Images */}
+            {images.length > 1 && (
+              <div className="flex space-x-3 w-full relative h-20 overflow-x-scroll no-scrollbar pb-1">
+                <div className="w-fit flex space-x-3 absolute overflow-x-auto no-scrollbar">
+                  {images.map((image: any, index: number) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      aria-label={`View image ${index + 1}`}
+                      className={`flex-shrink-0 w-20 h-20 rounded-md relative overflow-hidden border transition-all duration-150 ${
+                        selectedImage === index
+                          ? "border-[var(--primary)] ring-1 ring-[var(--primary)]"
+                          : "border-[var(--border)] hover:border-[var(--muted)]"
+                      }`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={`${product.title} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Product Details */}
+          <div className="space-y-7 order-2">
+            {/* Product Info */}
+            <div>
+              {product.brand && (
+                <p className="text-[var(--primary)] font-semibold text-xs uppercase tracking-[0.14em] mb-3">
+                  {product.brand}
+                </p>
+              )}
+              <h1
+                className="text-3xl lg:text-4xl break-words text-[var(--ink)] mb-3 leading-[1.15]"
+                style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
+              >
+                {product.title}
+              </h1>
+              <p className="text-[var(--body)] mb-5 text-base leading-relaxed">
+                {product.description}
+              </p>
+
+              {/* Rating */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={16}
+                      className={`${
+                        i < Math.floor(product.rating)
+                          ? "text-[var(--gold)] fill-current"
+                          : "text-[var(--border)]"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm text-[var(--ink)] font-medium">
+                  {product.rating.toFixed(2)}
+                </span>
+                <span className="text-sm text-[var(--muted)]">
+                  ({reviewCount} {reviewCount === 1 ? "review" : "reviews"})
+                </span>
+              </div>
+            </div>
+
+            {/* Price / Buy box — styled like a market price tag */}
+            <div className="relative bg-[var(--surface)] border border-dashed border-[var(--border)] rounded-lg p-5 sm:p-7">
+              {/* ticket notches */}
+              <span className="hidden sm:block absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-[var(--border)]" />
+              <span className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full border border-[var(--border)]" />
+
+              <div className="flex items-end flex-wrap gap-4 mb-5">
+                <span
+                  className="text-4xl text-[var(--ink)] tracking-tight"
+                  style={{ fontFamily: "var(--font-mono)", fontWeight: 600 }}
+                >
+                  {formatPrice(product.price)}
+                </span>
+                {product.discountPercentage ? (
+                  <div className="flex flex-col pb-0.5">
+                    <span
+                      className="text-base text-[var(--muted)] line-through"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      {formatPrice(product.discountPercentage)}
+                    </span>
+                    <span className="text-sm text-[var(--primary)] font-semibold">
+                      Save{" "}
+                      {formatPrice(
+                        product.discountPercentage - product.price
+                      )}
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Stock Status */}
+              <div className="flex items-center gap-2 mb-6">
+                {product.stock ? (
+                  <>
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--primary)] opacity-60" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--primary)]" />
+                    </span>
+                    <span className="text-[var(--primary-dark)] font-medium text-sm">
+                      In stock, ready to ship
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Clock size={15} className="text-[var(--sale)]" />
+                    <span className="text-[var(--sale)] font-medium text-sm">
+                      Out of stock
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {/* Quantity Selector */}
+              <div className="flex items-center gap-4 mb-6">
+                <span className="text-[var(--ink)] font-medium text-sm">
+                  Quantity
+                </span>
+                <div className="flex items-center border border-[var(--border)] rounded-md bg-white">
+                  <button
+                    onClick={() => handleQuantityChange(-1)}
+                    disabled={quantity <= 1}
+                    aria-label="Decrease quantity"
+                    className="p-2.5 hover:bg-[var(--surface)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <Minus size={15} />
+                  </button>
+                  <span
+                    className="px-4 py-2 font-semibold text-[var(--ink)] min-w-[2.5rem] text-center"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => handleQuantityChange(1)}
+                    disabled={quantity >= 10}
+                    aria-label="Increase quantity"
+                    className="p-2.5 hover:bg-[var(--surface)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <Plus size={15} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Add to Cart Button */}
+              <Button
+                onClick={() => handleAddToCart(product, quantity)}
+                disabled={!product.stock}
+                className={`w-full !bg-[var(--primary)] hover:!bg-[var(--primary-dark)] !text-white transition-colors ${
+                  product.stock
+                    ? ""
+                    : "!bg-[var(--border)] !text-[var(--muted)] cursor-not-allowed"
+                }`}
+              >
+                <span>
+                  {product.stock ? `Add ${quantity} to cart` : "Out of stock"}
+                </span>
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="flex items-start gap-2.5 p-3 rounded-md border border-[var(--border)]">
+                <Shield size={18} className="text-[var(--primary)] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-[var(--ink)] font-medium leading-tight">
+                    Warranty
+                  </p>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">Protected</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2.5 p-3 rounded-md border border-[var(--border)]">
+                <Truck size={18} className="text-[var(--primary)] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-[var(--ink)] font-medium leading-tight">
+                    Free shipping
+                  </p>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">On orders ₦500k+</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2.5 p-3 rounded-md border border-[var(--border)]">
+                <RotateCcw size={18} className="text-[var(--primary)] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-[var(--ink)] font-medium leading-tight">
+                    Easy returns
+                  </p>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">30-day policy</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Product Details Tabs */}
+        <div className="mt-20">
+          <div className="border-b border-[var(--border)]">
+            <nav className="flex space-x-8">
+              {[
+                { id: "description", label: "Description" },
+                { id: "specifications", label: "Specifications" },
+                { id: "reviews", label: `Reviews (${reviewCount})` },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`py-3 px-1 border-b-2 font-medium text-sm transition-colors ${
+                    activeTab === tab.id
+                      ? "border-[var(--primary)] text-[var(--ink)]"
+                      : "border-transparent text-[var(--muted)] hover:text-[var(--ink)]"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="py-8">
+            {activeTab === "description" && (
+              <div className="bg-[var(--surface)] rounded-lg border border-[var(--border)] sm:p-8 p-5">
+                <h3
+                  className="text-2xl text-[var(--ink)] mb-5"
+                  style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
+                >
+                  Product description
+                </h3>
+                <p className="text-[var(--body)] text-base whitespace-pre-wrap leading-relaxed mb-6">
+                  {product.fullDescription || product.description}
+                </p>
+
+                {product.features && (
+                  <div>
+                    <h4 className="text-base font-semibold text-[var(--ink)] mb-4 uppercase tracking-wide">
+                      Key features
+                    </h4>
+                    <ul className="grid md:grid-cols-2 gap-3">
+                      {product.features.map((feature: string, index: number) => (
+                        <li key={index} className="flex items-start gap-2.5">
+                          <Check
+                            size={16}
+                            className="text-[var(--primary)] mt-1 flex-shrink-0"
+                          />
+                          <span className="text-[var(--body)] text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "specifications" && (
+              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-lg p-5 sm:p-8">
+                <h3
+                  className="text-2xl text-[var(--ink)] mb-6"
+                  style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
+                >
+                  Technical specifications
+                </h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h4 className="text-sm font-semibold text-[var(--ink)] mb-4 uppercase tracking-wide">
+                      General
+                    </h4>
+                    <dl className="space-y-3">
+                      {product.brand && (
+                        <div className="flex justify-between border-b border-[var(--border)] pb-2">
+                          <dt className="text-[var(--muted)] text-sm">Brand</dt>
+                          <dd className="font-medium text-[var(--ink)] text-sm">
+                            {product.brand}
+                          </dd>
+                        </div>
+                      )}
+                      {product.model && (
+                        <div className="flex justify-between border-b border-[var(--border)] pb-2">
+                          <dt className="text-[var(--muted)] text-sm">Model</dt>
+                          <dd className="font-medium text-[var(--ink)] text-sm">
+                            {product.model}
+                          </dd>
+                        </div>
+                      )}
+                      {product.weight && (
+                        <div className="flex justify-between border-b border-[var(--border)] pb-2">
+                          <dt className="text-[var(--muted)] text-sm">Weight</dt>
+                          <dd className="font-medium text-[var(--ink)] text-sm">
+                            {product.weight}
+                          </dd>
+                        </div>
+                      )}
+                      {product.dimensions && (
+                        <div className="flex justify-between border-b border-[var(--border)] pb-2">
+                          <dt className="text-[var(--muted)] text-sm">Dimensions</dt>
+                          <dd className="font-medium text-[var(--ink)] text-sm">
+                            {product.dimensions.width}
+                          </dd>
+                        </div>
+                      )}
+                      {product.warrantyInformation && (
+                        <div className="flex justify-between border-b border-[var(--border)] pb-2">
+                          <dt className="text-[var(--muted)] text-sm">Warranty</dt>
+                          <dd className="font-medium text-[var(--ink)] text-sm">
+                            {product.warrantyInformation}
+                          </dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+
+                  {product.features && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-[var(--ink)] mb-4 uppercase tracking-wide">
+                        Features
+                      </h4>
+                      <ul className="space-y-2.5">
+                        {product.features.map((spec: string, index: number) => (
+                          <li key={index} className="flex items-center gap-2.5">
+                            <Zap size={13} className="text-[var(--gold)]" />
+                            <span className="text-[var(--body)] text-sm">{spec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "reviews" && (
+              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-lg p-5 sm:p-8">
+                <div className="flex items-center flex-wrap justify-between gap-4 mb-8">
+                  <h3
+                    className="text-2xl text-[var(--ink)]"
+                    style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
+                  >
+                    Customer reviews
+                  </h3>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={18}
+                          className={`${
+                            i < Math.floor(product.rating)
+                              ? "text-[var(--gold)] fill-current"
+                              : "text-[var(--border)]"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-lg text-[var(--ink)] font-semibold">
+                      {product.rating.toFixed(2)}
+                    </span>
+                    <span className="text-[var(--muted)] text-sm">
+                      ({reviewCount} {reviewCount === 1 ? "review" : "reviews"})
+                    </span>
+                  </div>
+                </div>
+
+                {/* Sample Reviews */}
+                <div className="space-y-6">
+                  {[
+                    {
+                      name: "Adebayo O.",
+                      rating: 5,
+                      date: "2 weeks ago",
+                      comment:
+                        "Excellent product! Works exactly as described. Installation was straightforward and the quality is outstanding.",
+                    },
+                    {
+                      name: "Fatima A.",
+                      rating: 4,
+                      date: "1 month ago",
+                      comment:
+                        "Very good value for money. The performance has been consistent and reliable. Would recommend to others.",
+                    },
+                    {
+                      name: "Chidi N.",
+                      rating: 5,
+                      date: "2 months ago",
+                      comment:
+                        "Top quality product with excellent customer service. Delivery was fast and packaging was secure.",
+                    },
+                  ].map((review, index) => (
+                    <div
+                      key={index}
+                      className="border-b border-[var(--border)] pb-6 last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 bg-[var(--primary-tint)] rounded-full flex items-center justify-center shrink-0">
+                            <span className="text-[var(--primary-dark)] font-semibold text-sm">
+                              {review.name.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-[var(--ink)] text-sm font-medium">
+                              {review.name}
+                            </p>
+                            <p className="text-xs text-[var(--muted)]">{review.date}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              size={13}
+                              className={`${
+                                i < review.rating
+                                  ? "text-[var(--gold)] fill-current"
+                                  : "text-[var(--border)]"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-[var(--body)] text-sm leading-relaxed">
+                        {review.comment}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div> 
+        </div>
+
+        <BackpackCatalog />
+      </div>
+    </div>
+  );
+};
+
+export default ProductOverview;
