@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;  
+@font-face {
+  font-family: markd;
+  src: url('../../public/fonts/Pally-Regular.otf');
+  /* font-weight: 100 900; */
+  /* font-display: swap; */
+}
+body {
+  font-family: markd;  
+}
+
+body {
+   
+}
+@font-face {
+  font-family: boldCal;
+  src: url(../../public/fonts/bricollage.ttf);
+}
+@font-face {
+  font-family: small;
+  src: url(../../public/fonts/Cooljazz.ttf );
+}
+@font-face {
+  font-family: bold-Livvic ;
+  src: url(../../public/fonts/Pally-Bold.otf);
+}
+@font-face {
+  font-family: medium-Livvic ;
+  src: url(../../public/fonts/Pally-Regular.otf);
+}
+@font-face {
+  font-family: famil;
+  src: url(../../public/fonts/Millik\ Regular.otf);
+  /* src: url(../../public/fonts/Cooljazz.ttf); */
+  
+
+}
+.med-livvic{
+  font-family: medium-Livvic;
+}
+.bold-livvic{
+  font-family: bold-Livvic;
+  letter-spacing: -0.1rem !important ;
+}
+.bg-image{
+  background-image: url(../../public/images/Image_1.jpg) !important;
+  background-size: cover !important;
+  background-position: center;
+}
+.price-font{
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.03rem  ;
+}
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge, and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+html.dark {
+    --typography-color: var(--color-zinc-400);
+    --typography-heading: var(--color-white);
+    --typography-strong: var(--color-white);
+    --typography-link: var(--color-white);
+    --typography-link-underline: var(--color-zinc-600);
+    --typography-link-underline-hover: var(--color-zinc-400);
+    --typography-code: var(--color-white);
+    --typography-thead-border: var(--color-zinc-800);
+    --typography-list-marker: var(--color-white);
+    --typography-hr: var(--color-zinc-800);
+    --background:0 0% 7%;
+    --primary-bg-color: hsl(var(--background)/ .8);
+    --border-color:240 3.7% 15.9%;
+    --accent:240 2.9% 12.0%;
+    --color:white;
+
+}
+
+:root {
+    
+     --background:0 0% 100%;
+    --primary-bg-color: hsl(var(--background)/.8);
+    --border-color:240 5.9% 90%;
+    --accent:240 4.8% 95.9%;
+    --error-bg:0, 91%, 71%, ;
+
+    --color:black;
+}
+.bg-loader{ 
+  @apply bg-gray-200
+}
+
+.card-overlay:hover > .group::before{
+  content: "";
+  position: absolute;
+  padding:12px;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  z-index: 2;
+}
+.max-screen{
+  @apply max-w-[1400px];
+}
+
+.hrpi::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100% ;
+  background-color:#6c757d1a ;
+}
+.hrpi2::before{
+  content: "";
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100% ;
+  background-color:#6c757d1a ;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+h1,h2,h3,h4,p,div,span{
+  letter-spacing: -0.02rem  ;
+  /* text-transform: uppercase !important; */
+  /* font-family: boldCal !important; */
+}
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+@layer utilities {
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+}
