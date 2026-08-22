@@ -108,6 +108,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     <button onClick={() => onAddToCart(product)} className="flex-1 text-xs med-livvic bg-gradient-to-b from-orange-400 to-orange-600 shadow-[0_1px_3px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-200 hover:from-orange-400 hover:to-orange-500 hover:shadow-[0_3px_12px_rgba(249,115,22,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.97] active:shadow-[0_0px_1px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(0,0,0,0.1)] text-white py-[6px] rounded hover:bg-orange-600 transition">
      Buy Now
     </button>
+    
     <button className="flex-1 med-livvic active:scale-[0.97] text-xs font-medium bg-gray-200 py-[6px] rounded hover:bg-gray-100 transition">
       Add to Cart
     </button>

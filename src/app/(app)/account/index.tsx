@@ -104,7 +104,7 @@ export default function AccountIndex() {
         </div>
         <div>
           <p className="text-gray-700 mb-6 text-lg">
-            Welcome {userObj.user.name}
+            Welcome {userObj?.user?.name}
           </p>
         </div>
         {/* Grid Layout */}

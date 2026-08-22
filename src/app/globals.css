@@ -163,3 +163,9 @@ h1,h2,h3,h4,p,div,span{
     animation: shimmer 2s infinite;
   }
 }
+.btn-bevel{
+  border-radius: 12px;  
+  --smooth-corners: 4.7 !important;
+  mask-image: paint(smooth-corners) !important;
+  -webkit-mask-image: paint(smooth-corners) !important;
+}
