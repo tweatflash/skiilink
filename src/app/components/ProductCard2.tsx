@@ -50,9 +50,9 @@ const ProductCard2: React.FC<ProductCardProps> = ({
   // Grid view with enhanced modern design
   return (
     <Card hover className="group cursor-pointer relative my-4 sm:my-1">
-      <div onClick={()=>handleProductClick()} className=" w-full max-w-xs bg-white dark:bg-gray-900 rounded-lg  transition duration-300 cursor-pointer" >
+      <div  className=" w-full max-w-xs bg-white dark:bg-gray-900 rounded-lg  transition duration-300 cursor-pointer" >
   {/* Product Image */}
-  <div className="hrpi relative w-full aspect-square overflow-hidden rounded-sm">
+  <div onClick={()=>handleProductClick()} className="hrpi relative w-full aspect-square overflow-hidden rounded-sm">
     <img
       src={product.image[0].url}
       alt={product.title}
@@ -86,7 +86,7 @@ const ProductCard2: React.FC<ProductCardProps> = ({
     </span>
   </div>
  {/* Product Title */}
-  <h3  className="mt-1 med-ivvic text-sm text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-orange-500 transition-colors">
+  <h3 onClick={()=>handleProductClick()} className="mt-1 med-ivvic text-sm text-gray-800 dark:text-gray-100 line-clamp-2 group-hover:text-orange-500 transition-colors">
     {product.title}
   </h3>
   {/* Price Section */}
@@ -105,11 +105,11 @@ const ProductCard2: React.FC<ProductCardProps> = ({
 
   {/* Optional: Quick Action Buttons */}
   <div className="mt-3 flex gap-2" > 
-    <button onClick={() => onAddToCart(product)} className="flex-1 text-xs med-livvic bg-gradient-to-b from-orange-400 to-orange-600 shadow-[0_1px_3px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-200 hover:from-orange-400 hover:to-orange-500 hover:shadow-[0_3px_12px_rgba(249,115,22,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.97] active:shadow-[0_0px_1px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(0,0,0,0.1)] text-white py-[6px] rounded hover:bg-orange-600 transition">
+    <button onClick={()=>router.push("/checkout")} className="flex-1 text-xs med-livvic bg-gradient-to-b from-orange-400 to-orange-600 shadow-[0_1px_3px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] transition-all duration-200 hover:from-orange-400 hover:to-orange-500 hover:shadow-[0_3px_12px_rgba(249,115,22,0.4),inset_0_1px_0_rgba(255,255,255,0.25)] active:scale-[0.97] active:shadow-[0_0px_1px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(0,0,0,0.1)] text-white py-[6px] rounded hover:bg-orange-600 transition">
      Buy Now
     </button>
     
-    <button className="flex-1 med-livvic active:scale-[0.97] text-xs font-medium bg-gray-200 py-[6px] rounded hover:bg-gray-100 transition">
+    <button onClick={() => onAddToCart(product)} className="flex-1 med-livvic active:scale-[0.97] text-xs font-medium bg-gray-200 py-[6px] rounded hover:bg-gray-100 transition">
       Add to Cart
     </button>
   </div>
