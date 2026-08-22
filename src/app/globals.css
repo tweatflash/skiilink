@@ -139,8 +139,6 @@ html.dark {
 }
 h1,h2,h3,h4,p,div,span{
   letter-spacing: -0.02rem  ;
-  /* text-transform: uppercase !important; */
-  /* font-family: boldCal !important; */
 }
 .animate-scroll {
   animation: scroll 30s linear infinite;
